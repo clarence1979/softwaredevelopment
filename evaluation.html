@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alpha &amp; Beta Testing · VCE Software Development U4O1 · Digital Vector</title>
+<title>Evaluation · VCE Software Development U4O1 · Digital Vector</title>
 <style>
 :root{
   --ink:#16202B; --muted:#5B6976; --paper:#EEF1F5; --card:#FFFFFF;
@@ -142,6 +142,16 @@ ul.clean.beta li::before{background:var(--beta)} ul.clean.green li::before{backg
 .lab-cap{padding:12px 18px; font-size:.92rem; border-top:1px solid var(--hair2); background:var(--paper); min-height:62px}
 .lab-cap b{color:var(--alpha)} .lab-cap.beta b{color:var(--beta)}
 .lab-hint{font-family:var(--mono); font-size:10.5px; color:var(--muted); text-align:center; padding:6px; letter-spacing:.04em}
+.era-ctl{display:inline-flex; align-items:center; gap:7px}
+.era-ctl .step{font-family:var(--mono); font-size:12px; line-height:1; cursor:pointer; border:1px solid var(--hair); background:var(--paper); color:var(--muted); padding:7px 10px; border-radius:8px; transition:.15s}
+.era-ctl .step:hover{color:var(--ink); border-color:var(--alpha)}
+.era-ctl .step:focus-visible{outline:2px solid var(--alpha); outline-offset:1px}
+.era-ctl .step.play.on{background:var(--alpha); color:#fff; border-color:var(--alpha)}
+.era-pill{font-family:var(--mono); font-size:12px; color:var(--muted); min-width:158px; text-align:center; letter-spacing:.01em}
+.era-pill #eraName{color:var(--ink); font-weight:600}
+.era-track{display:flex; gap:7px; justify-content:center; padding:8px 0 0}
+.era-track i{width:26px; height:5px; border-radius:3px; background:var(--hair2); transition:.2s}
+.era-track i.on{background:var(--alpha); width:34px}
 
 /* ---- comparison table ---- */
 .tbl-scroll{overflow-x:auto; margin:18px 0; border:1px solid var(--hair); border-radius:12px}
@@ -273,6 +283,96 @@ table.cmp tbody tr:hover{background:var(--paper)}
 @media (max-width:620px){.cs-table,.cs-table tbody,.cs-table tr,.cs-table td{display:block; width:100%} .cs-table thead{display:none} .cs-table td{border-bottom:none; padding:4px 0} .cs-table tr{border-bottom:1px solid var(--hair); padding:10px 0}}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important; scroll-behavior:auto}}
+
+
+/* ============ EVALUATION-SPECIFIC ADDITIONS ============ */
+/* effectiveness = blue (--alpha family) · efficiency = amber (--beta family) */
+.eff-word{color:var(--alpha); font-weight:680}
+.efy-word{color:var(--beta); font-weight:680}
+
+/* hero pipeline: highlight the Evaluate step */
+.pstep.is-eval{background:rgba(45,78,216,.18); border-radius:8px}
+.pstep.is-eval .lbl{color:#9DB0FF}
+
+/* two-bucket sorter layout */
+.buckets.two{grid-template-columns:repeat(2,1fr)}
+@media (max-width:560px){.buckets.two{grid-template-columns:1fr}}
+
+/* new bucket head colours */
+.bucket[data-cat="effectiveness"] .bhead,.bucket[data-cat="solution"] .bhead{color:var(--alpha)}
+.bucket[data-cat="efficiency"] .bhead,.bucket[data-cat="plan"] .bhead{color:var(--beta)}
+.bucket[data-cat="testing"] .bhead{color:var(--trap)}
+
+/* two-halves split card */
+.halves{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0}
+.halfcard{border-radius:11px; padding:14px 16px; border:1px solid var(--hair); background:var(--card)}
+.halfcard.a{border-top:3px solid var(--alpha)} .halfcard.b{border-top:3px solid var(--beta)}
+.halfcard .ht{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; margin-bottom:5px}
+.halfcard.a .ht{color:var(--alpha)} .halfcard.b .ht{color:var(--beta)}
+.halfcard p{margin:0; font-size:.92rem}
+@media (max-width:560px){.halves{grid-template-columns:1fr}}
+
+/* timeline strip */
+.timeline{display:grid; grid-template-columns:repeat(5,1fr); gap:0; margin:20px 0 6px}
+.tnode{position:relative; text-align:center; padding:14px 8px}
+.tnode .tdot{width:14px; height:14px; border-radius:50%; background:var(--hair); border:2px solid var(--card); margin:0 auto 9px; position:relative; z-index:2}
+.tnode.is-eval .tdot{background:var(--alpha); box-shadow:0 0 0 4px var(--alpha-soft)}
+.tnode::before{content:""; position:absolute; top:20px; left:-50%; width:100%; height:2px; background:var(--hair2); z-index:1}
+.tnode:first-child::before{display:none}
+.tnode .tlbl{font-weight:640; font-size:13px}
+.tnode .tsub{font-size:11px; color:var(--muted); margin-top:2px}
+.tnode.is-eval .tlbl{color:var(--alpha)}
+@media (max-width:560px){.timeline{grid-template-columns:1fr; gap:4px}.tnode::before{display:none}.tnode{text-align:left; padding:6px 0 6px 26px}.tnode .tdot{position:absolute; left:0; top:8px; margin:0}}
+
+/* gauge legend under the 3D lab */
+.legend{display:grid; grid-template-columns:1fr 1fr; gap:9px 20px; padding:14px 18px; border-top:1px solid var(--hair2); background:var(--paper)}
+.legend .lrow{display:flex; align-items:center; gap:9px; font-size:.88rem}
+.legend .swatch{width:10px; height:10px; border-radius:3px; flex:none}
+.legend .lname{flex:none; min-width:118px}
+.legend .lbar{flex:1; height:7px; border-radius:4px; background:var(--hair2); position:relative; min-width:46px}
+.legend .lbar > i{position:absolute; left:0; top:0; bottom:0; border-radius:4px; transition:width .55s ease}
+.legend .lval{font-family:var(--mono); font-size:.8rem; min-width:32px; text-align:right; color:var(--muted)}
+@media (max-width:600px){.legend{grid-template-columns:1fr}}
+
+/* good vs weak criteria cards */
+.crit{background:var(--card); border:1px solid var(--hair); border-radius:11px; margin:12px 0; overflow:hidden}
+.crit .ch{display:grid; grid-template-columns:1fr 1fr}
+.crit .ccol{padding:13px 16px}
+.crit .ccol.weak{background:var(--trap-soft); border-right:1px solid var(--hair2)}
+.crit .ccol.strong{background:var(--pass-soft)}
+.crit .ct{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; margin-bottom:5px}
+.crit .ccol.weak .ct{color:var(--trap)} .crit .ccol.strong .ct{color:var(--pass)}
+.crit .cbody{font-size:.92rem}
+.crit .why{padding:10px 16px; border-top:1px solid var(--hair2); font-size:.86rem; color:var(--muted)}
+.crit .why b{color:var(--ink)}
+@media (max-width:560px){.crit .ch{grid-template-columns:1fr}.crit .ccol.weak{border-right:none; border-bottom:1px solid var(--hair2)}}
+
+/* scorecard (case study) */
+.sc-table{width:100%; border-collapse:collapse; font-size:.9rem; margin:8px 0}
+.sc-table th{font-family:var(--mono); font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); text-align:left; padding:8px 10px; border-bottom:1px solid var(--hair)}
+.sc-table td{padding:11px 10px; border-bottom:1px solid var(--hair2); vertical-align:top}
+.sc-table .cn{font-weight:620; width:148px}
+.sc-table .cn .tagm{font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; display:block; margin-top:3px; font-weight:600}
+.sc-table .cn .tagm.eff{color:var(--alpha)} .sc-table .cn .tagm.efy{color:var(--beta)}
+.sc-table .ev{font-size:.88rem}
+.sc-table select{font-family:var(--mono); font-size:.82rem; padding:7px 8px; border:1px solid var(--hair); border-radius:6px; background:var(--paper); color:var(--ink); width:100%; max-width:150px}
+.sc-table .mk2{font-family:var(--mono); font-size:.85rem; white-space:nowrap}
+.sc-table .mk2 .y{color:var(--pass); font-weight:700} .sc-table .mk2 .n{color:var(--trap); font-weight:700}
+@media (max-width:680px){.sc-table,.sc-table tbody,.sc-table tr,.sc-table td{display:block; width:100%}.sc-table thead{display:none}.sc-table td{border-bottom:none; padding:3px 0}.sc-table tr{border-bottom:1px solid var(--hair); padding:12px 0}.sc-table .cn{width:auto}}
+.sc-reveal{display:none; border-top:1px solid var(--hair2); margin-top:6px; padding-top:14px; font-size:.93rem}
+.sc-reveal.show{display:block; animation:fade .25s ease}
+
+/* status pills for the project-plan tables */
+.pill{font-family:var(--mono); font-size:10px; letter-spacing:.04em; text-transform:uppercase; font-weight:700; padding:3px 7px; border-radius:5px; white-space:nowrap}
+.pill.ontime{color:var(--pass); background:var(--pass-soft)}
+.pill.over{color:var(--trap); background:var(--trap-soft)}
+.pill.under{color:var(--beta); background:var(--beta-soft)}
+
+/* mini measure-chips list */
+.mchips{display:flex; flex-wrap:wrap; gap:7px; margin:8px 0 14px}
+.mchip{font-family:var(--mono); font-size:11.5px; padding:5px 10px; border-radius:6px; border:1px solid var(--hair)}
+.mchip.a{color:var(--alpha); background:var(--alpha-soft); border-color:var(--alpha-line)}
+.mchip.b{color:var(--beta); background:var(--beta-soft); border-color:var(--beta-line)}
 </style>
 </head>
 <body>
@@ -290,20 +390,20 @@ table.cmp tbody tr:hover{background:var(--paper)}
 <header class="top">
   <div class="wrap">
     <div class="brand"><b>DIGITAL VECTOR</b> &nbsp;·&nbsp; VCE Software Development &nbsp;·&nbsp; Unit 4 · Outcome 1</div>
-    <h1 class="title">The Two Test Gates:<br><span class="a">Alpha</span> &amp; <span class="b">Beta</span> Testing</h1>
-    <p class="subtitle">What alpha and beta testing actually are in VCAA terms — learnt by doing: design test data, alpha-test a real Python program, sort live scenarios, and write answers that earn full marks.</p>
+    <h1 class="title">The Final Verdict:<br><span class="a">Evaluating</span> the <span class="b">Solution</span></h1>
+    <p class="subtitle">What evaluation actually is in VCAA terms — learnt by doing: write measurable criteria, judge a real solution for <span style="color:#8DA2FF">effectiveness</span> and <span style="color:#F2B567">efficiency</span>, assess a project plan, and write answers that earn full marks.</p>
     <div class="meta-row">
       <span class="tag">U4O1 · Develop &amp; Evaluate</span>
-      <span class="tag">SAT Criterion 8</span>
+      <span class="tag">SAT Criteria 9 &amp; 10</span>
       <span class="tag">Exam-ready</span>
     </div>
-    <canvas id="heroCanvas" aria-label="Animation of a software build passing through an alpha gate then a beta gate, shedding bugs, before release"></canvas>
-    <div class="hero-cap">↑ the build sheds bugs as it clears each gate · drag to spin</div>
+    <canvas id="heroCanvas" aria-label="Animation of a finished software solution on an evaluation rig, measured by banks of gauges for effectiveness and efficiency"></canvas>
+    <div class="hero-cap">↑ the finished solution is measured against its criteria · drag to spin</div>
     <div class="pipeline">
-      <div class="pstep"><div class="n">STAGE</div><div class="lbl">Development</div><div class="sub">Code it</div></div>
-      <div class="pstep is-alpha"><div class="n">GATE 1</div><div class="lbl">Alpha</div><div class="sub">Developer · internal</div></div>
-      <div class="pstep is-beta"><div class="n">GATE 2</div><div class="lbl">Beta</div><div class="sub">Users · real-world</div></div>
-      <div class="pstep"><div class="n">STAGE</div><div class="lbl">Evaluate</div><div class="sub">Vs criteria</div></div>
+      <div class="pstep"><div class="n">STAGE</div><div class="lbl">Develop</div><div class="sub">Build it</div></div>
+      <div class="pstep"><div class="n">STAGE</div><div class="lbl">Test</div><div class="sub">Alpha · beta</div></div>
+      <div class="pstep"><div class="n">PERIOD</div><div class="lbl">In real use</div><div class="sub">Gather evidence</div></div>
+      <div class="pstep is-eval"><div class="n">STAGE</div><div class="lbl">Evaluate</div><div class="sub">Vs criteria</div></div>
     </div>
   </div>
 </header>
@@ -313,16 +413,18 @@ table.cmp tbody tr:hover{background:var(--paper)}
   <nav class="toc">
     <h2>What's inside</h2>
     <ol>
-      <li><a href="#context">Where this sits in the study design</a></li>
-      <li><a href="#analogy">The video-game analogy</a></li>
-      <li><a href="#alpha">Alpha testing, in VCAA terms</a></li>
-      <li><a href="#casestudy">Case study: alpha-test Python code</a></li>
-      <li><a href="#beta">Beta testing, in VCAA terms</a></li>
-      <li><a href="#lab">3D lab: white-box vs black-box</a></li>
-      <li><a href="#compare">Side-by-side: the exam table</a></li>
-      <li><a href="#evaluate">Testing vs evaluation</a></li>
-      <li><a href="#classify">Sort it yourself: alpha / beta / neither</a></li>
-      <li><a href="#traps">Six exam traps</a></li>
+      <li><a href="#context">Where evaluation sits in the study design</a></li>
+      <li><a href="#analogy">The report-card analogy</a></li>
+      <li><a href="#define">What evaluation is, in VCAA terms</a></li>
+      <li><a href="#measures">Efficiency vs effectiveness</a></li>
+      <li><a href="#criteria">Writing measurable evaluation criteria</a></li>
+      <li><a href="#lab">3D lab: the evaluation dashboard</a></li>
+      <li><a href="#strategies">Evaluation strategies &amp; collecting evidence</a></li>
+      <li><a href="#scorecard">Case study: score a real solution</a></li>
+      <li><a href="#plan">Assessing the project plan</a></li>
+      <li><a href="#compare">Testing vs evaluation: the exam table</a></li>
+      <li><a href="#classify">Sort it yourself: solution / plan / testing</a></li>
+      <li><a href="#traps">Seven exam traps</a></li>
       <li><a href="#writing">How to write the answer</a></li>
       <li><a href="#practice">Practice questions (self-mark)</a></li>
     </ol>
@@ -331,256 +433,374 @@ table.cmp tbody tr:hover{background:var(--paper)}
   <!-- 1 CONTEXT -->
   <section id="context">
     <div class="eyebrow"><span class="dot"></span>Section 01 · Orientation</div>
-    <h2 class="sec">Where this sits in the study design</h2>
-    <p class="lead">Both kinds of testing belong to <strong>Unit 4, Area of Study 1</strong>. The outcome asks you to <em>develop and evaluate a software solution that meets requirements, and assess the effectiveness of the project plan.</em></p>
-    <p>The relevant key knowledge points sit right next to each other:</p>
+    <h2 class="sec">Where evaluation sits in the study design</h2>
+    <p class="lead">Evaluation is the <strong>final stage</strong> of the problem-solving methodology — <em>Analysis → Design → Development → Evaluation</em> — and it belongs to <strong>Unit 4, Area of Study 1</strong>. The outcome asks you to <em>develop and evaluate a software solution that meets requirements, and assess the effectiveness of the project plan.</em></p>
+    <p>Here is the part students miss: the <strong>evaluation criteria you use now were written back in Unit&nbsp;3 design</strong>. You don't invent fresh yardsticks at the end — you measure the finished solution against the <em>same</em> criteria you set when you generated your design ideas.</p>
+    <p>Evaluation has <strong>two distinct jobs</strong>:</p>
+    <div class="halves">
+      <div class="halfcard a"><div class="ht">◆ Job 1 · Evaluate the solution</div><p>Judge the solution's <span class="eff-word">effectiveness</span> and <span class="efy-word">efficiency</span> against the evaluation criteria, using evidence gathered after a period of use.</p></div>
+      <div class="halfcard b"><div class="ht">◆ Job 2 · Assess the project plan</div><p>Document the changes made to your original plan and judge how effective the plan was at guiding the project to completion.</p></div>
+    </div>
+    <p>On the <strong>SAT</strong> these are assessed separately: <strong>Criterion&nbsp;9</strong> (skills in evaluating the software solution) and <strong>Criterion&nbsp;10</strong> (skills in assessing the project plan). In the <strong>exam</strong> you write about both. The relevant key knowledge sits together:</p>
     <p>
-      <span class="kk">debugging &amp; alpha testing techniques</span>
-      <span class="kk">conducting beta testing</span>
-      <span class="kk">evaluation strategies</span>
-      <span class="kk">applying evaluation criteria</span>
+      <span class="kk">evaluation criteria</span>
+      <span class="kk">efficiency &amp; effectiveness</span>
+      <span class="kk">evaluation strategies &amp; techniques</span>
+      <span class="kk">assessing the project plan</span>
     </p>
-    <p>On the <strong>SAT</strong>, your skill in debugging and alpha testing is assessed under Criterion 8, and beta testing must be run with <strong>at least two intended users</strong>, with their feedback kept as evidence. So you physically <em>do</em> both during your SAT and you <em>write</em> about both in the exam.</p>
-    <p>One sentence to hold for the whole guide: <strong>alpha is the developer checking the solution <span class="alpha-word">works</span>; beta is real users checking the solution <span class="beta-word">works for them</span>.</strong></p>
+    <p>One sentence to hold for the whole guide: <strong>testing asks “does it <span class="eff-word">work</span>?”; evaluation asks “was it <span class="efy-word">good enough</span>?” — judged after real use, against the criteria, for both efficiency and effectiveness.</strong></p>
   </section>
 
   <!-- 2 ANALOGY -->
   <section id="analogy">
     <div class="eyebrow green"><span class="dot"></span>Section 02 · Make it stick</div>
-    <h2 class="sec">The analogy: shipping a video game</h2>
-    <p class="lead">You've lived through this cycle already — every big game release runs on exactly the same two gates.</p>
+    <h2 class="sec">The analogy: a new café opens</h2>
+    <p class="lead">You set targets before you open, run for a few weeks, then sit down with the evidence and judge yourself against those targets. That's evaluation.</p>
 
     <div class="analogy">
-      <div class="ic">🎮</div>
+      <div class="ic">☕</div>
       <div>
-        <h4>Game development</h4>
-        <p>Before a studio lets the public anywhere near a game, the studio's <em>own</em> QA team plays the unfinished build to hunt bugs. Then a chosen slice of the public is invited to a “beta weekend” to play it on their own consoles, on their own internet, and report back.</p>
+        <h4>Opening a café</h4>
+        <p>Before opening, the chef tastes every dish in the kitchen and a few regulars trial the menu — that's <em>testing</em> (alpha &amp; beta). But you can only judge whether the café is <strong>any good</strong> after it has actually been <strong>open and serving customers for a few weeks</strong>. Then the owner pulls out the business plan and checks reality against the targets set in advance.</p>
         <div class="split">
-          <div class="half a"><div class="t">◆ Alpha = internal QA</div>The studio's testers, inside the studio, with debug tools, checking the game actually runs.</div>
-          <div class="half b"><div class="t">◆ Beta = the public beta</div>Real players, in the real world, on real hardware, telling the studio what's confusing or broken.</div>
+          <div class="half a"><div class="t">◆ Effectiveness</div>Are customers happy, are orders correct, is the food the quality we promised? Does the café achieve its <em>purpose</em>?</div>
+          <div class="half b"><div class="t">◆ Efficiency</div>Are we making money without waste — fast service, low spoilage, sensible staffing? Are we using our <em>resources</em> well?</div>
         </div>
       </div>
     </div>
 
     <div class="realworld"><div class="rl">★ Real examples you know</div>
-      <strong>Minecraft</strong> literally shipped as “Alpha” (2010) then “Beta” (late 2010–2011) before its 1.0 release — the labels <em>are</em> these stages. Console games run <strong>open/closed beta weekends</strong> before launch. And <strong>Gmail</strong> wore a “beta” badge for about five years (2004–2009) while millions of real users shook it out.</div>
+      A <strong>school report card</strong> grades you against set criteria <em>after</em> a term of learning, not during a single lesson. A <strong>car review at 10,000&nbsp;km</strong> judges reliability and running cost that a showroom test-drive never could. Companies run <strong>post-launch reviews against KPIs</strong> weeks after release. In every case: judge against a yardstick set in advance, after a real period of use.</div>
 
     <div class="analogy">
-      <div class="ic">🍝</div>
+      <div class="ic">🏗️</div>
       <div>
-        <h4>The restaurant</h4>
-        <p>The <span class="alpha-word">chef tastes the dish in the kitchen</span> before it leaves — they know the recipe and can fix the seasoning (alpha). Then a few regulars get a <span class="beta-word">free sample at their table</span> and say what they think before it goes on the menu (beta).</p>
+        <h4>The building handover</h4>
+        <p>Inspectors check the wiring and plumbing during construction — that's testing. But the <span class="eff-word">final evaluation</span> happens once people have <em>lived in the building</em>: did it meet the brief, stay on budget, and finish on schedule? Quality of the building (effectiveness) and use of resources (efficiency) — plus a hard look at how well the <span class="efy-word">project plan</span> held up.</p>
       </div>
     </div>
-
-    <div class="analogy">
-      <div class="ic">🚗</div>
-      <div>
-        <h4>The new car</h4>
-        <p>Engineers test it on a <span class="alpha-word">closed track with diagnostics plugged in</span> — they can see the engine (alpha). Then selected drivers take pre-production cars onto <span class="beta-word">real roads for weeks</span> to surface problems the track never would (beta).</p>
-      </div>
-    </div>
-    <p>Notice the pattern in all three: <strong>insiders who can see the inner workings go first; outsiders in the real world go second.</strong> That single idea is worth most of the marks.</p>
+    <p>Notice the shared pattern: <strong>you can only judge “good enough” after a period of real use, and only against criteria you set beforehand.</strong> That single idea separates evaluation from testing — and it's worth a lot of marks.</p>
   </section>
 
-  <!-- 3 ALPHA -->
-  <section id="alpha">
-    <div class="eyebrow"><span class="dot"></span>Section 03 · Gate 1</div>
-    <h2 class="sec"><span class="alpha-word">Alpha</span> testing, in VCAA terms</h2>
+  <!-- 3 DEFINE -->
+  <section id="define">
+    <div class="eyebrow"><span class="dot"></span>Section 03 · The definition</div>
+    <h2 class="sec">What evaluation is, in VCAA terms</h2>
     <div class="def alpha">
       <div class="deflabel">◆ Definition to memorise</div>
-      <p><strong>Alpha testing</strong> is testing carried out <strong>by the developer (internally)</strong> within a <strong>controlled development environment</strong>, before release, to confirm that the solution and its modules <strong>function as expected and meet the requirements.</strong></p>
+      <p><strong>Evaluation</strong> is the process, carried out <strong>after the solution has been in use for a period of time</strong>, of judging the quality of the solution against the <strong>evaluation criteria</strong> — specifically its <strong>effectiveness and efficiency</strong> — and <strong>assessing the effectiveness of the project plan.</strong></p>
     </div>
-    <p>Alpha testing is tightly bound to <strong>debugging</strong> — that's why the study design pairs them. You run the solution against planned test data, find where it misbehaves, then debug and fix.</p>
     <div class="facts">
-      <div class="fact alpha"><div class="q">Who runs it?</div><div class="ans">The developer / dev team (internal).</div></div>
-      <div class="fact alpha"><div class="q">Where?</div><div class="ans">A controlled, in-house environment.</div></div>
-      <div class="fact alpha"><div class="q">When?</div><div class="ans">After coding, <em>before</em> beta.</div></div>
-      <div class="fact alpha"><div class="q">Focus?</div><div class="ans">Correctness — does it work &amp; meet requirements.</div></div>
+      <div class="fact alpha"><div class="q">When?</div><div class="ans">After a period of real use (often a few weeks).</div></div>
+      <div class="fact alpha"><div class="q">Against what?</div><div class="ans">The evaluation criteria set during design.</div></div>
+      <div class="fact beta"><div class="q">Measures the solution by?</div><div class="ans">Effectiveness &amp; efficiency.</div></div>
+      <div class="fact beta"><div class="q">Also judges?</div><div class="ans">The effectiveness of the project plan.</div></div>
     </div>
-    <h3>How a developer actually does it</h3>
-    <ul class="clean">
-      <li>Design <strong>test data</strong> covering <strong>valid</strong>, <strong>invalid</strong> and <strong>boundary</strong> values (a mark out of 100 → test 50, −1, 0, 100, 101).</li>
-      <li>Predict the <strong>expected output</strong> before running each test.</li>
-      <li>Run the module, record the <strong>actual output</strong>; a <strong>trace table</strong> tracks variables line-by-line.</li>
-      <li>Where expected ≠ actual, <strong>debug</strong>: find the error, fix it, re-test.</li>
-    </ul>
-    <div class="realworld"><div class="rl">★ Picture it</div>Alpha is <strong>white-box</strong> testing: like the game studio's QA with the source code open, the developer can see <em>inside</em> the solution and test specific modules and code paths. Spin the 3D lab below in <span class="alpha-word">Alpha</span> mode to see this.</div>
 
-    <div class="do">Now you do it · build the test data</div>
-    <p>A developer designs test data before running anything. Sort each value below into the right category. Aim to cover all three — and remember the boundaries are where bugs hide.</p>
-    <div class="lab">
-      <div class="lab-head"><span class="lt">◆ Test-data sorter</span><span class="score-pill" id="tdbScore">0 of 9 placed</span></div>
-      <div class="sortbox">
-        <div class="scenario-line"><b>The field under test</b>A score field that should accept a <strong>whole number from 0 to 100</strong>.</div>
-        <div class="tray" id="tdbTray" aria-label="Values to sort"></div>
-        <div class="buckets">
-          <div class="bucket" data-cat="valid"><div class="bhead">◆ Valid</div><div class="drop"></div></div>
-          <div class="bucket" data-cat="boundary"><div class="bhead">◆ Boundary</div><div class="drop"></div></div>
-          <div class="bucket" data-cat="invalid"><div class="bhead">◆ Invalid</div><div class="drop"></div></div>
-        </div>
-        <button class="check-btn" id="tdbCheck">Check my testing</button>
-        <div class="sfeedback" id="tdbFb"></div>
-      </div>
+    <h3>Why “after a period of use”?</h3>
+    <p>Some qualities simply cannot be judged on day one. Whether the solution is <strong>reliable</strong>, whether it actually <strong>saved time</strong>, whether it performs under a <strong>real workload</strong>, and whether users find it <strong>usable</strong> over time — all of this needs genuine evidence from real use. Evaluating too early means guessing; evaluating after use means <em>judging from data</em>.</p>
+
+    <h3>Where it sits in the lifecycle</h3>
+    <p>Evaluation is the last station on the line. Testing happens <em>during</em> development to make the solution better; evaluation happens <em>after</em> use to decide whether it was good enough.</p>
+    <div class="timeline">
+      <div class="tnode"><div class="tdot"></div><div class="tlbl">Develop</div><div class="tsub">Code the solution</div></div>
+      <div class="tnode"><div class="tdot"></div><div class="tlbl">Alpha test</div><div class="tsub">Developer, internal</div></div>
+      <div class="tnode"><div class="tdot"></div><div class="tlbl">Beta test</div><div class="tsub">Real users refine it</div></div>
+      <div class="tnode"><div class="tdot"></div><div class="tlbl">In use</div><div class="tsub">A period of real use</div></div>
+      <div class="tnode is-eval"><div class="tdot"></div><div class="tlbl">Evaluate</div><div class="tsub">Judge vs criteria</div></div>
     </div>
   </section>
 
-  <!-- 3.5 CASE STUDY -->
-  <section id="casestudy">
-    <div class="eyebrow"><span class="dot"></span>Section 04 · Alpha in action</div>
-    <h2 class="sec">Case study: alpha-test a real Python program</h2>
-    <p class="lead">Here is a finished module from an online booking system — exactly the kind of solution you alpha-test during a SAT. Your job is the developer's job: design test data, predict the <span class="alpha-word">expected</span> output from the requirements, run each test, then compare expected against <span class="beta-word">actual</span> to find the defect.</p>
+  <!-- 4 MEASURES -->
+  <section id="measures">
+    <div class="eyebrow beta"><span class="dot"></span>Section 04 · The two measures</div>
+    <h2 class="sec"><span class="eff-word">Effectiveness</span> vs <span class="efy-word">efficiency</span></h2>
+    <p class="lead">Every evaluation of a solution is built from these two ideas. Examiners reward you for naming the right one and measuring it.</p>
 
-    <div class="brief"><div class="bl">◆ Requirements — what the code SHOULD do</div>
-      <ul>
-        <li>A booking needs at least <strong>1</strong> seat, or it is rejected.</li>
-        <li>Confirm the booking when the seats requested <strong>fit within</strong> the seats available (including using every remaining seat).</li>
-        <li>Otherwise report that it is sold out.</li>
-      </ul>
+    <div class="def alpha">
+      <div class="deflabel">◆ Effectiveness — “doing the right thing”</div>
+      <p><strong>Effectiveness</strong> measures <strong>how well the solution achieves its intended purpose</strong> and meets its requirements — the quality of the <em>outcome</em>.</p>
+    </div>
+    <div class="mchips">
+      <span class="mchip a">completeness</span><span class="mchip a">functionality</span><span class="mchip a">accuracy</span>
+      <span class="mchip a">usability</span><span class="mchip a">accessibility</span><span class="mchip a">reliability / robustness</span>
+      <span class="mchip a">clarity / communication</span><span class="mchip a">relevance</span><span class="mchip a">security</span><span class="mchip a">timeliness</span>
     </div>
 
-    <div class="code-card" aria-label="Python function under test"><span class="cm"># booking.py — module under alpha test</span>
-<span class="kw">def</span> <span class="fn">can_book</span>(requested, available):
-    <span class="st">"""Confirm a seat booking against the rules above."""</span>
-    <span class="kw">if</span> requested &lt;= <span class="st">0</span>:
-        <span class="kw">return</span> <span class="st">"Rejected: must book at least 1 seat"</span>
-<span class="bugline">    <span class="kw">if</span> requested &lt; available:          <span class="cm"># does this match the rule?</span></span>
-        <span class="kw">return</span> <span class="st">"Booking confirmed"</span>
-    <span class="kw">return</span> <span class="st">"Sold out: not enough seats"</span></div>
-
-    <p>Edit the inputs if you like, choose the output the <em>requirements</em> say you should get, then run the test. One row hides a defect.</p>
-    <div class="lab">
-      <div class="lab-head"><span class="lt">◆ Expected vs actual</span><span class="score-pill" id="csScore">0 of 4 run</span></div>
-      <div class="sortbox">
-        <table class="cs-table">
-          <thead><tr><th>requested</th><th>available</th><th>Your expected output</th><th></th><th>Actual</th><th>Result</th></tr></thead>
-          <tbody id="csRows"></tbody>
-        </table>
-        <div class="cs-actions">
-          <button class="run-btn" id="csRunAll">Run all tests</button>
-          <button class="check-btn" id="csReveal" style="display:none">Reveal the defect</button>
-        </div>
-        <div class="cs-reveal" id="csRevealBox">
-          <p><strong>Found it.</strong> The valid and invalid tests all pass — the program only fails when <code>requested</code> is <em>exactly equal</em> to <code>available</code> (e.g. 5 seats wanted, 5 left). That is a <strong>boundary</strong> case, and it returns “Sold out” when the rule says it should confirm.</p>
-          <div class="fixrow"><span class="cm"># the fix — one character</span><br><span class="was">if requested &lt; available:</span>  →  <span class="now">if requested &lt;= available:</span></div>
-          <p style="margin:0">This is the whole point of <span class="alpha-word">boundary</span> test data: a normal valid value (3 of 10) and a normal invalid value (0) both sail straight past this bug. Only a test sitting <em>on the edge</em> exposes it — which is why you built boundary values in the sorter above.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4 BETA -->
-  <section id="beta">
-    <div class="eyebrow beta"><span class="dot"></span>Section 05 · Gate 2</div>
-    <h2 class="sec"><span class="beta-word">Beta</span> testing, in VCAA terms</h2>
     <div class="def beta">
-      <div class="deflabel">◆ Definition to memorise</div>
-      <p><strong>Beta testing</strong> is testing carried out <strong>by intended (potential) end users</strong> in a <strong>real-world environment</strong>, after alpha testing, to gather <strong>feedback on the functionality and usability</strong> of the solution under genuine conditions of use.</p>
+      <div class="deflabel">◆ Efficiency — “doing the thing right”</div>
+      <p><strong>Efficiency</strong> measures <strong>how well the solution uses resources</strong> — chiefly <strong>time, cost and effort</strong> — the economy of the <em>means</em>.</p>
     </div>
-    <p>The whole point is to expose the solution to people who are <em>not</em> the developer, doing real tasks. They notice confusing layouts and unexpected inputs the developer is “too close” to see.</p>
-    <div class="facts">
-      <div class="fact beta"><div class="q">Who runs it?</div><div class="ans">Intended end users (SAT: at least two).</div></div>
-      <div class="fact beta"><div class="q">Where?</div><div class="ans">A realistic, real-world environment.</div></div>
-      <div class="fact beta"><div class="q">When?</div><div class="ans">After alpha, before final release.</div></div>
-      <div class="fact beta"><div class="q">Focus?</div><div class="ans">Usability &amp; real-world feedback from users.</div></div>
+    <div class="mchips">
+      <span class="mchip b">speed of processing</span><span class="mchip b">cost-effectiveness</span><span class="mchip b">use of processing / storage</span>
+      <span class="mchip b">level of automation</span><span class="mchip b">productivity</span><span class="mchip b">time taken</span>
     </div>
-    <h3>How beta testing is conducted</h3>
-    <ul class="clean beta">
-      <li>Prepare a <strong>beta testing strategy</strong>: which users, which tasks, how feedback is captured.</li>
-      <li>Give the working solution to chosen users in their normal environment.</li>
-      <li>Users complete <strong>typical, realistic tasks</strong>, not scripted developer tests.</li>
-      <li>Collect feedback via <strong>surveys, observation or interviews</strong>.</li>
-      <li>Analyse feedback, find usability issues, then refine the solution.</li>
-    </ul>
-    <div class="realworld"><div class="rl">★ Picture it</div>Beta is <strong>black-box</strong> testing: like players in a public beta, users only ever see the <em>outside</em>. Flip the 3D lab to <span class="beta-word">Beta</span> mode to watch real users probe the sealed product and send feedback.</div>
+
+    <div class="realworld"><div class="rl">★ The key insight</div>The two are independent. A solution can be <span class="eff-word">effective but inefficient</span> (it produces perfect results, but slowly and at great cost) or <span class="efy-word">efficient but ineffective</span> (it runs fast and cheap, but doesn't actually meet the need). A complete evaluation always judges <strong>both</strong>.</div>
+
+    <div class="do">Now you do it · sort the measures</div>
+    <p>Each statement below is something you might measure during evaluation. Decide whether it tells you about <span class="eff-word">effectiveness</span> (achieving the purpose) or <span class="efy-word">efficiency</span> (using resources well).</p>
+    <div class="lab">
+      <div class="lab-head"><span class="lt">◆ Measure sorter</span><span class="score-pill" id="meScore">0 of 10 placed</span></div>
+      <div class="sortbox">
+        <div class="tray" id="meTray" aria-label="Measures to sort"></div>
+        <div class="buckets two">
+          <div class="bucket" data-cat="effectiveness"><div class="bhead">◆ Effectiveness</div><div class="drop"></div></div>
+          <div class="bucket" data-cat="efficiency"><div class="bhead">◆ Efficiency</div><div class="drop"></div></div>
+        </div>
+        <button class="check-btn" id="meCheck">Check my answers</button>
+        <div class="sfeedback" id="meFb"></div>
+      </div>
+    </div>
   </section>
 
-  <!-- 5 LAB -->
+  <!-- 5 CRITERIA -->
+  <section id="criteria">
+    <div class="eyebrow"><span class="dot"></span>Section 05 · The yardstick</div>
+    <h2 class="sec">Writing measurable evaluation criteria</h2>
+    <div class="def alpha">
+      <div class="deflabel">◆ Definition to memorise</div>
+      <p><strong>Evaluation criteria</strong> are a set of <strong>measurable statements</strong>, developed during <strong>design</strong> and derived from the <strong>solution requirements</strong>, against which the <strong>effectiveness and efficiency</strong> of the finished solution are later judged.</p>
+    </div>
+    <p>Good criteria are usually written as a <strong>question with a measurable answer</strong>, and each one ties to a <strong>requirement</strong> and to either effectiveness or efficiency. A criterion you can't measure is useless at evaluation time — you'll have no way to say whether it was met.</p>
+
+    <h3>The test of a good criterion</h3>
+    <ul class="clean">
+      <li><strong>Specific</strong> — it names one thing, not a vague feeling.</li>
+      <li><strong>Measurable</strong> — there's a clear way to gather evidence and decide met / partly met / not met.</li>
+      <li><strong>Tied to a requirement</strong> — it traces back to what the solution was meant to do.</li>
+      <li><strong>Labelled</strong> — you know whether it measures effectiveness or efficiency.</li>
+    </ul>
+
+    <h3>Weak criterion → strong criterion</h3>
+    <p>Same intent, made measurable. The fix is almost always: add a <em>number, a threshold, or a defined test.</em></p>
+
+    <div class="crit">
+      <div class="ch">
+        <div class="ccol weak"><div class="ct">✗ Too vague</div><div class="cbody">“The app is good.”</div></div>
+        <div class="ccol strong"><div class="ct">✓ Measurable</div><div class="cbody">“Does the booking screen let a new user complete a booking in under 60&nbsp;seconds?”</div></div>
+      </div>
+      <div class="why"><b>Why:</b> sets a threshold you can time. Measures <span class="efy-word">efficiency</span> / usability.</div>
+    </div>
+
+    <div class="crit">
+      <div class="ch">
+        <div class="ccol weak"><div class="ct">✗ Too vague</div><div class="cbody">“It works.”</div></div>
+        <div class="ccol strong"><div class="ct">✓ Measurable</div><div class="cbody">“Does the solution calculate the correct total for every valid combination of seats and prices?”</div></div>
+      </div>
+      <div class="why"><b>Why:</b> testable against expected results. Measures <span class="eff-word">effectiveness</span> / accuracy.</div>
+    </div>
+
+    <div class="crit">
+      <div class="ch">
+        <div class="ccol weak"><div class="ct">✗ Too vague</div><div class="cbody">“Users like it.”</div></div>
+        <div class="ccol strong"><div class="ct">✓ Measurable</div><div class="cbody">“Do at least 80% of surveyed users rate the interface 4&nbsp;out&nbsp;of&nbsp;5 or higher for ease of use?”</div></div>
+      </div>
+      <div class="why"><b>Why:</b> a survey gives a number to check against the threshold. Measures <span class="eff-word">effectiveness</span> / usability.</div>
+    </div>
+
+    <div class="crit">
+      <div class="ch">
+        <div class="ccol weak"><div class="ct">✗ Too vague</div><div class="cbody">“It's fast.”</div></div>
+        <div class="ccol strong"><div class="ct">✓ Measurable</div><div class="cbody">“Does a search return results in under 2&nbsp;seconds for a database of 5,000&nbsp;records?”</div></div>
+      </div>
+      <div class="why"><b>Why:</b> a measurable response time under a defined load. Measures <span class="efy-word">efficiency</span> / speed.</div>
+    </div>
+
+    <div class="realworld"><div class="rl">★ Continuity worth marks</div>The criteria you apply now are the <strong>same ones written in Unit&nbsp;3 design</strong>. Examiners like to ask <em>where evaluation criteria come from</em> — the answer is: from the solution requirements, during the design stage, before the solution is built.</div>
+  </section>
+
+  <!-- 6 LAB -->
   <section id="lab">
     <div class="eyebrow green"><span class="dot"></span>Section 06 · Interactive lab</div>
-    <h2 class="sec">3D lab: white-box vs black-box</h2>
-    <p class="lead">Same product, two gates. Toggle the mode and drag to rotate — watch <em>who</em> tests and <em>what</em> they can see change completely.</p>
+    <h2 class="sec">3D lab: one job, four solutions, two lenses</h2>
+    <p class="lead">The task never changes — <em>process the numbers</em>. But the <strong>solution</strong> does, across four eras. Step from the abacus to a modern laptop and watch the <em>same</em> evaluation criteria re-score each one. Notice that "newer" wins almost everywhere — but <em>not</em> on cost. Drag to rotate.</p>
     <div class="lab">
       <div class="lab-head">
-        <span class="lt">◆ Test Mode</span>
-        <div class="toggle" role="group" aria-label="Choose test mode">
-          <button id="modeAlpha" class="on a" aria-pressed="true">ALPHA · internal</button>
-          <button id="modeBeta" class="b" aria-pressed="false">BETA · real users</button>
+        <div class="era-ctl" role="group" aria-label="Choose the solution era">
+          <button id="eraPrev" class="step" aria-label="Previous solution">◀</button>
+          <span class="era-pill"><span id="eraNum">1</span>/4 · <span id="eraName">Abacus</span></span>
+          <button id="eraNext" class="step" aria-label="Next solution">▶</button>
+          <button id="eraPlay" class="step play" aria-label="Auto-advance through the eras">▶ PLAY</button>
+        </div>
+        <div class="toggle" role="group" aria-label="Choose measure">
+          <button id="modeEff" class="on a" aria-pressed="true">EFFECTIVENESS</button>
+          <button id="modeEfy" class="b" aria-pressed="false">EFFICIENCY</button>
         </div>
       </div>
-      <canvas id="labCanvas" aria-label="Interactive 3D scene of a product being tested"></canvas>
-      <div class="lab-hint">drag to rotate · the product is the same — only the testing changes</div>
-      <div class="lab-cap" id="labCap"><b>ALPHA.</b> The shell is transparent — the <b>developer</b> can see every internal module and probe it directly with planned test data. Modules flash green as they pass; a red one is a bug being found and fixed. This is <b>white-box</b>, internal testing.</div>
+      <canvas id="labCanvas" aria-label="Interactive 3D evaluation rig: a tool from history on the plinth, with gauges scoring it"></canvas>
+      <div class="era-track" id="eraDots" aria-hidden="true"></div>
+      <div class="lab-hint">drag to rotate · step through the eras · the job is the same — only the solution changes</div>
+      <div class="legend" id="labLegend"></div>
+      <div class="lab-cap" id="labCap"></div>
     </div>
   </section>
 
-  <!-- 6 COMPARE -->
-  <section id="compare">
-    <div class="eyebrow green"><span class="dot"></span>Section 07 · The money table</div>
-    <h2 class="sec">Side-by-side: the comparison examiners reward</h2>
-    <p class="lead">A “distinguish” or “compare” question wants a row or two from this table — both sides stated, linked by <em>whereas</em>.</p>
+  <!-- 7 STRATEGIES -->
+  <section id="strategies">
+    <div class="eyebrow"><span class="dot"></span>Section 07 · Gather the evidence</div>
+    <h2 class="sec">Evaluation strategies &amp; collecting evidence</h2>
+    <p class="lead">You can't judge a criterion on a hunch. An <strong>evaluation strategy</strong> is your plan for <em>what evidence to collect, how, and over what period</em> — so each criterion can be rated from data.</p>
+
+    <h3>Techniques for collecting evidence</h3>
+    <ul class="clean">
+      <li><strong>User feedback</strong> — surveys / questionnaires, interviews, and observing users complete real tasks (best for usability, clarity, accessibility).</li>
+      <li><strong>System &amp; usage data</strong> — logs, error reports, and measured response times or benchmarking (best for reliability, speed, resource use).</li>
+      <li><strong>Comparing results to requirements</strong> — checking actual outputs against the expected outputs the criteria demand (best for accuracy, completeness, functionality).</li>
+      <li><strong>Before-vs-after comparison</strong> — time or cost to do the task manually vs with the solution (best for productivity and cost-effectiveness).</li>
+      <li><strong>Re-using beta feedback</strong> — feedback gathered during beta testing becomes evidence you draw on at evaluation.</li>
+    </ul>
+
+    <div class="realworld"><div class="rl">★ The move that earns marks</div>Match the <strong>technique to the measure</strong>. You don't survey users to check processing speed, and you don't read server logs to find out if the layout is confusing. Then you <strong>rate each criterion from the evidence</strong> (met / partly met / not met), draw a conclusion, and <strong>recommend improvements</strong>.</div>
+
+    <h3>Which technique suits which criterion</h3>
     <div class="tbl-scroll">
       <table class="cmp">
-        <thead><tr><th>Dimension</th><th class="h-alpha">Alpha testing</th><th class="h-beta">Beta testing</th></tr></thead>
+        <thead><tr><th>Criterion measures…</th><th class="h-alpha">Effectiveness or efficiency?</th><th class="h-beta">Evidence / technique</th></tr></thead>
         <tbody>
-          <tr><td>Who tests</td><td>The developer / dev team (internal)</td><td>Intended end users (external)</td></tr>
-          <tr><td>Environment</td><td>Controlled development environment</td><td>Real-world environment</td></tr>
-          <tr><td>Timing</td><td>First — straight after coding</td><td>Second — after alpha is passed</td></tr>
-          <tr><td>Main focus</td><td>Functions correctly &amp; meets requirements</td><td>Usability &amp; functionality for real users</td></tr>
-          <tr><td>Method</td><td>Planned test data, trace tables, expected vs actual, debugging</td><td>User tasks + surveys, observation, interviews</td></tr>
-          <tr><td>Sees the code?</td><td>Yes — white-box, knows internals</td><td>No — black-box, outside only</td></tr>
-          <tr><td>Output</td><td>Bugs found &amp; fixed before release</td><td>User feedback used to refine the solution</td></tr>
-          <tr><td>Shared trait</td><td colspan="2" style="text-align:center; color:var(--muted)">Both are forms of <strong>acceptance testing</strong> — both check the solution meets requirements before release.</td></tr>
+          <tr><td>Ease of use</td><td>Effectiveness (usability)</td><td>User survey + observation of real tasks</td></tr>
+          <tr><td>Correct results</td><td>Effectiveness (accuracy)</td><td>Compare actual outputs to expected outputs</td></tr>
+          <tr><td>Runs without failing</td><td>Effectiveness (reliability)</td><td>Error logs over the period of use</td></tr>
+          <tr><td>Response time</td><td>Efficiency (speed)</td><td>Measure / benchmark time per operation</td></tr>
+          <tr><td>Running cost</td><td>Efficiency (cost)</td><td>Cost analysis vs budget / vs old method</td></tr>
+          <tr><td>Time saved</td><td>Efficiency (productivity)</td><td>Before-vs-after timing of the task</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- 7 EVALUATE -->
-  <section id="evaluate">
-    <div class="eyebrow"><span class="dot"></span>Section 08 · Don't confuse these</div>
-    <h2 class="sec">Testing is not the same as evaluation</h2>
-    <p class="lead">The highest-value distinction in the outcome — and the one students most often blur.</p>
-    <ul class="clean"><li><strong>Beta testing happens <em>during</em> development.</strong> Users trial the working solution; the developer uses the feedback to <em>refine and fix</em> it before release.</li></ul>
-    <ul class="clean beta"><li><strong>Evaluation happens <em>after</em> the solution has been in use for a period of time</strong> (often a few weeks). It judges the solution against the <strong>evaluation criteria</strong> set during design, and assesses the <strong>effectiveness of the project plan</strong>.</li></ul>
-    <p>Testing makes the solution <em>better</em>; evaluation decides whether it was <em>good enough</em>. Beta feedback can become <strong>evidence you draw on during evaluation</strong> — but they're different activities with different timing and purpose.</p>
-  </section>
+  <!-- 8 SCORECARD -->
+  <section id="scorecard">
+    <div class="eyebrow green"><span class="dot"></span>Section 08 · Evaluation in action</div>
+    <h2 class="sec">Case study: score a real solution</h2>
+    <p class="lead">The online booking system has now been <strong>live for three weeks</strong>. Here are five evaluation criteria written back in design, each with the evidence collected during use. Do the evaluator's job: read the evidence and give each criterion an honest rating, then check it and reveal a model evaluation.</p>
 
-  <!-- 8.5 CLASSIFY -->
-  <section id="classify">
-    <div class="eyebrow green"><span class="dot"></span>Section 09 · Sort it yourself</div>
-    <h2 class="sec">Sort it yourself: alpha, beta or neither?</h2>
-    <p class="lead">No reveal button this time — recall it yourself. Drop each real scenario under the gate it belongs to. Some are <em>evaluation</em>, not testing at all, so they go in <strong>Neither</strong>.</p>
+    <div class="brief"><div class="bl">◆ The solution under evaluation</div>
+      An online seat-booking system for a community theatre. Criteria were set in Unit&nbsp;3 design; evidence below was gathered over three weeks of real bookings.
+    </div>
+
     <div class="lab">
-      <div class="lab-head"><span class="lt">◆ Scenario sorter</span><span class="score-pill" id="sortScore">0 of 7 placed</span></div>
+      <div class="lab-head"><span class="lt">◆ Evaluation scorecard</span><span class="score-pill" id="scScore">0 of 5 rated</span></div>
       <div class="sortbox">
-        <div class="tray" id="sortTray" aria-label="Scenarios to sort"></div>
-        <div class="buckets">
-          <div class="bucket" data-cat="alpha"><div class="bhead">◆ Alpha</div><div class="drop"></div></div>
-          <div class="bucket" data-cat="beta"><div class="bhead">◆ Beta</div><div class="drop"></div></div>
-          <div class="bucket" data-cat="neither"><div class="bhead">◆ Neither</div><div class="drop"></div></div>
+        <table class="sc-table">
+          <thead><tr><th>Criterion</th><th>Evidence after 3 weeks of use</th><th>Your rating</th><th></th></tr></thead>
+          <tbody id="scRows"></tbody>
+        </table>
+        <div class="cs-actions">
+          <button class="check-btn" id="scCheck">Check my ratings</button>
+          <button class="reveal-btn" id="scRevealBtn" style="display:none">Reveal model evaluation ▾</button>
         </div>
-        <button class="check-btn" id="sortCheck">Check my answers</button>
-        <div class="sfeedback" id="sortFb"></div>
+        <div class="sfeedback" id="scFb"></div>
+        <div class="sc-reveal" id="scReveal">
+          <div class="mlabel" style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--pass);font-weight:600;margin-bottom:8px">Model evaluation</div>
+          <p>Overall the solution is <strong>effective but only moderately efficient</strong>. It fully meets its core purpose: bookings are <span class="eff-word">accurate</span> (criterion&nbsp;2 met — no incorrect totals in 3 weeks) and the solution is <span class="eff-word">reliable</span> (criterion&nbsp;4 met — zero crashes logged). <span class="eff-word">Usability</span> is partly met: 72% of surveyed users rated ease of use 4/5+, just short of the 80% threshold, with the date picker the common complaint. On efficiency, <span class="efy-word">processing speed</span> is met (confirmations under 2&nbsp;seconds), but <span class="efy-word">accessibility</span> is not met — screen-reader users could not complete a booking, failing the criterion outright.</p>
+          <p style="margin:0"><strong>Recommendations:</strong> redesign the date picker and add proper labels/ARIA for screen readers, then re-evaluate usability and accessibility against the same thresholds. The two met effectiveness criteria and the speed criterion show the core is sound; the gaps are in inclusive design, not correctness.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 8 TRAPS -->
-  <section id="traps">
-    <div class="eyebrow red"><span class="dot"></span>Section 10 · Lose-a-mark landmines</div>
-    <h2 class="sec">Six exam traps to avoid</h2>
-    <div class="trap"><div class="x">Trap 1</div><p class="wrong">“Alpha testing is done by users at home.”</p><p class="fix"><b>Fix:</b> Alpha is done by the <span class="alpha-word">developer, internally</span>. It's <span class="beta-word">beta</span> that uses real users in a real environment.</p></div>
-    <div class="trap"><div class="x">Trap 2</div><p class="wrong">“Beta testing is how you evaluate the solution.”</p><p class="fix"><b>Fix:</b> Beta happens <em>during</em> development to refine; <strong>evaluation</strong> happens <em>after</em> use, against criteria.</p></div>
-    <div class="trap"><div class="x">Trap 3</div><p class="wrong">“Beta finds all the bugs, so alpha isn't needed.”</p><p class="fix"><b>Fix:</b> Different jobs. Alpha confirms the code <em>functions</em>; beta checks it <em>works for real users</em>. Both required.</p></div>
-    <div class="trap"><div class="x">Trap 4</div><p class="wrong">“Testing just means running the program to see if it opens.”</p><p class="fix"><b>Fix:</b> Name the method — <span class="alpha-word">planned test data &amp; expected-vs-actual</span> for alpha; <span class="beta-word">user feedback via surveys/observation</span> for beta.</p></div>
-    <div class="trap"><div class="x">Trap 5</div><p class="wrong">Describing beta without saying “real users” or “real-world environment.”</p><p class="fix"><b>Fix:</b> Those ideas <em>are</em> the marks. Always pin beta to <span class="beta-word">intended users</span> in a <span class="beta-word">realistic environment</span>.</p></div>
-    <div class="trap"><div class="x">Trap 6</div><p class="wrong">Answering a 3-mark “explain” with a one-line “describe.”</p><p class="fix"><b>Fix:</b> “Explain” needs the point <em>plus the reason</em>. Match distinct ideas to marks.</p></div>
+  <!-- 9 PLAN -->
+  <section id="plan">
+    <div class="eyebrow beta"><span class="dot"></span>Section 09 · The other half · Criterion 10</div>
+    <h2 class="sec">Assessing the project plan</h2>
+    <div class="def beta">
+      <div class="deflabel">◆ Definition to memorise</div>
+      <p><strong>Assessing the project plan</strong> means <strong>documenting the modifications</strong> made to your original plan and judging <strong>how effective the plan was</strong> at guiding the project to completion — on time, on scope, and on track.</p>
+    </div>
+    <p>This is a separate job from evaluating the solution. You monitor it throughout using the <strong>Gantt chart from Unit&nbsp;3</strong>, recording <strong>actual versus expected durations</strong>, whether <strong>milestones</strong> were reached, and <strong>annotations</strong> explaining what happened.</p>
+
+    <h3>1 · Monitor: actual vs expected</h3>
+    <div class="tbl-scroll">
+      <table class="cmp">
+        <thead><tr><th>Task</th><th class="h-alpha">Expected</th><th class="h-beta">Actual</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Analysis &amp; requirements</td><td>2 weeks</td><td>2 weeks</td><td><span class="pill ontime">on time</span></td></tr>
+          <tr><td>Design</td><td>3 weeks</td><td>4 weeks</td><td><span class="pill over">+1 week</span></td></tr>
+          <tr><td>Development</td><td>6 weeks</td><td>7 weeks</td><td><span class="pill over">+1 week</span></td></tr>
+          <tr><td>Testing</td><td>2 weeks</td><td>1.5 weeks</td><td><span class="pill under">−0.5 week</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2 · Document the changes</h3>
+    <p>A change log records, for every adjustment, three things VCAA names explicitly: <strong>the change made</strong>, <strong>the reason it was necessary</strong>, and <strong>the impact</strong> on the schedule.</p>
+    <div class="tbl-scroll">
+      <table class="cmp">
+        <thead><tr><th>Change made</th><th class="h-alpha">Reason</th><th class="h-beta">Impact</th></tr></thead>
+        <tbody>
+          <tr><td>Extended design by 1 week</td><td>Mock-ups needed rework after user feedback</td><td>Pushed development start back; absorbed by trimming testing</td></tr>
+          <tr><td>Dropped the “seat map” feature</td><td>Too complex for the time remaining</td><td>Kept the milestone on track; logged as a scope change</td></tr>
+          <tr><td>Ran testing in parallel with docs</td><td>To recover the week lost in design</td><td>Final milestone met on the original date</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3 · Assess effectiveness</h3>
+    <p>Finally, judge the plan as a whole. Were the time estimates realistic? Were milestones met? Did the chosen <strong>development model</strong> suit the project? Where did the plan hold up, and what would you do differently next time?</p>
+    <div class="def alpha" style="border-left-color:var(--pass)">
+      <div class="deflabel" style="color:var(--pass)">◆ A model judgement</div>
+      <p>“The project plan was <strong>moderately effective</strong>. Most milestones were met and the final deadline held, but the design phase was consistently under-estimated, forcing a feature to be cut and testing to be compressed. A more realistic design estimate and a small time buffer would have removed the need to drop scope.”</p>
+    </div>
   </section>
 
-  <!-- 9 WRITING -->
+  <!-- 10 COMPARE -->
+  <section id="compare">
+    <div class="eyebrow green"><span class="dot"></span>Section 10 · The money table</div>
+    <h2 class="sec">Testing vs evaluation: the distinction examiners reward</h2>
+    <p class="lead">This is the single most-confused pair in the outcome. A “distinguish” question wants a row or two from this table — both sides, linked by <em>whereas</em>.</p>
+    <div class="tbl-scroll">
+      <table class="cmp">
+        <thead><tr><th>Dimension</th><th class="h-alpha">Testing (alpha &amp; beta)</th><th class="h-beta">Evaluation</th></tr></thead>
+        <tbody>
+          <tr><td>When</td><td>During development</td><td>After a period of real use</td></tr>
+          <tr><td>Purpose</td><td>Find &amp; fix problems — make it <em>better</em></td><td>Judge whether it was <em>good enough</em></td></tr>
+          <tr><td>Against what</td><td>Expected outputs / requirements</td><td>The evaluation criteria set in design</td></tr>
+          <tr><td>Measures</td><td>Does it function correctly?</td><td>Effectiveness &amp; efficiency</td></tr>
+          <tr><td>Also covers</td><td>—</td><td>Effectiveness of the project plan</td></tr>
+          <tr><td>Output</td><td>Bugs fixed / solution refined</td><td>A judgement + recommendations</td></tr>
+          <tr><td>How they link</td><td colspan="2" style="text-align:center; color:var(--muted)">Beta-testing feedback becomes <strong>evidence</strong> the developer draws on during evaluation.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 11 CLASSIFY -->
+  <section id="classify">
+    <div class="eyebrow green"><span class="dot"></span>Section 11 · Sort it yourself</div>
+    <h2 class="sec">Sort it yourself: solution, plan or testing?</h2>
+    <p class="lead">No reveal button — recall it yourself. Drop each scenario into the right bucket. Two of them are <em>testing</em>, not evaluation at all.</p>
+    <div class="lab">
+      <div class="lab-head"><span class="lt">◆ Scenario sorter</span><span class="score-pill" id="clScore">0 of 7 placed</span></div>
+      <div class="sortbox">
+        <div class="tray" id="clTray" aria-label="Scenarios to sort"></div>
+        <div class="buckets">
+          <div class="bucket" data-cat="solution"><div class="bhead">◆ Evaluating the solution</div><div class="drop"></div></div>
+          <div class="bucket" data-cat="plan"><div class="bhead">◆ Assessing the plan</div><div class="drop"></div></div>
+          <div class="bucket" data-cat="testing"><div class="bhead">◆ Not evaluation (testing)</div><div class="drop"></div></div>
+        </div>
+        <button class="check-btn" id="clCheck">Check my answers</button>
+        <div class="sfeedback" id="clFb"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 TRAPS -->
+  <section id="traps">
+    <div class="eyebrow red"><span class="dot"></span>Section 12 · Lose-a-mark landmines</div>
+    <h2 class="sec">Seven exam traps to avoid</h2>
+    <div class="trap"><div class="x">Trap 1</div><p class="wrong">“Evaluation happens right after you finish coding.”</p><p class="fix"><b>Fix:</b> Evaluation happens <span class="eff-word">after the solution has been in use for a period of time</span> — you need real evidence first.</p></div>
+    <div class="trap"><div class="x">Trap 2</div><p class="wrong">“Beta testing is how you evaluate the solution.”</p><p class="fix"><b>Fix:</b> Beta testing happens <em>during</em> development to refine; <strong>evaluation</strong> happens <em>after</em> use, against criteria. Beta feedback is only <em>evidence</em> for evaluation.</p></div>
+    <div class="trap"><div class="x">Trap 3</div><p class="wrong">Using “efficient” and “effective” as if they mean the same thing.</p><p class="fix"><b>Fix:</b> <span class="eff-word">Effective</span> = achieves its purpose; <span class="efy-word">efficient</span> = uses time/cost/effort well. Name which one you mean.</p></div>
+    <div class="trap"><div class="x">Trap 4</div><p class="wrong">“I made up new evaluation criteria at the end.”</p><p class="fix"><b>Fix:</b> Criteria are written in <strong>design</strong> from the requirements; you <em>apply</em> the same ones at evaluation.</p></div>
+    <div class="trap"><div class="x">Trap 5</div><p class="wrong">A criterion like “the program is good” or “users are happy.”</p><p class="fix"><b>Fix:</b> Criteria must be <span class="eff-word">measurable</span> — add a threshold, number or defined test so you can rate met / not met.</p></div>
+    <div class="trap"><div class="x">Trap 6</div><p class="wrong">Forgetting the project plan and only evaluating the solution.</p><p class="fix"><b>Fix:</b> The outcome has <em>two</em> jobs. Also <strong>assess the project plan</strong> — changes made, reasons, impact, and how effective it was.</p></div>
+    <div class="trap"><div class="x">Trap 7</div><p class="wrong">Stating a rating with no evidence behind it.</p><p class="fix"><b>Fix:</b> Every judgement needs <span class="efy-word">evidence</span> from use — a survey result, a log, a measured time — then a conclusion and a recommendation.</p></div>
+  </section>
+
+  <!-- 13 WRITING -->
   <section id="writing">
-    <div class="eyebrow green"><span class="dot"></span>Section 11 · Exam technique</div>
+    <div class="eyebrow green"><span class="dot"></span>Section 13 · Exam technique</div>
     <h2 class="sec">How to write the answer</h2>
     <h3>1 · Read the command word first</h3>
     <div class="tbl-scroll">
@@ -590,78 +810,88 @@ table.cmp tbody tr:hover{background:var(--paper)}
           <tr><td>State / Identify</td><td>A correct term, no elaboration</td><td>One precise phrase</td></tr>
           <tr><td>Describe</td><td>What it is + key features</td><td>2–3 concrete details</td></tr>
           <tr><td>Explain</td><td>Describe + the reason (“because…”, “so that…”)</td><td>Every point earns a “why”</td></tr>
-          <tr><td>Justify</td><td>Reasons this choice fits <em>the scenario</em></td><td>Tied to the case study</td></tr>
+          <tr><td>Justify</td><td>Reasons this judgement fits <em>the evidence / scenario</em></td><td>Tied to the case study</td></tr>
+          <tr><td>Evaluate</td><td>A judgement against criteria, backed by evidence</td><td>Verdict + reason + (often) recommendation</td></tr>
           <tr><td>Distinguish / Compare</td><td>Both sides, linked by <em>whereas</em></td><td>Two clauses, one comparison word</td></tr>
         </tbody>
       </table>
     </div>
     <h3>2 · Match length to marks</h3>
-    <p>Rule of thumb: <strong>one distinct, correct idea per mark.</strong> A 3-mark “explain alpha testing” needs three separable ideas (<em>who/where</em> → <em>method</em> → <em>outcome</em>), not one idea stretched thin.</p>
+    <p>Rule of thumb: <strong>one distinct, correct idea per mark.</strong> A 3-mark “explain how you would evaluate the solution” needs three separable ideas (<em>against criteria</em> → <em>using evidence from use</em> → <em>for effectiveness and efficiency</em>), not one idea stretched thin.</p>
     <h3>3 · Use a paragraph skeleton — P · E · L</h3>
     <div class="pel">
-      <div class="row"><div class="badge">P</div><div class="ptxt"><b>Point</b>Claim it in VCAA language: “Alpha testing is conducted by the developer to confirm the solution functions as expected.”</div></div>
-      <div class="row"><div class="badge">E</div><div class="ptxt"><b>Evidence / Elaboration</b>Add the method: “The developer runs planned test data and compares actual output to expected output.”</div></div>
-      <div class="row"><div class="badge">L</div><div class="ptxt"><b>Link</b>Connect to the consequence: “…so defects are fixed before users beta test the solution.”</div></div>
+      <div class="row"><div class="badge">P</div><div class="ptxt"><b>Point</b>Claim it in VCAA language: “The solution would be evaluated against the evaluation criteria for its effectiveness and efficiency.”</div></div>
+      <div class="row"><div class="badge">E</div><div class="ptxt"><b>Evidence / Elaboration</b>Add the method: “after a period of use, evidence is gathered through surveys, logs and measured response times.”</div></div>
+      <div class="row"><div class="badge">L</div><div class="ptxt"><b>Link</b>Connect to the outcome: “…so each criterion can be rated and improvements recommended.”</div></div>
     </div>
     <h3>4 · Keep these stems ready</h3>
-    <div class="stem">// Definition · "Alpha testing is conducted by the developer in a controlled environment to confirm the solution functions as expected."</div>
-    <div class="stem">// Definition · "Beta testing is conducted by intended users in a real-world environment to gather feedback on usability and functionality."</div>
-    <div class="stem">// Distinguish · "Alpha testing is internal and developer-led, whereas beta testing is external and conducted by real users."</div>
-    <div class="stem">// Method · "This is done by ___, then ___, and the results are used to ___."</div>
+    <div class="stem">// Definition · "Evaluation occurs after the solution has been in use for a period of time, judging it against the evaluation criteria for effectiveness and efficiency."</div>
+    <div class="stem">// Effectiveness · "Effectiveness measures how well the solution achieves its intended purpose and meets requirements."</div>
+    <div class="stem">// Efficiency · "Efficiency measures how well the solution uses resources such as time, cost and effort."</div>
+    <div class="stem">// Distinguish · "Testing occurs during development to refine the solution, whereas evaluation occurs after use to judge it against criteria."</div>
+    <div class="stem">// Project plan · "The project plan is assessed by documenting changes made, the reasons, and their impact, then judging how effective the plan was."</div>
   </section>
 
-  <!-- 10 PRACTICE -->
+  <!-- 14 PRACTICE -->
   <section id="practice">
-    <div class="eyebrow green"><span class="dot"></span>Section 12 · Train under exam conditions</div>
+    <div class="eyebrow green"><span class="dot"></span>Section 14 · Train under exam conditions</div>
     <h2 class="sec">Practice questions — write first, then reveal</h2>
     <p class="lead">Cover the answer, write yours in full sentences, then reveal and self-mark. A tick only if your idea genuinely matches.</p>
 
     <div class="qcard"><div class="qhead"><div class="qnum">Q1</div><div class="qbody"><div class="qmarks">2 marks</div>
-      <div class="qtext"><span class="cmd">Distinguish</span> between alpha testing and beta testing.</div></div></div>
+      <div class="qtext"><span class="cmd">Distinguish</span> between the effectiveness and the efficiency of a software solution.</div></div></div>
       <div class="qctrl"><button class="reveal-btn" data-target="m1">Reveal model answer ▾</button></div>
       <div class="model" id="m1"><div class="mlabel">Model answer</div>
-        <p>Alpha testing is conducted internally by the developer in a controlled environment to confirm the solution functions as expected, <strong>whereas</strong> beta testing is conducted by intended end users in a real-world environment to gather feedback on usability and functionality.</p>
-        <div class="marks-guide"><div class="mg-h">Marking guide</div><ul><li>1 — alpha = developer / internal / controlled</li><li>1 — beta = real users / real-world / feedback</li><li>Both sides present, linked. One side only = 1 max.</li></ul></div>
+        <p>Effectiveness measures how well the solution achieves its intended purpose and meets its requirements, <strong>whereas</strong> efficiency measures how well the solution uses resources such as time, cost and effort.</p>
+        <div class="marks-guide"><div class="mg-h">Marking guide</div><ul><li>1 — effectiveness = achieves purpose / meets requirements</li><li>1 — efficiency = use of resources (time / cost / effort)</li><li>Both sides present, linked. One side only = 1 max.</li></ul></div>
       </div></div>
 
     <div class="qcard"><div class="qhead"><div class="qnum">Q2</div><div class="qbody"><div class="qmarks">3 marks</div>
-      <div class="qtext"><span class="cmd">Explain</span> the purpose of alpha testing in the development of a software solution.</div></div></div>
+      <div class="qtext"><span class="cmd">Explain</span> why a software solution is evaluated after it has been in use for a period of time, rather than immediately after it is built.</div></div></div>
       <div class="qctrl"><button class="reveal-btn" data-target="m2">Reveal model answer ▾</button></div>
       <div class="model" id="m2"><div class="mlabel">Model answer</div>
-        <p>The purpose of alpha testing is for the developer to confirm that the solution and its modules function correctly and meet the requirements. The developer runs planned test data — valid, invalid and boundary values — and compares actual output against expected output to locate errors. Any defects found are then debugged and corrected, so the solution is reliable before it is released to users for beta testing.</p>
-        <div class="marks-guide"><div class="mg-h">One mark each</div><ul><li>Purpose: confirm it functions correctly / meets requirements</li><li>Method: planned test data &amp; expected-vs-actual</li><li>Outcome: errors fixed before release / before beta</li></ul></div>
+        <p>Evaluation judges the solution against its criteria, and a fair judgement needs real evidence. Several qualities — such as reliability, performance under a genuine workload, and whether the solution actually saves time for users — can only be observed over a period of real use. Evaluating immediately would force the developer to guess, whereas a period of use provides the data needed to rate each criterion and recommend improvements.</p>
+        <div class="marks-guide"><div class="mg-h">One mark each</div><ul><li>Evaluation is judged against criteria / needs evidence</li><li>Some qualities only appear over real use (reliability, speed, time saved)</li><li>Real data → accurate judgement rather than a guess</li></ul></div>
       </div></div>
 
-    <div class="qcard"><div class="qhead"><div class="qnum">Q3</div><div class="qbody"><div class="qmarks">4 marks</div>
-      <div class="qtext">A developer has finished coding an online booking system. <span class="cmd">Describe</span> how the developer would conduct beta testing, and <span class="cmd">explain</span> how the results could be used.</div></div></div>
+    <div class="qcard"><div class="qhead"><div class="qnum">Q3</div><div class="qbody"><div class="qmarks">2 marks</div>
+      <div class="qtext">During design, a student writes the evaluation criterion: <em>“The app should be fast.”</em> <span class="cmd">Explain</span> why this is a poor criterion and rewrite it so it is measurable.</div></div></div>
       <div class="qctrl"><button class="reveal-btn" data-target="m3">Reveal model answer ▾</button></div>
       <div class="model" id="m3"><div class="mlabel">Model answer</div>
-        <p>The developer would select at least two intended users of the booking system and give them the working solution to use in a realistic environment. The users would complete typical tasks, such as making and cancelling a booking, while the developer collects feedback through a survey or structured observation. The feedback would then be analysed to identify usability and functional issues the developer did not notice — for example, a confusing date selector. The developer would use these findings to refine the solution before release, and the feedback can also contribute evidence for the later evaluation against the criteria.</p>
-        <div class="marks-guide"><div class="mg-h">Any 4 distinct ideas</div><ul><li>Select intended users (≥2) in a realistic environment</li><li>Users perform typical/realistic tasks</li><li>Collect feedback (survey / observation / interview)</li><li>Analyse → identify usability/functionality issues</li><li>Use results to refine the solution (and/or inform evaluation)</li></ul></div>
+        <p>It is a poor criterion because it is not measurable — there is no threshold, so at evaluation there is no way to decide whether it was met. A measurable version sets a clear target, for example: “Does the app return search results in under 2&nbsp;seconds for a database of 5,000&nbsp;records?”</p>
+        <div class="marks-guide"><div class="mg-h">Marking guide</div><ul><li>1 — not measurable / no threshold, so can't be judged</li><li>1 — a measurable rewrite with a clear target/test</li></ul></div>
       </div></div>
 
-    <div class="qcard"><div class="qhead"><div class="qnum">Q4</div><div class="qbody"><div class="qmarks">3 marks</div>
-      <div class="qtext"><span class="cmd">Explain</span> why a developer conducts beta testing even after alpha testing is complete.</div></div></div>
+    <div class="qcard"><div class="qhead"><div class="qnum">Q4</div><div class="qbody"><div class="qmarks">4 marks</div>
+      <div class="qtext">A developer has built an online booking system that has now been live for several weeks. <span class="cmd">Describe</span> how the developer would evaluate the solution.</div></div></div>
       <div class="qctrl"><button class="reveal-btn" data-target="m4">Reveal model answer ▾</button></div>
       <div class="model" id="m4"><div class="mlabel">Model answer</div>
-        <p>Alpha testing is performed by the developer, who knows how the solution is meant to be used and may miss problems a genuine user would hit. Beta testing places the solution with real users in a real-world environment, surfacing usability issues and unexpected inputs the developer did not anticipate. This provides feedback from the solution's actual audience, letting the developer improve usability and reliability before release.</p>
-        <div class="marks-guide"><div class="mg-h">One mark each</div><ul><li>Developer tests as intended, so misses real-user issues</li><li>Beta exposes it to real users in real conditions</li><li>Feedback improves usability/reliability before release</li></ul></div>
+        <p>The developer would judge the solution against the evaluation criteria established during design, assessing both its effectiveness and its efficiency. They would gather evidence from the period of use — for example, surveys and observation of users for usability, error logs for reliability, and measured response times for speed. Each criterion would then be rated from this evidence as met, partly met or not met, with a justification. Finally, the developer would draw an overall conclusion about the solution's quality and recommend improvements for the criteria that were not fully met.</p>
+        <div class="marks-guide"><div class="mg-h">Any 4 distinct ideas</div><ul><li>Judge against the evaluation criteria from design</li><li>Cover both effectiveness and efficiency</li><li>Gather evidence from the period of use (survey / logs / timing)</li><li>Rate each criterion from the evidence</li><li>Conclude + recommend improvements</li></ul></div>
       </div></div>
 
-    <div class="qcard"><div class="qhead"><div class="qnum">Q5</div><div class="qbody"><div class="qmarks">2 marks</div>
-      <div class="qtext">A student writes: <em>“Alpha testing is when the public downloads the app and reports bugs.”</em> <span class="cmd">Identify</span> the error and <span class="cmd">correct</span> it.</div></div></div>
+    <div class="qcard"><div class="qhead"><div class="qnum">Q5</div><div class="qbody"><div class="qmarks">3 marks</div>
+      <div class="qtext"><span class="cmd">Distinguish</span> between testing and evaluation, and <span class="cmd">explain</span> how the two are related.</div></div></div>
       <div class="qctrl"><button class="reveal-btn" data-target="m5">Reveal model answer ▾</button></div>
       <div class="model" id="m5"><div class="mlabel">Model answer</div>
-        <p>The statement is incorrect because alpha testing is performed internally by the developer in a controlled environment, not by the public. Testing carried out by members of the public / intended users in a real-world environment describes beta testing.</p>
-        <div class="marks-guide"><div class="mg-h">Marking guide</div><ul><li>1 — alpha is developer/internal, not public</li><li>1 — the described activity is actually beta testing</li></ul></div>
+        <p>Testing occurs during development, where the developer and users find and fix problems to make the solution better, <strong>whereas</strong> evaluation occurs after a period of use and judges the solution against its criteria for effectiveness and efficiency. The two are related because feedback gathered during beta testing, together with data from ongoing use, provides evidence the developer draws on when evaluating how well the solution meets its criteria.</p>
+        <div class="marks-guide"><div class="mg-h">One mark each</div><ul><li>Testing = during development, to refine</li><li>Evaluation = after use, judge against criteria</li><li>Link: beta/test feedback is evidence used in evaluation</li></ul></div>
       </div></div>
 
-    <div class="qcard"><div class="qhead"><div class="qnum">Q6</div><div class="qbody"><div class="qmarks">4 marks</div>
-      <div class="qtext"><span class="cmd">Distinguish</span> between beta testing and evaluation, and <span class="cmd">explain</span> how the two are related.</div></div></div>
+    <div class="qcard"><div class="qhead"><div class="qnum">Q6</div><div class="qbody"><div class="qmarks">3 marks</div>
+      <div class="qtext">As part of the outcome, a developer must assess the project plan. <span class="cmd">Describe</span> what is involved in assessing the effectiveness of a project plan.</div></div></div>
       <div class="qctrl"><button class="reveal-btn" data-target="m6">Reveal model answer ▾</button></div>
       <div class="model" id="m6"><div class="mlabel">Model answer</div>
-        <p>Beta testing occurs during development: intended users trial the working solution and provide feedback the developer uses to refine and fix it before release. Evaluation, in contrast, occurs after the solution has been in use for a period of time; it judges the solution against the evaluation criteria set during design and also assesses the effectiveness of the project plan. The two are related because feedback gathered through beta testing, with data from ongoing use, provides evidence the developer draws on when evaluating how well the solution meets its criteria.</p>
-        <div class="marks-guide"><div class="mg-h">Up to 4</div><ul><li>Beta = during development, by users, to refine</li><li>Evaluation = after a period of use, against criteria + plan</li><li>Clear contrast in timing/purpose</li><li>Link: beta feedback is evidence used in evaluation</li></ul></div>
+        <p>Assessing the project plan involves comparing the actual progress against the plan — actual versus expected task durations and whether milestones were reached — using the Gantt chart developed earlier. The developer documents each modification made to the plan, the reason it was necessary and its impact on the schedule. They then judge how effective the plan was overall: whether estimates were realistic, milestones were met, and the chosen approach suited the project, noting what could be improved.</p>
+        <div class="marks-guide"><div class="mg-h">Any 3 distinct ideas</div><ul><li>Compare actual vs expected durations / milestones (monitor the Gantt chart)</li><li>Document changes: change made, reason, impact</li><li>Judge overall effectiveness (estimates, milestones, model) + improvements</li></ul></div>
+      </div></div>
+
+    <div class="qcard"><div class="qhead"><div class="qnum">Q7</div><div class="qbody"><div class="qmarks">4 marks</div>
+      <div class="qtext">A booking solution is found to be accurate and reliable, but a survey shows screen-reader users cannot complete a booking and only 72% of users rated it easy to use (the criterion required 80%). <span class="cmd">Evaluate</span> the effectiveness of this solution.</div></div></div>
+      <div class="qctrl"><button class="reveal-btn" data-target="m7">Reveal model answer ▾</button></div>
+      <div class="model" id="m7"><div class="mlabel">Model answer</div>
+        <p>The solution is <strong>partly effective</strong>. It meets two effectiveness criteria strongly: it is accurate, producing correct booking totals, and reliable, running without failures over the period of use. However, it does not fully meet the usability criterion, since only 72% of users rated it easy to use against an 80% threshold, and it fails the accessibility criterion outright because screen-reader users cannot complete a booking. The solution therefore achieves its core purpose for most users but is not effective for all of its intended users; improving accessibility and the usability of the interface would be needed before it could be judged fully effective.</p>
+        <div class="marks-guide"><div class="mg-h">Up to 4 — judgement + evidence</div><ul><li>Clear overall judgement (partly effective)</li><li>Criteria met, with evidence (accuracy, reliability)</li><li>Criteria not met, with evidence (usability 72% &lt; 80%, accessibility fail)</li><li>Reasoned conclusion tied to “achieves its purpose” + improvement</li></ul></div>
       </div></div>
 
   </section>
@@ -669,7 +899,7 @@ table.cmp tbody tr:hover{background:var(--paper)}
 
 <div class="footer">
   <div class="mono">DIGITAL VECTOR · digitalvector.com.au</div>
-  <p style="margin:8px 0 0">VCE Software Development · Unit 4 Outcome 1 · Alpha &amp; Beta Testing. Definitions written to align with the VCAA Applied Computing Study Design — confirm wording against the current study design and your school's materials.</p>
+  <p style="margin:8px 0 0">VCE Software Development · Unit 4 Outcome 1 · Evaluation. Definitions written to align with the VCAA Applied Computing Study Design — confirm wording against the current study design and your school's materials.</p>
 </div>
 
 <script>/**
@@ -685,26 +915,26 @@ table.cmp tbody tr:hover{background:var(--paper)}
   var root=document.documentElement;
   var themeBtn=document.getElementById('themeBtn');
   function setTheme(t){ root.setAttribute('data-theme',t); themeBtn.textContent=(t==='dark'?'☀️ Light':'🌙 Dark');
-    try{localStorage.setItem('ab_theme',t)}catch(e){} if(window.__recolor){window.__recolor(t);} }
-  var savedT='light'; try{savedT=localStorage.getItem('ab_theme')|| (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');}catch(e){}
+    try{localStorage.setItem('ev_theme',t)}catch(e){} if(window.__recolor){window.__recolor(t);} }
+  var savedT='light'; try{savedT=localStorage.getItem('ev_theme')|| (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');}catch(e){}
   setTheme(savedT);
   themeBtn.addEventListener('click',function(){ setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'); });
 
   var sizes=[90,100,112,125,140,160], idx=1, lbl=document.getElementById('fsLabel');
-  try{var s=parseInt(localStorage.getItem('ab_fs')); if(!isNaN(s)) idx=Math.max(0,Math.min(sizes.length-1,s));}catch(e){}
-  function applyFS(){ root.style.fontSize=sizes[idx]+'%'; lbl.textContent=sizes[idx]+'%'; try{localStorage.setItem('ab_fs',idx)}catch(e){} }
+  try{var s=parseInt(localStorage.getItem('ev_fs')); if(!isNaN(s)) idx=Math.max(0,Math.min(sizes.length-1,s));}catch(e){}
+  function applyFS(){ root.style.fontSize=sizes[idx]+'%'; lbl.textContent=sizes[idx]+'%'; try{localStorage.setItem('ev_fs',idx)}catch(e){} }
   document.getElementById('fsUp').addEventListener('click',function(){ idx=Math.min(sizes.length-1,idx+1); applyFS(); });
   document.getElementById('fsDown').addEventListener('click',function(){ idx=Math.max(0,idx-1); applyFS(); });
   applyFS();
 
-  document.querySelectorAll('.reveal-btn').forEach(function(btn){
+  document.querySelectorAll('.reveal-btn[data-target]').forEach(function(btn){
     btn.addEventListener('click',function(){
       var m=document.getElementById(btn.dataset.target); var open=m.classList.toggle('show');
       btn.textContent=open?'Hide model answer ▴':'Reveal model answer ▾';
-      try{var d=JSON.parse(localStorage.getItem('ab_done')||'{}'); d[btn.dataset.target]=open; localStorage.setItem('ab_done',JSON.stringify(d));}catch(e){}
+      try{var d=JSON.parse(localStorage.getItem('ev_done')||'{}'); d[btn.dataset.target]=open; localStorage.setItem('ev_done',JSON.stringify(d));}catch(e){}
     });
   });
-  try{var d=JSON.parse(localStorage.getItem('ab_done')||'{}'); Object.keys(d).forEach(function(k){ if(d[k]){var m=document.getElementById(k); if(m){m.classList.add('show'); var b=document.querySelector('[data-target="'+k+'"]'); if(b)b.textContent='Hide model answer ▴';}} });}catch(e){}
+  try{var d=JSON.parse(localStorage.getItem('ev_done')||'{}'); Object.keys(d).forEach(function(k){ if(d[k]){var m=document.getElementById(k); if(m){m.classList.add('show'); var b=document.querySelector('[data-target="'+k+'"]'); if(b)b.textContent='Hide model answer ▴';}} });}catch(e){}
 
   var prog=document.getElementById('prog');
   function upd(){var h=document.documentElement; var max=h.scrollHeight-h.clientHeight; prog.style.width=(max>0?(h.scrollTop/max*100):0)+'%';}
@@ -716,50 +946,71 @@ table.cmp tbody tr:hover{background:var(--paper)}
   if(typeof THREE==='undefined') return;
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-  /* ---------- HERO: build through two gates ---------- */
+  /* helper: a bottom-anchored gauge (track + coloured fill) */
+  function makeGauge(h){
+    var g=new THREE.Group();
+    var track=new THREE.Mesh(new THREE.BoxGeometry(0.26,h,0.26),
+      new THREE.MeshStandardMaterial({color:0x3a4658,metalness:.3,roughness:.6,transparent:true,opacity:.55}));
+    track.position.y=h/2; g.add(track);
+    var fgeo=new THREE.BoxGeometry(0.30,1,0.30); fgeo.translate(0,0.5,0); /* base at y=0 */
+    var fill=new THREE.Mesh(fgeo,new THREE.MeshStandardMaterial({color:0x6f88ff,emissive:0x2740c0,emissiveIntensity:.45,metalness:.4,roughness:.3}));
+    g.add(fill);
+    g.userData={fill:fill,h:h,cur:0,target:0};
+    return g;
+  }
+
+  /* ---------- HERO: solution on an evaluation rig ---------- */
   (function(){
     var cv=document.getElementById('heroCanvas'); if(!cv) return;
     var r=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
     r.setPixelRatio(Math.min(devicePixelRatio,2));
     var sc=new THREE.Scene();
-    var cam=new THREE.PerspectiveCamera(45,1,0.1,100); cam.position.set(0,1.2,11);
-    sc.add(new THREE.AmbientLight(0xffffff,.65));
-    var d=new THREE.DirectionalLight(0xffffff,.9); d.position.set(4,6,8); sc.add(d);
+    var cam=new THREE.PerspectiveCamera(45,1,0.1,100); cam.position.set(0,1.6,11);
+    sc.add(new THREE.AmbientLight(0xffffff,.66));
+    var d=new THREE.DirectionalLight(0xffffff,.9); d.position.set(4,7,8); sc.add(d);
     var grp=new THREE.Group(); sc.add(grp);
 
-    function gate(x,col){
-      var g=new THREE.Group();
-      var ring=new THREE.Mesh(new THREE.TorusGeometry(1.5,0.09,16,48),
-        new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.55,metalness:.3,roughness:.4}));
-      g.add(ring);
-      var glow=new THREE.Mesh(new THREE.CircleGeometry(1.42,40),
-        new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.10,side:THREE.DoubleSide}));
-      g.add(glow); g.position.x=x; return g;
-    }
-    var gA=gate(-2.2,0x6f88ff), gB=gate(2.6,0xf0b25e); grp.add(gA,gB);
+    /* platform */
+    var plat=new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.7,0.25,48),
+      new THREE.MeshStandardMaterial({color:0x1a2330,metalness:.4,roughness:.6}));
+    plat.position.y=-1.5; grp.add(plat);
 
-    /* the build: a complex torus-knot core */
-    var build=new THREE.Group();
-    var core=new THREE.Mesh(new THREE.TorusKnotGeometry(0.5,0.17,80,12,2,3),
-      new THREE.MeshStandardMaterial({color:0x9fb2ff,emissive:0x2740c0,emissiveIntensity:.4,metalness:.5,roughness:.3}));
-    build.add(core);
-    var cage=new THREE.Mesh(new THREE.IcosahedronGeometry(0.85,0),
-      new THREE.MeshBasicMaterial({color:0xaebbff,wireframe:true,transparent:true,opacity:.35}));
-    build.add(cage);
-    grp.add(build);
+    /* the finished solution: a golden core in a wire cage */
+    var core=new THREE.Mesh(new THREE.IcosahedronGeometry(0.95,1),
+      new THREE.MeshStandardMaterial({color:0xf4c870,emissive:0xc98a16,emissiveIntensity:.4,metalness:.6,roughness:.25}));
+    core.position.y=0.35; grp.add(core);
+    var cage=new THREE.Mesh(new THREE.IcosahedronGeometry(1.25,0),
+      new THREE.MeshBasicMaterial({color:0xf2d59a,wireframe:true,transparent:true,opacity:.3}));
+    cage.position.y=0.35; grp.add(cage);
 
-    /* bugs orbiting the build */
-    var bugs=[];
-    for(var i=0;i<7;i++){
-      var b=new THREE.Mesh(new THREE.TetrahedronGeometry(0.16),
-        new THREE.MeshStandardMaterial({color:0xe5564b,emissive:0x7a1c16,emissiveIntensity:.5}));
-      b.userData={a:Math.random()*6.28,sp:0.6+Math.random()*0.6,rad:1.0+Math.random()*0.3,phase:i/7};
-      bugs.push(b); build.add(b);
+    /* verdict halo */
+    var halo=new THREE.Mesh(new THREE.TorusGeometry(1.7,0.04,12,60),
+      new THREE.MeshStandardMaterial({color:0x9fb2ff,emissive:0x4060d0,emissiveIntensity:.5}));
+    halo.rotation.x=Math.PI/2; halo.position.y=0.35; grp.add(halo);
+
+    /* two banks of gauges: left = effectiveness (blue), right = efficiency (amber) */
+    var effScores=[0.95,0.78,0.8,0.62,0.82];
+    var efyScores=[0.66,0.8,0.78,0.95,0.8];
+    var gauges=[];
+    function bank(scores,blue,baseAngle){
+      scores.forEach(function(v,i){
+        var g=makeGauge(2.2);
+        var col=blue?0x6f88ff:0xf0b25e, emi=blue?0x2740c0:0xc97312;
+        g.userData.fill.material.color.setHex(col); g.userData.fill.material.emissive.setHex(emi);
+        var a=baseAngle + (i-2)*0.20;
+        var R=2.6;
+        g.position.set(Math.sin(a)*R, -1.35, Math.cos(a)*R);
+        g.lookAt(0,-1.35,0);
+        g.userData.target=v;
+        grp.add(g); gauges.push(g);
+      });
     }
+    bank(effScores,true,-1.05);   /* left-back arc */
+    bank(efyScores,false,1.05);   /* right-back arc */
+
     function resize(){var w=cv.clientWidth,h=cv.clientHeight; r.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix();}
     resize(); addEventListener('resize',resize);
 
-    /* drag */
     var drag=false,px=0,ry=0,tv=0;
     cv.addEventListener('pointerdown',function(e){drag=true;px=e.clientX;cv.setPointerCapture(e.pointerId);});
     cv.addEventListener('pointermove',function(e){if(drag){tv+=(e.clientX-px)*0.01;px=e.clientX;}});
@@ -768,223 +1019,246 @@ table.cmp tbody tr:hover{background:var(--paper)}
     var t=0;
     function frame(){
       t+=0.016;
-      var x=((t*0.9)%7)-3.5;       /* build travels left→right and loops */
-      build.position.x=x;
-      build.rotation.y+=0.02; build.rotation.x=0.3;
-      /* bugs shed as build clears each gate */
-      var cleared = x>-2.2 ? (x>2.6?7:4) : 0;
-      bugs.forEach(function(b,i){
-        var ud=b.userData; ud.a+=ud.sp*0.03;
-        var gone = i<cleared;
-        var rad = gone? ud.rad+ (t*2)%6 : ud.rad;
-        b.position.set(Math.cos(ud.a)*ud.rad, Math.sin(ud.a*1.3)*0.4, Math.sin(ud.a)*ud.rad);
-        b.rotation.x+=0.06; b.rotation.y+=0.05;
-        b.material.opacity = gone?Math.max(0,1-((x- (i<4?-2.2:2.6)))*0.7):1;
-        b.material.transparent=gone; b.visible = gone? b.material.opacity>0.02 : true;
-        if(gone){ b.position.y += ((t*1.5)%3); }
+      core.rotation.y+=0.012; core.rotation.x=0.2; cage.rotation.y-=0.008;
+      halo.rotation.z+=0.01;
+      gauges.forEach(function(g,i){
+        var ud=g.userData;
+        var wobble=0.015*Math.sin(t*1.5+i);
+        ud.cur += ((ud.target+wobble)-ud.cur)*0.05;
+        var s=Math.max(0.001,ud.cur*ud.h);
+        ud.fill.scale.y=s;
       });
-      /* build turns golden after final gate */
-      var gold = x>2.6;
-      core.material.emissive.setHex(gold?0xc98a16:0x2740c0);
-      core.material.color.setHex(gold?0xf4c870:0x9fb2ff);
-      gA.children[0].rotation.z+=0.01; gB.children[0].rotation.z-=0.01;
-      ry+=(tv-ry)*0.1; grp.rotation.y=ry + (drag?0:Math.sin(t*0.2)*0.05);
+      ry+=(tv-ry)*0.1; grp.rotation.y=ry + (drag?0:Math.sin(t*0.2)*0.12);
       r.render(sc,cam);
       requestAnimationFrame(frame);
     }
-    if(reduce){ build.position.x=2.7; core.material.color.setHex(0xf4c870); core.material.emissive.setHex(0xc98a16); r.render(sc,cam); }
+    if(reduce){ gauges.forEach(function(g){g.userData.fill.scale.y=g.userData.target*g.userData.h;}); r.render(sc,cam); }
     else frame();
   })();
 
-  /* ---------- LAB: white-box (alpha) vs black-box (beta) ---------- */
+  /* ---------- LAB: one job, four solutions across the eras ---------- */
   (function(){
     var cv=document.getElementById('labCanvas'); if(!cv) return;
     var r=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
     r.setPixelRatio(Math.min(devicePixelRatio,2));
     var sc=new THREE.Scene();
-    var cam=new THREE.PerspectiveCamera(42,1,0.1,100); cam.position.set(0,1.5,9);
-    sc.add(new THREE.AmbientLight(0xffffff,.7));
+    var cam=new THREE.PerspectiveCamera(44,1,0.1,100); cam.position.set(0,1.7,9.2);
+    sc.add(new THREE.AmbientLight(0xffffff,.74));
     var dl=new THREE.DirectionalLight(0xffffff,.85); dl.position.set(5,8,6); sc.add(dl);
+    var dl2=new THREE.DirectionalLight(0xbcd0ff,.25); dl2.position.set(-6,3,4); sc.add(dl2);
     var grp=new THREE.Group(); sc.add(grp);
 
-    /* product shell (a device) */
-    var shellMat=new THREE.MeshStandardMaterial({color:0x3b4a63,metalness:.45,roughness:.35,transparent:true,opacity:.18});
-    var shell=new THREE.Mesh(new THREE.BoxGeometry(2.2,3.4,0.8),shellMat);
-    grp.add(shell);
-    var edge=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(2.2,3.4,0.8)),
-      new THREE.LineBasicMaterial({color:0x8aa0c8,transparent:true,opacity:.5}));
-    grp.add(edge);
-    /* screen on front */
-    var screen=new THREE.Mesh(new THREE.PlaneGeometry(1.7,2.7),
-      new THREE.MeshStandardMaterial({color:0x121a26,emissive:0x16324f,emissiveIntensity:.6}));
-    screen.position.z=0.41; grp.add(screen);
+    /* materials reused across builders */
+    function M(c,opt){opt=opt||{};return new THREE.MeshStandardMaterial({color:c,metalness:opt.m!=null?opt.m:.35,roughness:opt.r!=null?opt.r:.55,emissive:opt.e!=null?opt.e:0x000000,emissiveIntensity:opt.ei!=null?opt.ei:.4});}
+    function box(w,h,d,mat){return new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);}
+    function cyl(rt,rb,h,mat,seg){return new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg||16),mat);}
 
-    /* internal modules (visible in alpha) */
-    var modules=[], mPos=[[-.5,.9,0],[.55,.6,0],[-.4,-.2,0],[.5,-.6,0],[0,-1.2,0]];
-    mPos.forEach(function(p,i){
-      var geo = i%2? new THREE.CylinderGeometry(.22,.22,.4,16) : new THREE.BoxGeometry(.5,.45,.4);
-      var m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0x6f88ff,emissive:0x2740c0,emissiveIntensity:.5,metalness:.4,roughness:.3}));
-      m.position.set(p[0],p[1],p[2]); m.userData={base:0x6f88ff,emi:0x2740c0,t:i*0.7};
-      modules.push(m); grp.add(m);
-    });
-    /* connectors between modules */
-    var conMat=new THREE.LineBasicMaterial({color:0x6f88ff,transparent:true,opacity:.4});
-    for(var i=0;i<modules.length-1;i++){
-      var g=new THREE.BufferGeometry().setFromPoints([modules[i].position,modules[i+1].position]);
-      grp.add(new THREE.Line(g,conMat));
+    /* platform + back plinth (the tool sits on the plinth, gauges read it from the front) */
+    var plat=new THREE.Mesh(new THREE.BoxGeometry(5.4,0.2,2.6),M(0x1a2330,{m:.4,r:.6}));
+    plat.position.set(0,-1.5,0); grp.add(plat);
+    var plinth=box(2.1,1.95,1.05,M(0x232e3d,{m:.4,r:.55}));
+    plinth.position.set(0,-0.42,-1.35); grp.add(plinth);
+    var plTop=box(2.16,0.07,1.11,M(0x2d3a4c,{m:.5,r:.4}));
+    plTop.position.set(0,0.57,-1.35); grp.add(plTop);
+    var BASE_Y=0.61; /* top of plinth: where each tool rests, just above the gauges */
+
+    /* ---- TOOL BUILDERS (each returns a Group whose y=0 sits on the plinth) ---- */
+    function buildAbacus(){
+      var t=new THREE.Group();
+      var wood=M(0x9a6230,{m:.15,r:.7}), woodD=M(0x6b4a2a,{m:.1,r:.75}), bead=M(0x33231a,{m:.2,r:.55}), beadA=M(0xc98a16,{m:.35,r:.4});
+      t.add(box(0.13,1.6,0.18,wood).translateX(-0.86).translateY(0.8)); /* left post */
+      t.add(box(0.13,1.6,0.18,wood).translateX(0.86).translateY(0.8));  /* right post */
+      t.add(box(1.85,0.15,0.18,wood).translateY(1.56));                 /* top rail */
+      t.add(box(1.85,0.15,0.18,wood).translateY(0.04));                 /* bottom rail */
+      t.add(box(1.85,0.11,0.20,woodD).translateY(1.02));                /* reckoning bar */
+      var xs=[-0.66,-0.44,-0.22,0,0.22,0.44,0.66];
+      for(var c=0;c<xs.length;c++){
+        var rod=cyl(0.018,0.018,1.5,woodD,8); rod.position.set(xs[c],0.8,0); t.add(rod);
+        var hy=[1.18,1.34], ey=[0.20,0.42,0.64];           /* heaven (2) + earth (3) beads */
+        var j,b;
+        for(j=0;j<hy.length;j++){ b=new THREE.Mesh(new THREE.SphereGeometry(0.075,10,8), (c%3===0)?beadA:bead); b.scale.set(1.25,0.7,1.25); b.position.set(xs[c],hy[j],0); t.add(b); }
+        for(j=0;j<ey.length;j++){ b=new THREE.Mesh(new THREE.SphereGeometry(0.075,10,8), (c%3===0)?beadA:bead); b.scale.set(1.25,0.7,1.25); b.position.set(xs[c],ey[j],0); t.add(b); }
+      }
+      return {grp:t};
+    }
+    function buildCalculator(){
+      var t=new THREE.Group();
+      var body=M(0x5c6470,{m:.6,r:.35}), key=M(0xb7c0cc,{m:.45,r:.4}), dark=M(0x3a4048,{m:.6,r:.35}), win=M(0x0e1622,{m:.2,r:.3,e:0x123a2a,ei:.5});
+      t.add(box(1.45,0.85,1.0,body).translateY(0.45));                 /* main body */
+      var top=box(1.25,0.08,0.78,dark); top.position.set(0,0.92,0.04); top.rotation.x=-0.16; t.add(top); /* sloped keypad base */
+      for(var rr=0;rr<3;rr++) for(var cc=0;cc<5;cc++){            /* keys */
+        var k=cyl(0.05,0.05,0.09,key,10);
+        k.position.set(-0.42+cc*0.21, 0.97+rr*0.018, 0.20-rr*0.18); k.rotation.x=-0.16; t.add(k);
+      }
+      t.add(box(0.92,0.18,0.05,win).translateY(0.72).translateZ(0.51)); /* result window */
+      /* crank on the right */
+      var crank=new THREE.Group();
+      var axle=cyl(0.05,0.05,0.34,dark,12); axle.rotation.z=Math.PI/2; crank.add(axle);
+      var arm=box(0.07,0.42,0.07,dark); arm.position.set(0.17,0.20,0); crank.add(arm);
+      var knob=cyl(0.07,0.07,0.16,key,12); knob.rotation.z=Math.PI/2; knob.position.set(0.30,0.40,0); crank.add(knob);
+      crank.position.set(0.82,0.5,0); t.add(crank);
+      return {grp:t, crank:crank};
+    }
+    function buildDesktop(){
+      var t=new THREE.Group();
+      var beige=M(0xd8cdb4,{m:.1,r:.7}), beigeD=M(0xbcb094,{m:.1,r:.7}), scr=M(0x0c150f,{m:.2,r:.3,e:0x1d6a38,ei:.55}), led=M(0x6f8,{e:0x33ff88,ei:.9});
+      t.add(box(0.55,0.2,0.55,beigeD).translateY(0.1));               /* stand */
+      t.add(box(1.5,1.18,1.05,beige).translateY(0.92));               /* CRT body (deep) */
+      var s=box(1.06,0.82,0.05,scr); s.position.set(0,0.96,0.55); t.add(s); /* screen */
+      t.add(box(1.12,0.88,0.02,M(0x2b3530,{m:.3,r:.4})).translateY(0.96).translateZ(0.52)); /* bezel */
+      t.add(cyl(0.025,0.025,0.03,led,8).translateY(0.42).translateZ(0.55)); /* power LED */
+      var kb=box(1.15,0.07,0.4,beigeD); kb.position.set(0,0.03,0.62); t.add(kb); /* keyboard */
+      return {grp:t};
+    }
+    function buildLaptop(){
+      var t=new THREE.Group();
+      var alu=M(0x39414e,{m:.7,r:.35}), deck=M(0x2a313d,{m:.6,r:.45}), scr=M(0x0e1626,{m:.2,r:.3,e:0x2b5fb0,ei:.55}), pad=M(0x444c5a,{m:.5,r:.4});
+      t.add(box(1.7,0.08,1.05,alu).translateY(0.05));                 /* base */
+      t.add(box(1.5,0.015,0.72,deck).translateY(0.092).translateZ(-0.04)); /* keyboard area */
+      t.add(box(0.42,0.012,0.26,pad).translateY(0.094).translateZ(0.34));  /* trackpad */
+      var lid=new THREE.Group();                                      /* hinged screen */
+      lid.add(box(1.7,1.06,0.05,alu).translateY(0.53));
+      lid.add(box(1.5,0.88,0.02,scr).translateY(0.53).translateZ(0.035));
+      lid.position.set(0,0.08,-0.5); lid.rotation.x=-0.34; t.add(lid);
+      return {grp:t};
     }
 
-    /* developer probe (alpha) */
-    var probe=new THREE.Mesh(new THREE.ConeGeometry(.18,.5,16),
-      new THREE.MeshStandardMaterial({color:0x6f88ff,emissive:0x3550e0,emissiveIntensity:.7}));
-    probe.position.set(-2.4,1.2,1.2); probe.rotation.z=-0.6; grp.add(probe);
-    var pulse=new THREE.Mesh(new THREE.SphereGeometry(.12,16,16),
-      new THREE.MeshBasicMaterial({color:0x9fb2ff})); pulse.visible=false; grp.add(pulse);
+    var TOOL_DEFS=[buildAbacus,buildCalculator,buildDesktop,buildLaptop];
+    var TOOL_SCALE=[1.0,1.12,1.0,1.22];   /* lift the smaller tools so all read clearly */
+    var TOOLS3D=[];
+    for(var ti=0;ti<TOOL_DEFS.length;ti++){
+      var o=TOOL_DEFS[ti]();
+      o.grp.position.set(0,BASE_Y,-1.35);
+      o.grp.visible=false; o.pop=1; o.base=TOOL_SCALE[ti];
+      grp.add(o.grp); TOOLS3D.push(o);
+    }
 
-    /* users (beta) — head + tapered body */
-    function makeUser(col){
-      var u=new THREE.Group();
-      var body=new THREE.Mesh(new THREE.CylinderGeometry(.18,.34,.9,18),
-        new THREE.MeshStandardMaterial({color:col,roughness:.6,metalness:.1}));
-      body.position.y=-.1; u.add(body);
-      var head=new THREE.Mesh(new THREE.SphereGeometry(.24,20,20),
-        new THREE.MeshStandardMaterial({color:0xf0c9a0,roughness:.7})); head.position.y=.62; u.add(head);
-      return u;
+    /* 5 gauges in a row, in front of the plinth */
+    var gauges=[];
+    for(var i=0;i<5;i++){
+      var g=makeGauge(1.95);
+      g.position.set((i-2)*0.85, -1.4, 0.95);
+      grp.add(g); gauges.push(g);
     }
-    var userCols=[0xe0a050,0xd98a4a,0xc97312,0xeab565];
-    var users=[], uAng=[-1.0,-0.2,0.7,1.5];
-    uAng.forEach(function(a,i){
-      var u=makeUser(userCols[i]); var R=3.4;
-      u.position.set(Math.sin(a)*R,-.3,Math.cos(a)*R+0.4);
-      u.lookAt(0,0,0); u.userData={ang:a,t:i*0.9}; u.visible=false; u.scale.setScalar(0.01);
-      users.push(u); grp.add(u);
-    });
-    /* feedback bubbles (beta) */
-    var bubbles=[];
-    for(var i=0;i<6;i++){
-      var bb=new THREE.Mesh(new THREE.SphereGeometry(.13,16,16),
-        new THREE.MeshStandardMaterial({color:0xf0b25e,emissive:0xc97312,emissiveIntensity:.6,transparent:true,opacity:.9}));
-      bb.userData={t:Math.random()*3,x:(Math.random()-.5)*1.6}; bb.visible=false; bubbles.push(bb); grp.add(bb);
-    }
-    var ubeam=new THREE.Mesh(new THREE.SphereGeometry(.1,12,12),
-      new THREE.MeshBasicMaterial({color:0xf0b25e})); ubeam.visible=false; grp.add(ubeam);
+
+    /* ---- DATA: same task, four solutions, two lenses (scores out of 5) ---- */
+    var EFF_NAMES=['Completeness','Accuracy','Usability','Accessibility','Reliability'];
+    var EFY_NAMES=['Processing speed','Cost-effectiveness','Resource use','Automation','Productivity'];
+    function conv(a){var s=[],v=[];for(var k=0;k<5;k++){s.push(a[k]/5);v.push(a[k]+'/5');}return {scores:s,vals:v};}
+    var TOOLS=[
+      {name:'Abacus', eff:conv([2,3,2,3,5]), efy:conv([1,5,5,1,1]), note:{
+        eff:'The abacus never crashes and needs no power, so reliability is perfect — but it covers only part of the job and every answer leans on the operator\u2019s skill.',
+        efy:'Almost free to make and using no energy at all, it is unbeatable on cost and materials. Yet every result is worked by hand, so speed, automation and output sit at the bottom.'}},
+      {name:'Mechanical calculator', eff:conv([3,4,3,2,3]), efy:conv([2,2,3,2,3]), note:{
+        eff:'More accurate and a little more complete than beads on rods, but it is heavy to move and its gears can jam, so reliability slips.',
+        efy:'The crank does the carrying for you, lifting automation and output above the abacus \u2014 but a precision machine like this was expensive to buy.'}},
+      {name:'Desktop computer', eff:conv([5,5,4,3,4]), efy:conv([4,2,2,4,4]), note:{
+        eff:'At last the whole job is done \u2014 calculate, store and report \u2014 with digital accuracy and a learnable interface. Power and desk space hold accessibility back.',
+        efy:'Programs automate the work and throughput jumps, but a power-hungry CRT machine is costly to buy and run, so cost and resource use score poorly.'}},
+      {name:'Modern laptop', eff:conv([5,5,5,5,5]), efy:conv([5,3,4,5,5]), note:{
+        eff:'The laptop tops every effectiveness measure \u2014 complete, exact, intuitive, portable and dependable with cloud backup behind it.',
+        efy:'Fast and heavily automated, with efficient low-power chips \u2014 though, tellingly, it still cannot beat the humble abacus on raw cost.'}}
+    ];
+    var capLead={
+      eff:'<b>EFFECTIVENESS.</b> The blue gauges ask whether this solution <b>achieves its purpose</b> \u2014 is it complete, accurate, usable, accessible and reliable? ',
+      efy:'<b>EFFICIENCY.</b> The amber gauges ask how well this solution <b>uses resources</b> \u2014 speed, cost, materials, automation and productivity. '
+    };
 
     function resize(){var w=cv.clientWidth,h=cv.clientHeight; r.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix();}
     resize(); addEventListener('resize',resize);
 
-    /* drag rotate */
     var drag=false,px=0,py=0,ry=0,rx=0,tvy=0,tvx=0;
     cv.addEventListener('pointerdown',function(e){drag=true;px=e.clientX;py=e.clientY;cv.setPointerCapture(e.pointerId);});
-    cv.addEventListener('pointermove',function(e){if(drag){tvy+=(e.clientX-px)*0.01;tvx+=(e.clientY-py)*0.008;tvx=Math.max(-.6,Math.min(.6,tvx));px=e.clientX;py=e.clientY;}});
+    cv.addEventListener('pointermove',function(e){if(drag){tvy+=(e.clientX-px)*0.01;tvx+=(e.clientY-py)*0.008;tvx=Math.max(-.5,Math.min(.5,tvx));px=e.clientX;py=e.clientY;}});
     cv.addEventListener('pointerup',function(){drag=false;});
 
-    var mode='alpha', trans=1; /* trans: 1=alpha, 0=beta */
-    function setMode(m){ mode=m; }
-    window.__labMode=setMode;
+    var mode='eff', era=0;
+    var lg=document.getElementById('labLegend');
+    var cap=document.getElementById('labCap');
+    var eraName=document.getElementById('eraName'), eraNum=document.getElementById('eraNum'), dots=document.getElementById('eraDots');
+    var bE=document.getElementById('modeEff'), bY=document.getElementById('modeEfy');
 
-    var t=0, probeIdx=0, probeT=0;
+    if(dots){var dh='';for(var d=0;d<TOOLS.length;d++) dh+='<i'+(d===0?' class="on"':'')+'></i>'; dots.innerHTML=dh;}
+
+    function apply(){
+      var tool=TOOLS[era], lens=(mode==='eff')?tool.eff:tool.efy;
+      var col=(mode==='eff')?0x6f88ff:0xf0b25e, emi=(mode==='eff')?0x2740c0:0xc97312;
+      var names=(mode==='eff')?EFF_NAMES:EFY_NAMES;
+      gauges.forEach(function(g,i){
+        g.userData.target=lens.scores[i];
+        g.userData.fill.material.color.setHex(col);
+        g.userData.fill.material.emissive.setHex(emi);
+      });
+      if(lg){
+        var sw='#'+('00000'+col.toString(16)).slice(-6), html='';
+        for(var i=0;i<5;i++){
+          var pct=Math.round(lens.scores[i]*100);
+          html+='<div class="lrow"><span class="swatch" style="background:'+sw+'"></span>'+
+            '<span class="lname">'+names[i]+'</span>'+
+            '<span class="lbar"><i style="width:'+pct+'%;background:'+sw+'"></i></span>'+
+            '<span class="lval">'+lens.vals[i]+'</span></div>';
+        }
+        lg.innerHTML=html;
+      }
+      if(cap){ cap.classList.toggle('beta',mode==='efy'); cap.innerHTML=capLead[mode]+tool.note[mode]; }
+      if(eraName) eraName.textContent=tool.name;
+      if(eraNum) eraNum.textContent=(era+1);
+      if(dots){var ic=dots.children; for(var n=0;n<ic.length;n++) ic[n].className=(n===era?'on':'');}
+    }
+
+    function showEra(i){
+      era=(i+TOOLS.length)%TOOLS.length;
+      for(var k=0;k<TOOLS3D.length;k++) TOOLS3D[k].grp.visible=(k===era);
+      TOOLS3D[era].pop=0.78;                  /* little pop-in on swap */
+      apply();
+    }
+    showEra(0);
+
+    var t=0;
     function frame(){
       t+=0.016;
-      var target = mode==='alpha'?1:0;
-      trans += (target-trans)*0.08;
-
-      /* shell opacity: transparent in alpha, opaque in beta */
-      shellMat.opacity = 0.18 + (1-trans)*0.74;
-      edge.material.opacity = 0.5*trans+0.15;
-      screen.material.emissiveIntensity = 0.4+0.5*(1-trans);
-
-      /* modules + probe visible in alpha */
-      var aShow=trans>0.05;
-      modules.forEach(function(m,i){
-        m.visible=aShow; var s=Math.max(0.001,trans); m.scale.setScalar(s);
-        m.material.opacity=trans; m.material.transparent=true;
+      var act=TOOLS3D[era];
+      if(act){
+        act.pop += (1-act.pop)*0.14; act.grp.scale.setScalar(act.pop*act.base);
+        act.grp.rotation.y = reduce?0:Math.sin(t*0.5)*0.10;
+        if(act.crank) act.crank.rotation.x -= 0.045;   /* the calculator crank turns */
+      }
+      gauges.forEach(function(g){
+        var ud=g.userData; ud.cur += (ud.target-ud.cur)*0.08;
+        ud.fill.scale.y=Math.max(0.001,ud.cur*ud.h);
       });
-      probe.visible=aShow; probe.material.opacity=trans; probe.material.transparent=true;
-
-      if(mode==='alpha'){
-        /* The probe fires a pulse of planned test data into each module in turn.
-           A module flashes green as it passes. Module 2 is a planted defect, so
-           it flashes red (bug found) then green (fixed) — matching the caption. */
-        probeT+=0.016;
-        var DUR=1.7, BUG=2;
-        var tgt=modules[probeIdx];
-        var p=probeT/DUR;                                   /* 0..1 through this scan */
-        /* smooth travel probe -> module, arriving by p=0.55 (no mid-air stall) */
-        var tp=Math.min(1,p/0.55), travel=tp*tp*(3-2*tp);   /* smoothstep ease */
-        pulse.position.lerpVectors(probe.position,tgt.position,travel);
-        /* grow the pulse out of the probe and shrink it into the module, so the
-           hand-over to the next module never teleports across the screen */
-        var env=Math.max(0,Math.min(1, p/0.15, (1-p)/0.2));
-        pulse.visible=true; pulse.scale.setScalar(Math.max(0.001,env));
-        if(p>0.5){                                          /* pulse has arrived — module reacts */
-          var glow=1.6+0.5*Math.sin(t*14);                  /* lively pulsing glow */
-          tgt.material.emissiveIntensity=glow;
-          if(probeIdx===BUG){
-            var fixed=p>0.82;                               /* found (red) -> fixed (green) */
-            tgt.material.emissive.setHex(fixed?0x1b7e45:0xb71c1c);
-            tgt.material.color.setHex(fixed?0x4fce82:0xff4438);
-          } else {
-            tgt.material.emissive.setHex(0x1b7e45);
-            tgt.material.color.setHex(0x4fce82);
-          }
-        } else {
-          tgt.material.emissiveIntensity=0.5;
-          tgt.material.emissive.setHex(0x2740c0); tgt.material.color.setHex(0x6f88ff);
-        }
-        if(probeT>DUR){                                     /* hand over to next module */
-          tgt.material.emissiveIntensity=0.5;
-          tgt.material.emissive.setHex(0x2740c0); tgt.material.color.setHex(0x6f88ff);
-          pulse.scale.setScalar(0.001);
-          probeT=0; probeIdx=(probeIdx+1)%modules.length;
-        }
-      } else { pulse.visible=false; }
-
-      /* users + bubbles in beta */
-      var bShow=trans<0.95;
-      users.forEach(function(u,i){
-        u.visible=bShow; var s=(1-trans); u.scale.setScalar(Math.max(0.001,s));
-        var bob=Math.sin(t*1.5+u.userData.t)*0.06; u.position.y=-0.3+bob;
-      });
-      if(mode==='beta'){
-        ubeam.visible=true;
-        var ui=Math.floor(t*1.2)%users.length; var src=users[ui].position;
-        var pr=(t*1.2)%1; ubeam.position.lerpVectors(src,new THREE.Vector3(0,0,0.4),pr);
-        ubeam.material.color.setHex(userCols[ui]);
-        bubbles.forEach(function(bb){ bb.visible=true; bb.userData.t+=0.016;
-          var ph=(bb.userData.t%3)/3; bb.position.set(bb.userData.x,(-1.4+ph*3.2),0.5);
-          bb.material.opacity=(1-ph)*0.95; });
-      } else { ubeam.visible=false; bubbles.forEach(function(bb){bb.visible=false;}); }
-
       ry+=(tvy-ry)*0.1; rx+=(tvx-rx)*0.1;
-      grp.rotation.y=ry + (drag?0:Math.sin(t*0.25)*0.12); grp.rotation.x=rx;
+      grp.rotation.y=ry + (drag||reduce?0:Math.sin(t*0.22)*0.07); grp.rotation.x=rx;
       r.render(sc,cam);
       requestAnimationFrame(frame);
     }
-    if(reduce){ trans=1; r.render(sc,cam); /* static alpha frame */ var raf=function(){r.render(sc,cam);}; }
     frame();
+    window.__recolor=function(theme){};
 
-    /* recolor hook for theme (subtle: screen tint) */
-    window.__recolor=function(theme){ /* materials already work on both; nothing required */ };
+    /* ---- controls ---- */
+    var autoTimer=null, bPlay=document.getElementById('eraPlay');
+    function stopAuto(){ if(autoTimer){clearInterval(autoTimer);autoTimer=null;} if(bPlay){bPlay.classList.remove('on'); bPlay.textContent='\u25B6 PLAY';} }
+    function startAuto(){ stopAuto(); if(bPlay){bPlay.classList.add('on'); bPlay.textContent='\u275A\u275A STOP';} autoTimer=setInterval(function(){ showEra(era+1); },2400); }
 
-    /* wire toggle buttons + captions */
-    var bA=document.getElementById('modeAlpha'), bB=document.getElementById('modeBeta'), cap=document.getElementById('labCap');
-    var capA='<b>ALPHA.</b> The shell is transparent — the <b>developer</b> can see every internal module and probe it with planned test data. Modules flash green as they pass; a red one is a bug being found and fixed. This is <b>white-box</b>, internal testing.';
-    var capB='<b>BETA.</b> The shell is now sealed — <b>real users</b> see only the outside (black-box). Several intended users in a real-world setting interact with the product and send <b>feedback</b> bubbles up for the developer to act on.';
+    var bPrev=document.getElementById('eraPrev'), bNext=document.getElementById('eraNext');
+    if(bPrev) bPrev.addEventListener('click',function(){ stopAuto(); showEra(era-1); });
+    if(bNext) bNext.addEventListener('click',function(){ stopAuto(); showEra(era+1); });
+    if(bPlay) bPlay.addEventListener('click',function(){ autoTimer?stopAuto():startAuto(); });
+
     function sel(m){
-      setMode(m);
-      bA.classList.toggle('on',m==='alpha'); bB.classList.toggle('on',m==='beta');
-      bA.setAttribute('aria-pressed',m==='alpha'); bB.setAttribute('aria-pressed',m==='beta');
-      cap.classList.toggle('beta',m==='beta'); cap.innerHTML = m==='alpha'?capA:capB;
+      mode=m;
+      bE.classList.toggle('on',m==='eff'); bY.classList.toggle('on',m==='efy');
+      bE.setAttribute('aria-pressed',m==='eff'); bY.setAttribute('aria-pressed',m==='efy');
+      apply();
     }
-    bA.addEventListener('click',function(){sel('alpha');});
-    bB.addEventListener('click',function(){sel('beta');});
+    bE.addEventListener('click',function(){sel('eff');});
+    bY.addEventListener('click',function(){sel('efy');});
   })();
 })();
 </script>
 <script>
-/* ============ INTERACTIVE PRACTICE: sorters + case study ============ */
+/* ============ INTERACTIVE PRACTICE: sorters + scorecard ============ */
 (function(){
-  /* ---- reusable tap-to-place sorter ---- */
   function makeSorter(cfg){
     var tray=document.getElementById(cfg.tray), sel=null;
     var buckets=cfg.root.querySelectorAll('.bucket');
@@ -1030,110 +1304,128 @@ table.cmp tbody tr:hover{background:var(--paper)}
     box.innerHTML=html;
   }
 
-  /* ---- 1 · test-data sorter ---- */
+  /* ---- 1 · effectiveness vs efficiency measure sorter ---- */
   (function(){
-    var root=document.getElementById('tdbTray'); if(!root) return;
+    var root=document.getElementById('meTray'); if(!root) return;
     var wrap=root.closest('.sortbox');
     var items=[
-      {id:'v50',label:'50',cat:'valid'},{id:'v73',label:'73',cat:'valid'},{id:'v8',label:'8',cat:'valid'},
-      {id:'b0',label:'0',cat:'boundary'},{id:'b100',label:'100',cat:'boundary'},
-      {id:'i_1',label:'-1',cat:'invalid'},{id:'i101',label:'101',cat:'invalid'},
-      {id:'ihalf',label:'7.5',cat:'invalid'},{id:'iword',label:'"ninety"',cat:'invalid'}
+      {id:'m1',cat:'effectiveness',label:'Does it perform every required function?',why:'meeting requirements / completeness is an effectiveness measure.'},
+      {id:'m2',cat:'effectiveness',label:'Are the results it produces correct?',why:'accuracy of output is an effectiveness measure.'},
+      {id:'m3',cat:'effectiveness',label:'Can target users operate it easily?',why:'usability — how well it serves its users — is effectiveness.'},
+      {id:'m4',cat:'effectiveness',label:'Can users with disabilities access it?',why:'accessibility is an effectiveness measure.'},
+      {id:'m5',cat:'effectiveness',label:'Does it run without crashing over time?',why:'reliability / robustness is an effectiveness measure.'},
+      {id:'m6',cat:'efficiency',label:'How fast does it process a transaction?',why:'speed of processing is an efficiency measure.'},
+      {id:'m7',cat:'efficiency',label:'How much does it cost to run each month?',why:'cost-effectiveness is an efficiency measure.'},
+      {id:'m8',cat:'efficiency',label:'How much memory and CPU does it use?',why:'use of processing/storage resources is efficiency.'},
+      {id:'m9',cat:'efficiency',label:'How much of the task is automated?',why:'level of automation is an efficiency measure.'},
+      {id:'m10',cat:'efficiency',label:'How much time does it save the user?',why:'productivity / time saved is an efficiency measure.'}
     ];
-    var s=makeSorter({tray:'tdbTray',root:wrap,items:items,cls:'chip',sel:'.chip',scoreEl:document.getElementById('tdbScore')});
-    document.getElementById('tdbCheck').addEventListener('click',function(){
-      var correct=0, placed=0, rows=[], cov={valid:0,boundary:0,invalid:0};
+    var byId={}; items.forEach(function(i){ byId[i.id]=i; });
+    var s=makeSorter({tray:'meTray',root:wrap,items:items,cls:'scard',sel:'.scard',scoreEl:document.getElementById('meScore')});
+    document.getElementById('meCheck').addEventListener('click',function(){
+      var correct=0,placed=0,rows=[],cov={effectiveness:0,efficiency:0};
       s.eachItem(function(el){
         var put=s.placedCat(el); if(!put) return; placed++;
         if(put===el.dataset.cat){ correct++; cov[put]++; el.classList.add('ok'); el.classList.remove('bad'); }
         else { el.classList.add('bad'); s.returnToTray(el);
-          rows.push({ok:false,text:'<strong>'+el.textContent.replace(' ✓','')+'</strong> isn\u2019t '+labelFor(put)+' — '+why(el.dataset.cat)+'.'}); }
+          rows.push({ok:false,text:'That one is <strong>'+el.dataset.cat+'</strong> — '+byId[el.dataset.id].why}); }
       });
-      var notes=[];
-      if(cov.boundary===0) notes.push({ok:false,text:'No <strong>boundary</strong> values tested. 0 and 100 sit right on the edge of what\u2019s allowed, and edges are where defects hide.'});
-      if(cov.valid===0) notes.push({ok:false,text:'No <strong>valid</strong> values — you also need to prove the field accepts normal, in-range input.'});
-      if(cov.invalid===0) notes.push({ok:false,text:'No <strong>invalid</strong> values — you need to prove bad input is rejected.'});
-      var allGood = correct===items.length;
-      renderFeedback(document.getElementById('tdbFb'), correct+' of '+items.length+' correctly classified · placed '+placed,
-        allGood?[{ok:true,text:'Valid, invalid <em>and</em> boundary all covered — that\u2019s a complete alpha test set.'}]:notes.concat(rows), allGood);
-      document.getElementById('tdbScore').textContent=correct+' of '+items.length+' correct';
+      var allGood=correct===items.length;
+      var head=correct+' of '+items.length+' correct · placed '+placed;
+      renderFeedback(document.getElementById('meFb'),head,
+        allGood?[{ok:true,text:'Both measures cleanly separated — that\u2019s the distinction examiners reward.'}]:rows, allGood);
+      document.getElementById('meScore').textContent=correct+' of '+items.length+' correct';
     });
-    function labelFor(c){ return c==='valid'?'valid input':c==='boundary'?'a boundary value':'invalid input'; }
-    function why(c){ return c==='valid'?'it\u2019s a normal in-range whole number, so it\u2019s valid'
-      : c==='boundary'?'it sits exactly on the limit (0 or 100), so it\u2019s a boundary value'
-      : 'it\u2019s out of range or not a whole number, so it should be rejected as invalid'; }
   })();
 
-  /* ---- 2 · scenario classifier ---- */
+  /* ---- 2 · solution / plan / testing scenario sorter ---- */
   (function(){
-    var root=document.getElementById('sortTray'); if(!root) return;
+    var root=document.getElementById('clTray'); if(!root) return;
     var wrap=root.closest('.sortbox');
     var items=[
-      {id:'s1',cat:'alpha',label:'A developer runs a module with planned inputs and checks each output against a trace table.',why:'the developer, internally, with planned test data \u2014 that\u2019s alpha.'},
-      {id:'s2',cat:'beta',label:'Two intended users trial the finished app on their own laptops at home and report bugs.',why:'real users in a real-world setting \u2014 that\u2019s beta.'},
-      {id:'s3',cat:'alpha',label:'The developer fixes a crash found during internal testing, before release.',why:'found by the developer before release \u2014 that\u2019s alpha (and debugging).'},
-      {id:'s4',cat:'beta',label:'Users fill in a survey on whether the booking screen was confusing.',why:'usability feedback gathered from users \u2014 that\u2019s beta.'},
-      {id:'s5',cat:'neither',label:'Three weeks after rollout, the solution is judged against the evaluation criteria set in design.',why:'after a period of use, against criteria \u2014 that\u2019s evaluation, not testing.'},
-      {id:'s6',cat:'alpha',label:'Valid, invalid and boundary values are tested in a controlled development environment.',why:'planned test data in a controlled environment \u2014 that\u2019s alpha.'},
-      {id:'s7',cat:'neither',label:'The effectiveness of the project plan is assessed once the solution has been in use for a while.',why:'assessing the project plan after use \u2014 that\u2019s evaluation.'}
+      {id:'c1',cat:'solution',label:'Rating the finished app against the usability criterion using survey data from three weeks of use.',why:'judging the solution against a criterion using evidence — evaluating the solution.'},
+      {id:'c2',cat:'plan',label:'Comparing actual task durations on the Gantt chart against the durations first estimated.',why:'actual vs expected durations — assessing the project plan.'},
+      {id:'c3',cat:'testing',label:'Running valid, invalid and boundary test data against a module before release.',why:'planned test data before release — that\u2019s alpha testing, not evaluation.'},
+      {id:'c4',cat:'solution',label:'Judging whether the solution achieves its purpose against the effectiveness criteria set in design.',why:'judging effectiveness against criteria — evaluating the solution.'},
+      {id:'c5',cat:'plan',label:'Documenting which milestones were reached late and explaining the reasons.',why:'milestones and reasons for change — assessing the project plan.'},
+      {id:'c6',cat:'testing',label:'Two intended users trial the working solution and report bugs so it can be refined.',why:'users refining the solution during development — that\u2019s beta testing.'},
+      {id:'c7',cat:'plan',label:'Deciding whether the chosen development model and time estimates worked well overall.',why:'judging the plan/approach overall — assessing the project plan.'}
     ];
     var byId={}; items.forEach(function(i){ byId[i.id]=i; });
-    var s=makeSorter({tray:'sortTray',root:wrap,items:items,cls:'scard',sel:'.scard',scoreEl:document.getElementById('sortScore')});
-    document.getElementById('sortCheck').addEventListener('click',function(){
-      var correct=0, placed=0, rows=[];
+    var s=makeSorter({tray:'clTray',root:wrap,items:items,cls:'scard',sel:'.scard',scoreEl:document.getElementById('clScore')});
+    document.getElementById('clCheck').addEventListener('click',function(){
+      var correct=0,placed=0,rows=[];
       s.eachItem(function(el){
         var put=s.placedCat(el); if(!put) return; placed++;
         if(put===el.dataset.cat){ correct++; el.classList.add('ok'); el.classList.remove('bad'); }
         else { el.classList.add('bad'); s.returnToTray(el);
-          rows.push({ok:false,text:'That one is <strong>'+el.dataset.cat+'</strong> \u2014 '+byId[el.dataset.id].why}); }
+          rows.push({ok:false,text:byId[el.dataset.id].why.charAt(0).toUpperCase()+byId[el.dataset.id].why.slice(1)}); }
       });
       var allGood=correct===items.length;
-      renderFeedback(document.getElementById('sortFb'), correct+' of '+items.length+' correct · placed '+placed, rows, allGood);
-      document.getElementById('sortScore').textContent=correct+' of '+items.length+' correct';
+      renderFeedback(document.getElementById('clFb'),correct+' of '+items.length+' correct · placed '+placed,rows,allGood);
+      document.getElementById('clScore').textContent=correct+' of '+items.length+' correct';
     });
   })();
 
-  /* ---- 3 · python case study (expected vs actual) ---- */
+  /* ---- 3 · case study scorecard (rate each criterion from evidence) ---- */
   (function(){
-    var body=document.getElementById('csRows'); if(!body) return;
-    var OUT={C:'Booking confirmed',S:'Sold out: not enough seats',R:'Rejected: must book at least 1 seat'};
-    function spec(req,av){ if(req<=0) return OUT.R; if(req<=av) return OUT.C; return OUT.S; }       // the rules
-    function actual(req,av){ if(req<=0) return OUT.R; if(req<av) return OUT.C; return OUT.S; }      // the buggy code
-    var seed=[{r:3,a:10},{r:0,a:10},{r:5,a:5},{r:6,a:5}];
-    var ran=0, total=seed.length;
-    seed.forEach(function(t,i){
+    var body=document.getElementById('scRows'); if(!body) return;
+    var crit=[
+      {n:'1 · Ease of use',m:'eff',tag:'Effectiveness · usability',
+       ev:'Survey of 40 users: 72% rated ease of use 4/5 or higher. Criterion required 80%. Date picker named as confusing.',
+       ans:'partly',why:'72% is below the 80% threshold, so it is only partly met.'},
+      {n:'2 · Booking accuracy',m:'eff',tag:'Effectiveness · accuracy',
+       ev:'No incorrect booking totals recorded across ~600 bookings in three weeks. Outputs match expected results.',
+       ans:'met',why:'every output matched the expected result — criterion met.'},
+      {n:'3 · Confirmation speed',m:'efy',tag:'Efficiency · speed',
+       ev:'Measured confirmation time averaged 1.3 seconds; criterion required under 2 seconds.',
+       ans:'met',why:'1.3s is under the 2s target — criterion met.'},
+      {n:'4 · Reliability',m:'eff',tag:'Effectiveness · reliability',
+       ev:'Error logs show zero crashes and no failed bookings over the three-week period.',
+       ans:'met',why:'no failures logged over the period of use — criterion met.'},
+      {n:'5 · Accessibility',m:'efy',tag:'Effectiveness · accessibility',
+       ev:'Screen-reader users could not complete a booking; form fields lack labels. Criterion required full keyboard + screen-reader access.',
+       ans:'not',why:'screen-reader users cannot complete the task — criterion not met.'}
+    ];
+    /* fix tag colour for criterion 5 (accessibility is effectiveness) */
+    crit[4].m='eff'; crit[4].tag='Effectiveness · accessibility';
+    var rated=0,total=crit.length;
+    crit.forEach(function(c,i){
       var tr=document.createElement('tr');
       tr.innerHTML=
-        '<td><input class="num" type="number" value="'+t.r+'" id="csr'+i+'"></td>'+
-        '<td><input class="num" type="number" value="'+t.a+'" id="csa'+i+'"></td>'+
-        '<td><select id="cse'+i+'">'+
-          '<option value="">— predict —</option>'+
-          '<option value="C">'+OUT.C+'</option>'+
-          '<option value="S">'+OUT.S+'</option>'+
-          '<option value="R">'+OUT.R+'</option>'+
+        '<td class="cn">'+c.n+'<span class="tagm '+(c.m==='eff'?'eff':'efy')+'">'+c.tag+'</span></td>'+
+        '<td class="ev">'+c.ev+'</td>'+
+        '<td><select id="scsel'+i+'">'+
+          '<option value="">— rate —</option>'+
+          '<option value="met">Met</option>'+
+          '<option value="partly">Partly met</option>'+
+          '<option value="not">Not met</option>'+
         '</select></td>'+
-        '<td><button class="run-btn" data-i="'+i+'">Run</button></td>'+
-        '<td class="actual" id="csact'+i+'">—</td>'+
-        '<td id="csv'+i+'"></td>';
+        '<td class="mk2" id="scmk'+i+'"></td>';
       body.appendChild(tr);
     });
-    var runFlags=new Array(total).fill(false);
-    function runRow(i){
-      var req=parseInt(document.getElementById('csr'+i).value,10);
-      var av=parseInt(document.getElementById('csa'+i).value,10);
-      if(isNaN(req)||isNaN(av)){ document.getElementById('csact'+i).textContent='need numbers'; return; }
-      var act=actual(req,av), exp=spec(req,av);
-      document.getElementById('csact'+i).textContent=act;
-      var v=document.getElementById('csv'+i);
-      v.innerHTML = (act===exp) ? '<span class="verdict pass">pass</span>' : '<span class="verdict fail">defect</span>';
-      var selEl=document.getElementById('cse'+i), pred=selEl.value;
-      selEl.style.borderColor = pred? (OUT[pred]===exp?'var(--pass)':'var(--trap)') : '';
-      if(!runFlags[i]){ runFlags[i]=true; ran++; document.getElementById('csScore').textContent=ran+' of '+total+' run'; }
-      if(ran===total) document.getElementById('csReveal').style.display='';
-    }
-    body.addEventListener('click',function(e){ var b=e.target.closest('.run-btn'); if(b) runRow(+b.dataset.i); });
-    document.getElementById('csRunAll').addEventListener('click',function(){ for(var i=0;i<total;i++) runRow(i); });
-    document.getElementById('csReveal').addEventListener('click',function(){ document.getElementById('csRevealBox').classList.toggle('show'); });
+    document.getElementById('scCheck').addEventListener('click',function(){
+      var correct=0,done=0,rows=[];
+      crit.forEach(function(c,i){
+        var sel=document.getElementById('scsel'+i), v=sel.value, mk=document.getElementById('scmk'+i);
+        if(!v){ mk.innerHTML=''; sel.style.borderColor=''; return; }
+        done++;
+        if(v===c.ans){ correct++; mk.innerHTML='<span class="y">✓</span>'; sel.style.borderColor='var(--pass)'; }
+        else { mk.innerHTML='<span class="n">✗</span>'; sel.style.borderColor='var(--trap)';
+          rows.push({ok:false,text:'<strong>'+c.n.replace(/^\d+ · /,'')+'</strong> is <strong>'+label(c.ans)+'</strong> — '+c.why}); }
+      });
+      var allGood=correct===total;
+      document.getElementById('scScore').textContent=correct+' of '+total+' correct';
+      renderFeedback(document.getElementById('scFb'),correct+' of '+total+' correct · rated '+done,
+        allGood?[{ok:true,text:'Spot on. Effective overall, but accessibility fails and usability falls short — exactly the nuanced verdict an Evaluate question wants.'}]:rows, allGood);
+      document.getElementById('scRevealBtn').style.display='';
+    });
+    function label(a){ return a==='met'?'Met':a==='partly'?'Partly met':'Not met'; }
+    var rb=document.getElementById('scRevealBtn');
+    rb.addEventListener('click',function(){
+      var open=document.getElementById('scReveal').classList.toggle('show');
+      rb.textContent=open?'Hide model evaluation ▴':'Reveal model evaluation ▾';
+    });
   })();
 })();
 </script>
