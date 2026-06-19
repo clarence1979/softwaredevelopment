@@ -756,8 +756,8 @@ table.cmp tbody tr:hover{background:var(--paper)}
       b.userData={a:Math.random()*6.28,sp:0.6+Math.random()*0.6,rad:1.0+Math.random()*0.3,phase:i/7};
       bugs.push(b); build.add(b);
     }
-    function resize(){var w=cv.clientWidth,h=cv.clientHeight; r.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix();}
-    resize(); addEventListener('resize',resize);
+    function resize(){var w=cv.clientWidth,h=cv.clientHeight; if(!w||!h)return; r.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix();}
+    requestAnimationFrame(function(){resize(); addEventListener('resize',resize);});
 
     /* drag */
     var drag=false,px=0,ry=0,tv=0;
@@ -792,7 +792,7 @@ table.cmp tbody tr:hover{background:var(--paper)}
       r.render(sc,cam);
       requestAnimationFrame(frame);
     }
-    if(reduce){ build.position.x=2.7; core.material.color.setHex(0xf4c870); core.material.emissive.setHex(0xc98a16); r.render(sc,cam); }
+    if(reduce){ requestAnimationFrame(function(){ build.position.x=2.7; core.material.color.setHex(0xf4c870); core.material.emissive.setHex(0xc98a16); resize(); r.render(sc,cam); }); }
     else frame();
   })();
 
@@ -869,8 +869,8 @@ table.cmp tbody tr:hover{background:var(--paper)}
     var ubeam=new THREE.Mesh(new THREE.SphereGeometry(.1,12,12),
       new THREE.MeshBasicMaterial({color:0xf0b25e})); ubeam.visible=false; grp.add(ubeam);
 
-    function resize(){var w=cv.clientWidth,h=cv.clientHeight; r.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix();}
-    resize(); addEventListener('resize',resize);
+    function resize(){var w=cv.clientWidth,h=cv.clientHeight; if(!w||!h)return; r.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix();}
+    requestAnimationFrame(function(){resize(); addEventListener('resize',resize);});
 
     /* drag rotate */
     var drag=false,px=0,py=0,ry=0,rx=0,tvy=0,tvx=0;
