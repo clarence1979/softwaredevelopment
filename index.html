@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VCE Software Development — Courseware Hub</title>
+<style>
+  :root {
+    --bg-editor:    #1e1e1e;
+    --bg-sidebar:   #252526;
+    --bg-tabbar:    #2d2d2d;
+    --bg-tab:       #2d2d2d;
+    --bg-tab-active:#1e1e1e;
+    --bg-activity:  #333333;
+    --border:       #3c3c3c;
+    --accent:       #0078d4;
+    --accent-dim:   #094771;
+    --text-primary: #cccccc;
+    --text-muted:   #858585;
+    --text-bright:  #ffffff;
+    --text-keyword: #569cd6;
+    --text-string:  #ce9178;
+    --text-comment: #6a9955;
+    --text-number:  #b5cea8;
+    --text-type:    #4ec9b0;
+    --text-fn:      #dcdcaa;
+    --badge-design:  #c586c0;
+    --badge-dev:     #4fc1ff;
+    --badge-alpha:   #f59e0b;
+    --badge-eval:    #6a9955;
+    --badge-analysis:#569cd6;
+    --tab-h: 35px;
+    --activity-w: 48px;
+    --sidebar-w: 220px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-editor);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+  /* ─── TITLE BAR ─── */
+  #titlebar {
+    background: #323233;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+    border-bottom: 1px solid #191919;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  #titlebar .dots span {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  #titlebar .dots .close   { background:#ff5f57; }
+  #titlebar .dots .min     { background:#febc2e; }
+  #titlebar .dots .max     { background:#28c840; }
+  #titlebar .title {
+    flex: 1; text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+  #titlebar .menu {
+    display: flex; gap: 16px;
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: default;
+  }
+  #titlebar .menu span:hover { color: var(--text-primary); }
+
+  /* ─── MAIN LAYOUT ─── */
+  #workspace {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ─── ACTIVITY BAR ─── */
+  #activitybar {
+    width: var(--activity-w);
+    background: var(--bg-activity);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0;
+    gap: 2px;
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .activity-btn {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-muted);
+    position: relative;
+    transition: color 0.15s;
+  }
+  .activity-btn:hover, .activity-btn.active { color: var(--text-bright); }
+  .activity-btn.active::before {
+    content: '';
+    position: absolute;
+    left: -4px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .activity-btn svg { width: 22px; height: 22px; fill: currentColor; }
+  #activitybar .spacer { flex: 1; }
+
+  /* ─── SIDEBAR ─── */
+  #sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  #sidebar .panel-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    padding: 10px 14px 6px;
+    flex-shrink: 0;
+  }
+  .sidebar-section {
+    padding: 4px 0;
+  }
+  .sidebar-section-header {
+    display: flex; align-items: center; gap: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .sidebar-section-header:hover { color: var(--text-primary); }
+  .sidebar-section-header .chevron {
+    display: inline-block;
+    width: 14px; height: 14px;
+    transition: transform 0.15s;
+  }
+  .sidebar-section-header .chevron.open { transform: rotate(90deg); }
+  .sidebar-file {
+    display: flex; align-items: center; gap: 8px;
+    padding: 3px 10px 3px 22px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: background 0.1s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar-file:hover { background: rgba(255,255,255,0.05); }
+  .sidebar-file.active {
+    background: var(--accent-dim);
+    border-left-color: var(--accent);
+    color: var(--text-bright);
+  }
+  .sidebar-file .file-icon {
+    width: 14px; height: 14px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700;
+  }
+
+  /* ─── EDITOR AREA ─── */
+  #editor-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ─── TAB BAR ─── */
+  #tabbar {
+    display: flex;
+    background: var(--bg-tabbar);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    flex-shrink: 0;
+    height: var(--tab-h);
+    scrollbar-width: none;
+  }
+  #tabbar::-webkit-scrollbar { display: none; }
+
+  .tab {
+    display: flex; align-items: center; gap: 7px;
+    padding: 0 14px;
+    height: var(--tab-h);
+    cursor: pointer;
+    border-right: 1px solid var(--border);
+    background: var(--bg-tab);
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    font-size: 13px;
+    transition: color 0.1s;
+    user-select: none;
+  }
+  .tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+  .tab.active {
+    background: var(--bg-tab-active);
+    color: var(--text-bright);
+    border-top: 1px solid var(--accent);
+  }
+  .tab .tab-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tab .tab-close {
+    width: 18px; height: 18px;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1;
+    opacity: 0;
+  }
+  .tab:hover .tab-close, .tab.active .tab-close { opacity: 1; }
+  .tab .tab-close:hover { background: rgba(255,255,255,0.12); color: var(--text-bright); }
+
+  /* ─── BREADCRUMB ─── */
+  #breadcrumb {
+    display: flex; align-items: center; gap: 4px;
+    padding: 4px 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-editor);
+    flex-shrink: 0;
+  }
+  #breadcrumb span { color: var(--text-primary); }
+  #breadcrumb .sep { color: var(--text-muted); }
+
+  /* ─── IFRAME PANEL ─── */
+  #panels {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-editor);
+  }
+  .panel {
+    position: absolute; inset: 0;
+    display: none;
+  }
+  .panel.active { display: flex; flex-direction: column; }
+
+  /* Welcome panel */
+  #panel-welcome {
+    overflow-y: auto;
+    padding: 40px 60px;
+    color: var(--text-primary);
+    line-height: 1.7;
+  }
+  #panel-welcome h1 {
+    font-size: 28px; font-weight: 300; color: var(--text-bright);
+    margin-bottom: 4px; letter-spacing: -0.5px;
+  }
+  #panel-welcome .subtitle {
+    color: var(--text-muted); font-size: 14px; margin-bottom: 36px;
+  }
+  #panel-welcome h2 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--text-muted); margin-bottom: 12px; font-weight: 700;
+  }
+  .quick-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  .quick-link {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .quick-link:hover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+  .quick-link .ql-icon {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .quick-link .ql-title { font-weight: 600; font-size: 13px; color: var(--text-bright); }
+  .quick-link .ql-desc  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .info-card {
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+  }
+  .info-card h3 {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--text-keyword);
+    margin-bottom: 10px;
+  }
+  .info-card ul {
+    list-style: none; padding: 0;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .info-card li {
+    display: flex; align-items: baseline; gap: 8px;
+    font-size: 12px; color: var(--text-primary);
+  }
+  .info-card li::before {
+    content: '›';
+    color: var(--accent); font-size: 14px; flex-shrink: 0;
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* iframe panels */
+  .iframe-wrapper {
+    flex: 1;
+    overflow: hidden;
+  }
+  .iframe-wrapper iframe {
+    width: 100%; height: 100%;
+    border: none;
+    background: white;
+  }
+
+  /* ─── STATUS BAR ─── */
+  #statusbar {
+    display: flex; align-items: center;
+    height: 22px;
+    background: var(--accent);
+    padding: 0 10px;
+    gap: 14px;
+    flex-shrink: 0;
+    font-size: 12px;
+    color: rgba(255,255,255,0.9);
+  }
+  #statusbar .sb-left { display: flex; gap: 10px; }
+  #statusbar .sb-right { margin-left: auto; display: flex; gap: 10px; }
+  #statusbar span { cursor: default; }
+
+  /* Colour classes */
+  .c-design  { color: var(--badge-design); }
+  .c-dev     { color: var(--badge-dev); }
+  .c-alpha   { color: var(--badge-alpha); }
+  .c-eval    { color: var(--badge-eval); }
+  .c-analysis{ color: var(--badge-analysis); }
+
+  .bg-design  { background: rgba(197,134,192,0.2); color: var(--badge-design); border: 1px solid var(--badge-design); }
+  .bg-dev     { background: rgba(79,193,255,0.2);  color: var(--badge-dev);    border: 1px solid var(--badge-dev); }
+  .bg-alpha   { background: rgba(245,158,11,0.2);  color: var(--badge-alpha);  border: 1px solid var(--badge-alpha); }
+  .bg-eval    { background: rgba(106,153,85,0.2);  color: var(--badge-eval);   border: 1px solid var(--badge-eval); }
+  .bg-analysis{ background: rgba(86,156,214,0.2);  color: var(--badge-analysis);border: 1px solid var(--badge-analysis); }
+</style>
+</head>
+<body>
+
+<!-- ─── TITLE BAR ─── -->
+<div id="titlebar">
+  <div class="dots">
+    <span class="close"></span><span class="min"></span><span class="max"></span>
+  </div>
+  <div class="menu">
+    <span>File</span><span>Edit</span><span>Selection</span>
+    <span>View</span><span>Go</span><span>Run</span><span>Help</span>
+  </div>
+  <div class="title">VCE Software Development — softwaredevelopment — Visual Studio Code</div>
+</div>
+
+<div id="workspace">
+
+  <!-- ─── ACTIVITY BAR ─── -->
+  <div id="activitybar">
+    <div class="activity-btn active" title="Explorer" onclick="toggleSidebar()">
+      <!-- files icon -->
+      <svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>
+    </div>
+    <div class="activity-btn" title="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" style="fill:none;stroke:currentColor;stroke-width:2"/><line x1="21" y1="21" x2="16.65" y2="16.65" style="stroke:currentColor;stroke-width:2"/></svg>
+    </div>
+    <div class="activity-btn" title="Source Control">
+      <svg viewBox="0 0 24 24"><circle cx="18" cy="18" r="3" style="fill:none;stroke:currentColor;stroke-width:2"/><circle cx="6" cy="6"  r="3" style="fill:none;stroke:currentColor;stroke-width:2"/><circle cx="6" cy="18" r="3" style="fill:none;stroke:currentColor;stroke-width:2"/><path d="M6 9v6M15.73 5.27l-3.46 9.46" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>
+    </div>
+    <div class="spacer"></div>
+    <div class="activity-btn" title="Settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" style="fill:none;stroke:currentColor;stroke-width:2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>
+    </div>
+  </div>
+
+  <!-- ─── SIDEBAR ─── -->
+  <div id="sidebar">
+    <div class="panel-title">Explorer</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-header" onclick="toggleSection(this)">
+        <svg class="chevron open" viewBox="0 0 16 16" fill="currentColor"><path d="M6 4l4 4-4 4"/></svg>
+        SOFTWAREDEVELOPMENT
+      </div>
+      <div class="section-files">
+        <div class="sidebar-file active" data-tab="welcome" onclick="openTab('welcome', this)">
+          <div class="file-icon" style="background:#252526;color:#cccccc;">🏠</div>
+          <span>Welcome.md</span>
+        </div>
+        <div class="sidebar-file" data-tab="design" onclick="openTab('design', this)">
+          <div class="file-icon" style="background:rgba(197,134,192,0.15);color:#c586c0;">D</div>
+          <span>design.html</span>
+        </div>
+        <div class="sidebar-file" data-tab="analysis" onclick="openTab('analysis', this)">
+          <div class="file-icon" style="background:rgba(86,156,214,0.15);color:#569cd6;">A</div>
+          <span>analysis.html</span>
+        </div>
+        <div class="sidebar-file" data-tab="development" onclick="openTab('development', this)">
+          <div class="file-icon" style="background:rgba(79,193,255,0.15);color:#4fc1ff;">D</div>
+          <span>development.html</span>
+        </div>
+        <div class="sidebar-file" data-tab="alpha" onclick="openTab('alpha', this)">
+          <div class="file-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b;">α</div>
+          <span>alpha-beta-testing.html</span>
+        </div>
+        <div class="sidebar-file" data-tab="evaluation" onclick="openTab('evaluation', this)">
+          <div class="file-icon" style="background:rgba(106,153,85,0.15);color:#6a9955;">E</div>
+          <span>evaluation.html</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-header" onclick="toggleSection(this)">
+        <svg class="chevron open" viewBox="0 0 16 16" fill="currentColor"><path d="M6 4l4 4-4 4"/></svg>
+        UNIT OVERVIEW
+      </div>
+      <div class="section-files" style="padding: 6px 14px; font-size:11px; color: var(--text-muted); line-height:1.7;">
+        <div>📘 Unit 3 &amp; 4</div>
+        <div style="color:var(--text-keyword);">Software Development</div>
+        <div style="margin-top:6px;">📗 Units 1 &amp; 2</div>
+        <div style="color:var(--text-keyword);">Applied Computing</div>
+        <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
+          <span style="color:var(--badge-alpha);">● </span>VCE Year 11–12<br>
+          <span style="color:var(--text-comment);">// PVCC Digital Technologies</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── EDITOR AREA ─── -->
+  <div id="editor-area">
+
+    <!-- TAB BAR -->
+    <div id="tabbar">
+      <div class="tab active" id="tab-welcome" onclick="openTab('welcome')">
+        <div class="tab-dot" style="background:#858585;"></div>
+        Welcome.md
+        <div class="tab-close">×</div>
+      </div>
+      <div class="tab" id="tab-design" onclick="openTab('design')">
+        <div class="tab-dot" style="background:#c586c0;"></div>
+        design.html
+        <div class="tab-close">×</div>
+      </div>
+      <div class="tab" id="tab-analysis" onclick="openTab('analysis')">
+        <div class="tab-dot" style="background:#569cd6;"></div>
+        analysis.html
+        <div class="tab-close">×</div>
+      </div>
+      <div class="tab" id="tab-development" onclick="openTab('development')">
+        <div class="tab-dot" style="background:#4fc1ff;"></div>
+        development.html
+        <div class="tab-close">×</div>
+      </div>
+      <div class="tab" id="tab-alpha" onclick="openTab('alpha')">
+        <div class="tab-dot" style="background:#f59e0b;"></div>
+        alpha-beta-testing.html
+        <div class="tab-close">×</div>
+      </div>
+      <div class="tab" id="tab-evaluation" onclick="openTab('evaluation')">
+        <div class="tab-dot" style="background:#6a9955;"></div>
+        evaluation.html
+        <div class="tab-close">×</div>
+      </div>
+    </div>
+
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb">
+      softwaredevelopment <span class="sep">›</span>
+      <span id="breadcrumb-file">Welcome.md</span>
+    </div>
+
+    <!-- PANELS -->
+    <div id="panels">
+
+      <!-- WELCOME -->
+      <div class="panel active" id="panel-welcome">
+        <h1>VCE Software Development</h1>
+        <p class="subtitle">Applied Computing · Years 11 &amp; 12 · PVCC Digital Technologies</p>
+
+        <h2>Open a module</h2>
+        <div class="quick-links">
+          <div class="quick-link" onclick="openTab('design')">
+            <div class="ql-icon" style="background:rgba(197,134,192,0.15);">🎨</div>
+            <div>
+              <div class="ql-title c-design">design.html</div>
+              <div class="ql-desc">Solution design &amp; planning artefacts</div>
+            </div>
+          </div>
+          <div class="quick-link" onclick="openTab('analysis')">
+            <div class="ql-icon" style="background:rgba(86,156,214,0.15);">🔍</div>
+            <div>
+              <div class="ql-title c-analysis">analysis.html</div>
+              <div class="ql-desc">Requirements analysis &amp; problem scoping</div>
+            </div>
+          </div>
+          <div class="quick-link" onclick="openTab('development')">
+            <div class="ql-icon" style="background:rgba(79,193,255,0.15);">⚙️</div>
+            <div>
+              <div class="ql-title c-dev">development.html</div>
+              <div class="ql-desc">Coding, debugging &amp; implementation</div>
+            </div>
+          </div>
+          <div class="quick-link" onclick="openTab('alpha')">
+            <div class="ql-icon" style="background:rgba(245,158,11,0.15);">🧪</div>
+            <div>
+              <div class="ql-title c-alpha">alpha-beta-testing.html</div>
+              <div class="ql-desc">Test strategies, data &amp; case studies</div>
+            </div>
+          </div>
+          <div class="quick-link" onclick="openTab('evaluation')">
+            <div class="ql-icon" style="background:rgba(106,153,85,0.15);">✅</div>
+            <div>
+              <div class="ql-title c-eval">evaluation.html</div>
+              <div class="ql-desc">Solution evaluation &amp; reflection</div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Unit structure</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>Unit 3 — Software Dev</h3>
+            <ul>
+              <li>Outcome 1 — Analysis &amp; Design</li>
+              <li>Outcome 2 — Programming</li>
+              <li>School-assessed Coursework (SAC)</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>Unit 4 — Software Dev</h3>
+            <ul>
+              <li>Outcome 1 — Testing &amp; Evaluation</li>
+              <li>Outcome 2 — Documentation</li>
+              <li>School-assessed Task (SAT)</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>Applied Computing U1&amp;2</h3>
+            <ul>
+              <li>Data analysis &amp; visualisation</li>
+              <li>Problem solving with algorithms</li>
+              <li>Digital systems &amp; networks</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>Key Assessment Types</h3>
+            <ul>
+              <li>SAC — School-Assessed Coursework</li>
+              <li>SAT — School-Assessed Task</li>
+              <li>Written Exam (Units 3&amp;4)</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>SDLC Phases covered</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px;">
+          <span class="tag bg-analysis">1. Analysis</span>
+          <span class="tag bg-design">2. Design</span>
+          <span class="tag bg-dev">3. Development</span>
+          <span class="tag bg-alpha">4. Testing</span>
+          <span class="tag bg-eval">5. Evaluation</span>
+          <span class="tag" style="background:rgba(255,255,255,0.07);color:var(--text-muted);border:1px solid var(--border);">Maintenance ↺</span>
+        </div>
+
+        <h2>Quick reference</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>VCE Study Design</h3>
+            <ul>
+              <li>VCAA Software Development SD</li>
+              <li>Applied Computing AC</li>
+              <li>vcaa.vic.edu.au</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>Languages &amp; Tools</h3>
+            <ul>
+              <li>Python 3 (primary language)</li>
+              <li>SQL — data management</li>
+              <li>HTML/CSS — interface design</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>Exam Outcomes</h3>
+            <ul>
+              <li>Section A — Multiple choice</li>
+              <li>Section B — Short answer</li>
+              <li>Section C — Extended response</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; padding: 14px 18px; background: var(--bg-sidebar); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; font-size: 12px; color: var(--text-muted); line-height: 1.7;">
+          <span style="color:var(--text-comment);">// </span>
+          Select a module above or click a tab to begin. Each tool opens in the editor pane — just like VS Code.
+          <br><span style="color:var(--text-comment);">// Keyboard shortcut tip: </span>
+          <span style="color:var(--text-string);">Ctrl+Tab</span> cycles through open files in VS Code.
+        </div>
+      </div>
+
+      <!-- iframe panels - load on demand -->
+      <div class="panel" id="panel-design">
+        <div class="iframe-wrapper"><iframe id="iframe-design" src="" title="Design"></iframe></div>
+      </div>
+      <div class="panel" id="panel-analysis">
+        <div class="iframe-wrapper"><iframe id="iframe-analysis" src="" title="Analysis"></iframe></div>
+      </div>
+      <div class="panel" id="panel-development">
+        <div class="iframe-wrapper"><iframe id="iframe-development" src="" title="Development"></iframe></div>
+      </div>
+      <div class="panel" id="panel-alpha">
+        <div class="iframe-wrapper"><iframe id="iframe-alpha" src="" title="Alpha &amp; Beta Testing"></iframe></div>
+      </div>
+      <div class="panel" id="panel-evaluation">
+        <div class="iframe-wrapper"><iframe id="iframe-evaluation" src="" title="Evaluation"></iframe></div>
+      </div>
+
+    </div><!-- /panels -->
+
+    <!-- STATUS BAR -->
+    <div id="statusbar">
+      <div class="sb-left">
+        <span>⎇ main</span>
+        <span>◯ 0 errors</span>
+        <span>⚠ 0 warnings</span>
+      </div>
+      <div class="sb-right">
+        <span id="status-lang">Markdown</span>
+        <span>UTF-8</span>
+        <span>VCAA VCE</span>
+        <span>🇦🇺 AUS</span>
+      </div>
+    </div>
+
+  </div><!-- /editor-area -->
+</div><!-- /workspace -->
+
+<script>
+  // Tab ↔ file mapping
+  const TABS = {
+    welcome:    { label: 'Welcome.md',              src: null,                        lang: 'Markdown',   breadcrumb: 'Welcome.md' },
+    design:     { label: 'design.html',             src: 'design.html',               lang: 'HTML',       breadcrumb: 'design.html' },
+    analysis:   { label: 'analysis.html',           src: 'analysis.html',             lang: 'HTML',       breadcrumb: 'analysis.html' },
+    development:{ label: 'development.html',        src: 'development.html',          lang: 'HTML',       breadcrumb: 'development.html' },
+    alpha:      { label: 'alpha-beta-testing.html', src: 'alpha-beta-testing.html',   lang: 'HTML',       breadcrumb: 'alpha-beta-testing.html' },
+    evaluation: { label: 'evaluation.html',         src: 'evaluation.html',           lang: 'HTML',       breadcrumb: 'evaluation.html' },
+  };
+
+  let currentTab = 'welcome';
+  const loaded = new Set(['welcome']); // welcome never needs iframe load
+
+  function openTab(id, sidebarEl) {
+    if (id === currentTab) return;
+
+    // Deactivate old
+    document.getElementById('tab-' + currentTab)?.classList.remove('active');
+    document.getElementById('panel-' + currentTab)?.classList.remove('active');
+    document.querySelectorAll('.sidebar-file').forEach(el => el.classList.remove('active'));
+
+    // Load iframe lazily
+    const cfg = TABS[id];
+    if (cfg.src && !loaded.has(id)) {
+      document.getElementById('iframe-' + id).src = cfg.src;
+      loaded.add(id);
+    }
+
+    // Activate new
+    document.getElementById('tab-' + id)?.classList.add('active');
+    document.getElementById('panel-' + id)?.classList.add('active');
+    document.querySelector(`.sidebar-file[data-tab="${id}"]`)?.classList.add('active');
+
+    // Update breadcrumb & status bar
+    document.getElementById('breadcrumb-file').textContent = cfg.breadcrumb;
+    document.getElementById('status-lang').textContent = cfg.lang;
+
+    currentTab = id;
+  }
+
+  function toggleSection(header) {
+    const chevron = header.querySelector('.chevron');
+    const files = header.nextElementSibling;
+    const isOpen = chevron.classList.contains('open');
+    chevron.classList.toggle('open', !isOpen);
+    files.style.display = isOpen ? 'none' : '';
+  }
+
+  let sidebarVisible = true;
+  function toggleSidebar() {
+    const sb = document.getElementById('sidebar');
+    sidebarVisible = !sidebarVisible;
+    sb.style.display = sidebarVisible ? '' : 'none';
+  }
+
+  // Keyboard: digits 1-5 switch tabs
+  const tabKeys = ['welcome','design','analysis','development','alpha','evaluation'];
+  document.addEventListener('keydown', e => {
+    if (e.altKey) return;
+    const n = parseInt(e.key);
+    if (n >= 1 && n <= tabKeys.length) openTab(tabKeys[n - 1]);
+  });
+</script>
+</body>
+</html>
