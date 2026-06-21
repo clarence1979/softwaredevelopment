@@ -1,730 +1,786 @@
 <!DOCTYPE html>
-<html lang="en-AU" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Design · VCE Software Development · The PSM Design Stage · Digital Vector</title>
+<title>KK10 · Strategies for Improving Secure Development — Digital Vector</title>
 <style>
-:root{
-  --ink:#16202B; --muted:#5B6976; --paper:#EEF1F5; --card:#FFFFFF;
-  /* Design semantics: appearance = indigo, functionality = amber */
-  --alpha:#2D4ED8; --alpha-soft:#E7ECFB; --alpha-line:#BCC8F2;   /* appearance / "look" */
-  --beta:#C97312;  --beta-soft:#FBEFDE;  --beta-line:#EFD3A8;    /* functionality / "do"  */
-  --pass:#1B7E45; --pass-soft:#E3F2E8;
-  --trap:#C0392F; --trap-soft:#F8E5E3;
-  --logic:#6D3FB0; --logic-soft:#EFE7FA; --logic-line:#D6C4EE;   /* logical tools  */
-  --phys:#0E7C86;  --phys-soft:#DEF3F4;  --phys-line:#AEDDE0;    /* physical tools */
-  --hair:#D3DAE3; --hair2:#E4E9EF;
-  --mono:ui-monospace,"Cascadia Code","SF Mono",Consolas,"Liberation Mono",monospace;
-  --sans:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --fs:1;
+/* ============ Digital Vector house style · Cyber Security (rose #fb7185) ============ */
+:root, [data-theme="dark"]{
+  --bg:#1115; --bg-page:#15171c; --bg-deep:#0f1115; --bg-card:#1c1f26; --bg-card2:#21252e;
+  --bg-top:#1a1d23; --bg-rail:#16181d; --border:#2b2f38; --border-soft:#252932;
+  --text:#d4d8e0; --text-dim:#9aa1ad; --text-faint:#6b7280; --text-bright:#f4f6fa;
+  --cc:#fb7185; --cc-deep:#e11d48; --cc-soft:rgba(251,113,133,.14); --cc-line:rgba(251,113,133,.4);
+  --good:#34d399; --good-soft:rgba(52,211,153,.14); --good-line:rgba(52,211,153,.45);
+  --warn:#fbbf24; --warn-soft:rgba(251,191,36,.14);
+  --bad:#f87171; --bad-soft:rgba(248,113,113,.14);
+  --info:#60a5fa; --info-soft:rgba(96,165,250,.14);
+  --violet:#c084fc; --violet-soft:rgba(192,132,252,.14);
+  --code-bg:#0d0f13; --shadow:rgba(0,0,0,.4);
+  --mono:'Cascadia Code','JetBrains Mono','Consolas',ui-monospace,monospace;
+  --sans:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+  --fs:16px;
 }
-[data-theme="dark"]{
-  --ink:#E7EDF4; --muted:#9BA9B8; --paper:#0E141B; --card:#161F29;
-  --alpha-soft:#1B2740; --alpha-line:#2C3E6B;
-  --beta-soft:#3A2A14; --beta-line:#6A4C1E;
-  --pass-soft:#16301F; --trap-soft:#3A1C18;
-  --logic-soft:#251A38; --logic-line:#3E2C5C;
-  --phys-soft:#0F2C2E; --phys-line:#1E4A4D;
-  --hair:#28323D; --hair2:#202A34;
+[data-theme="light"]{
+  --bg-page:#f6f7f9; --bg-deep:#eceef2; --bg-card:#ffffff; --bg-card2:#f3f5f8;
+  --bg-top:#ffffff; --bg-rail:#f0f2f5; --border:#d8dde4; --border-soft:#e4e8ed;
+  --text:#2b303a; --text-dim:#586173; --text-faint:#8b94a3; --text-bright:#10131a;
+  --cc:#e11d48; --cc-deep:#be123c; --cc-soft:rgba(225,29,72,.09); --cc-line:rgba(225,29,72,.32);
+  --good:#059669; --good-soft:rgba(5,150,105,.1); --good-line:rgba(5,150,105,.4);
+  --warn:#d97706; --warn-soft:rgba(217,119,6,.12);
+  --bad:#dc2626; --bad-soft:rgba(220,38,38,.1);
+  --info:#2563eb; --info-soft:rgba(37,99,235,.1);
+  --violet:#7c3aed; --violet-soft:rgba(124,58,237,.1);
+  --code-bg:#f1f3f6; --shadow:rgba(15,20,30,.1);
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth; font-size:calc(16px * var(--fs))}
-body{
-  margin:0; background:var(--paper); color:var(--ink);
-  font-family:var(--sans); line-height:1.62; font-size:1rem;
-  -webkit-font-smoothing:antialiased; transition:background .3s, color .3s;
-}
-.wrap{max-width:920px; margin:0 auto; padding:0 22px}
-a{color:var(--alpha)}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important}}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:var(--fs);scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg-page);color:var(--text);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .3s,color .3s}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001ms!important;transition-duration:.05ms!important}}
 
-/* ---------- header ---------- */
-header.top{
-  background:#0E1620; color:#E9EEF4; padding:46px 0 38px; position:relative; overflow:hidden;
-  border-bottom:3px solid var(--alpha);
-}
-header.top::after{
-  content:""; position:absolute; inset:0;
-  background:
-    radial-gradient(440px 220px at 12% 0%, rgba(45,78,216,.32), transparent 70%),
-    radial-gradient(440px 240px at 90% 120%, rgba(201,115,18,.26), transparent 70%);
-  pointer-events:none;
-}
-.brand{font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:#8FA0B4; margin-bottom:18px; position:relative; z-index:1}
-.brand b{color:#C9D4E2; font-weight:600}
-h1.title{font-size:clamp(30px,5.4vw,48px); line-height:1.05; margin:0 0 14px; letter-spacing:-.02em; font-weight:760; position:relative; z-index:1}
-h1.title .a{color:#7E97FF} h1.title .b{color:#F0B25E}
-.subtitle{color:#AEBCCC; font-size:1.06rem; max-width:660px; margin:0; position:relative; z-index:1}
-.meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; position:relative; z-index:1}
-.tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; padding:6px 11px; border-radius:6px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); color:#C6D2DF}
+/* ---- top bar (VS Code chrome) ---- */
+#top{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:12px;height:46px;
+  padding:0 14px;background:var(--bg-top);border-bottom:1px solid var(--border);backdrop-filter:blur(8px)}
+#top .dots{display:flex;gap:7px}
+#top .dots i{width:12px;height:12px;border-radius:50%;display:block}
+.d1{background:#ff5f57}.d2{background:#febc2e}.d3{background:#28c840}
+#top .crumb{display:flex;align-items:center;gap:7px;font-size:.8rem;color:var(--text-dim);min-width:0}
+#top .crumb b{color:var(--cc);font-weight:600}
+#top .crumb .sep{color:var(--text-faint)}
+#top .crumb .file{color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#top .spacer{flex:1}
+.tbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 11px;border-radius:7px;
+  border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;
+  font-family:var(--sans);font-size:.78rem;transition:all .15s}
+.tbtn:hover{background:var(--cc-soft);color:var(--text-bright);border-color:var(--cc-line)}
+.tbtn .ic{width:15px;height:15px;display:block}
+.fsgrp{display:flex;align-items:center;border:1px solid var(--border);border-radius:7px;overflow:hidden}
+.fsgrp button{height:28px;width:28px;border:none;background:transparent;color:var(--text-dim);cursor:pointer;font-size:1rem;transition:all .15s}
+.fsgrp button:hover{background:var(--cc-soft);color:var(--cc)}
+.fsgrp .lbl{font-size:.68rem;color:var(--text-faint);padding:0 7px;min-width:42px;text-align:center}
+@media(max-width:720px){#top .crumb .file,.fslabelwrap{display:none}}
 
-/* ---------- toolbar ---------- */
-.toolbar{position:sticky; top:0; z-index:40; background:color-mix(in srgb,var(--paper) 86%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--hair)}
-.toolbar .wrap{display:flex; align-items:center; gap:10px; padding:9px 22px}
-.progress{flex:1; height:6px; background:var(--hair2); border-radius:99px; overflow:hidden}
-.progress > i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--alpha),var(--beta)); transition:width .25s}
-.tbtn{font-family:var(--mono); font-size:12px; border:1px solid var(--hair); background:var(--card); color:var(--ink); border-radius:7px; padding:6px 10px; cursor:pointer}
-.tbtn:hover{border-color:var(--alpha)}
+/* ---- reading progress ---- */
+#prog{position:fixed;top:46px;left:0;height:3px;width:0;z-index:60;
+  background:linear-gradient(90deg,var(--cc),#f9a8b4);box-shadow:0 0 12px var(--cc);transition:width .12s}
 
-/* ---------- pipeline hero ---------- */
-.pipeline{margin:30px 0 2px; display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--hair); border-radius:12px; overflow:hidden; position:relative; z-index:1}
-.pstep{padding:14px 12px; text-align:center; background:var(--card); border-right:1px solid var(--hair); position:relative}
-.pstep:last-child{border-right:none}
-.pstep .num{font-family:var(--mono); font-size:11px; color:var(--muted)}
-.pstep .lbl{font-weight:680; margin-top:2px; font-size:.96rem}
-.pstep .sub{font-size:.74rem; color:var(--muted); margin-top:1px}
-.pstep.is-design{background:linear-gradient(180deg,var(--alpha-soft),transparent)}
-.pstep.is-design .lbl{color:var(--alpha)}
-.pstep.is-design::after{content:"YOU ARE HERE"; position:absolute; left:50%; transform:translateX(-50%); bottom:-9px; font-family:var(--mono); font-size:8.5px; letter-spacing:.12em; color:#fff; background:var(--alpha); padding:2px 7px; border-radius:99px; white-space:nowrap}
+/* ---- layout shell ---- */
+#shell{max-width:1180px;margin:0 auto;padding:0 22px;display:grid;grid-template-columns:218px 1fr;gap:34px}
+@media(max-width:960px){#shell{grid-template-columns:1fr;gap:0}}
 
-/* ---------- table of contents ---------- */
-.toc{background:var(--card); border:1px solid var(--hair); border-radius:14px; padding:18px 20px; margin:30px 0}
-.toc h3{margin:0 0 12px; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-family:var(--mono); font-weight:600}
-.toc ol{margin:0; padding:0; list-style:none; counter-reset:toc; columns:2; column-gap:26px}
-.toc li{counter-increment:toc; break-inside:avoid; margin:5px 0}
-.toc a{display:flex; gap:9px; text-decoration:none; color:var(--ink); padding:3px 0; align-items:baseline}
-.toc a::before{content:counter(toc,decimal-leading-zero); font-family:var(--mono); font-size:11px; color:var(--alpha); font-weight:600}
-.toc a:hover{color:var(--alpha)}
-@media (max-width:620px){.toc ol{columns:1}}
+/* ---- scroll-spy rail ---- */
+#rail{position:sticky;top:64px;align-self:start;height:calc(100vh - 80px);overflow-y:auto;
+  padding:18px 0 40px;font-size:.8rem;scrollbar-width:thin}
+#rail::-webkit-scrollbar{width:5px}#rail::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+#rail .rk{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-faint);padding:0 10px 8px}
+#rail a{display:flex;gap:9px;align-items:baseline;padding:6px 10px;border-radius:7px;color:var(--text-dim);
+  text-decoration:none;border-left:2px solid transparent;transition:all .14s;line-height:1.35}
+#rail a .n{font-family:var(--mono);font-size:.62rem;color:var(--text-faint);flex-shrink:0;min-width:14px}
+#rail a:hover{background:var(--cc-soft);color:var(--text)}
+#rail a.on{background:var(--cc-soft);color:var(--text-bright);border-left-color:var(--cc);font-weight:600}
+#rail a.on .n{color:var(--cc)}
+@media(max-width:960px){#rail{display:none}}
 
-/* ---------- sections ---------- */
-main{padding:14px 0 60px}
-section{padding:34px 0; border-top:1px solid var(--hair)}
-section:first-child{border-top:none}
-.eyebrow{display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:9px}
-.eyebrow .dot{width:9px; height:9px; border-radius:99px; background:var(--alpha); box-shadow:0 0 0 4px var(--alpha-soft)}
-h2.sec{font-size:clamp(22px,3.4vw,30px); line-height:1.16; margin:0 0 8px; letter-spacing:-.01em; font-weight:740}
-h3.sub{font-size:1.12rem; margin:26px 0 8px; font-weight:700}
-.lead{color:var(--muted); font-size:1.04rem; max-width:680px; margin:0 0 8px}
-p{margin:12px 0}
-.wrap > section p strong, section .lead strong{color:var(--ink)}
-.k-app{color:var(--alpha); font-weight:680}
-.k-func{color:var(--beta); font-weight:680}
-.k-log{color:var(--logic); font-weight:680}
-.k-phy{color:var(--phys); font-weight:680}
+/* ---- main column ---- */
+#main{min-width:0;padding:8px 0 120px}
+section{scroll-margin-top:74px;padding:30px 0;border-bottom:1px solid var(--border-soft)}
+section:last-child{border-bottom:none}
+.eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cc);margin-bottom:11px;display:flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--cc)}
+h1{font-size:2.35rem;font-weight:800;letter-spacing:-.02em;color:var(--text-bright);line-height:1.08;margin-bottom:8px}
+h2{font-size:1.62rem;font-weight:750;letter-spacing:-.015em;color:var(--text-bright);margin-bottom:14px;line-height:1.18}
+h3{font-size:1.12rem;font-weight:700;color:var(--text-bright);margin:18px 0 8px}
+p{margin-bottom:13px;max-width:68ch}
+.lead{font-size:1.12rem;color:var(--text);max-width:64ch}
+a.inl{color:var(--cc);text-decoration:none;border-bottom:1px solid var(--cc-line)}
+strong{color:var(--text-bright);font-weight:650}
+em.k{font-style:normal;color:var(--cc);font-weight:600}
+.mono{font-family:var(--mono)}
 
-/* ---------- callouts ---------- */
-.callout{border-radius:12px; padding:14px 16px 14px 18px; margin:16px 0; border:1px solid var(--hair); background:var(--card); position:relative}
-.callout .ct{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; margin-bottom:5px}
-.callout.tip{border-left:4px solid var(--alpha)} .callout.tip .ct{color:var(--alpha)}
-.callout.warn{border-left:4px solid var(--beta)} .callout.warn .ct{color:var(--beta)}
-.callout.trap{border-left:4px solid var(--trap); background:var(--trap-soft)} .callout.trap .ct{color:var(--trap)}
-.callout.pass{border-left:4px solid var(--pass); background:var(--pass-soft)} .callout.pass .ct{color:var(--pass)}
-.callout p{margin:6px 0 0}
+/* ---- hero ---- */
+#hero{padding-top:34px;border-bottom:1px solid var(--border-soft)}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:24px}
+#heroCanvasWrap{position:relative;height:340px;border-radius:16px;overflow:hidden;
+  border:1px solid var(--border);background:radial-gradient(120% 120% at 70% 10%,rgba(251,113,133,.1),transparent 60%),var(--bg-deep)}
+#heroCanvas{width:100%;height:100%;display:block}
+.hero-cap{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:.7rem;color:var(--text-dim);
+  background:rgba(0,0,0,.35);padding:5px 10px;border-radius:7px;backdrop-filter:blur(4px);max-width:80%}
+[data-theme="light"] .hero-cap{background:rgba(255,255,255,.6)}
+.kkpill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.72rem;font-weight:700;
+  color:var(--bg-deep);background:var(--cc);padding:5px 12px;border-radius:20px;margin-bottom:16px;box-shadow:0 5px 18px -8px var(--cc)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.chip{font-family:var(--mono);font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--cc);border:1px solid var(--cc-line);background:var(--cc-soft);padding:4px 11px;border-radius:20px}
 
-/* ---------- mnemonic block ---------- */
-.mne{border:2px dashed var(--beta-line); background:var(--beta-soft); border-radius:14px; padding:16px 18px; margin:18px 0}
-.mne .tag2{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:#fff; background:var(--beta); padding:3px 9px; border-radius:99px; margin-bottom:8px}
-.mne h4{margin:0 0 6px; font-size:1.18rem; font-weight:780}
-.mne .word{font-family:var(--mono); font-weight:700; letter-spacing:.04em; color:var(--beta)}
-.mne p{margin:6px 0 0; font-size:.96rem}
+/* ---- callout boxes ---- */
+.box{border-radius:13px;padding:17px 19px;margin:18px 0;border:1px solid var(--border);background:var(--bg-card)}
+.box .bt{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--text-bright);margin-bottom:7px;font-size:.96rem}
+.box .bt .bi{width:19px;height:19px;flex-shrink:0}
+.box.key{border-color:var(--cc-line);background:var(--cc-soft)}
+.box.key .bt{color:var(--cc)}
+.box.good{border-color:var(--good-line);background:var(--good-soft)}.box.good .bt{color:var(--good)}
+.box.warn{border-color:var(--warn);background:var(--warn-soft)}.box.warn .bt{color:var(--warn)}
+.box.analogy{border-color:var(--info);background:var(--info-soft)}.box.analogy .bt{color:var(--info)}
+.box.scen{border-left:3px solid var(--cc);border-radius:0 13px 13px 0;background:linear-gradient(90deg,var(--cc-soft),transparent 80%)}
+.box p:last-child{margin-bottom:0}
 
-/* ---------- generic chips ---------- */
-.chips{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
-.chip{font-family:var(--mono); font-size:12.5px; padding:6px 11px; border-radius:8px; border:1px solid var(--hair); background:var(--card); cursor:default}
-.chip.app{border-color:var(--alpha-line); background:var(--alpha-soft); color:var(--alpha)}
-.chip.func{border-color:var(--beta-line); background:var(--beta-soft); color:var(--beta)}
-.chip.log{border-color:var(--logic-line); background:var(--logic-soft); color:var(--logic)}
-.chip.phy{border-color:var(--phys-line); background:var(--phys-soft); color:var(--phys)}
+/* ---- scenario actor tags ---- */
+.actor{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;font-weight:600;color:var(--text-bright);
+  background:var(--bg-card2);border:1px solid var(--border);padding:2px 9px 2px 4px;border-radius:20px;margin:0 2px}
+.actor .av{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:.6rem;font-weight:800;color:#0d0f13}
 
-/* ---------- tables ---------- */
-.tbl{width:100%; border-collapse:collapse; margin:16px 0; font-size:.94rem; background:var(--card); border:1px solid var(--hair); border-radius:10px; overflow:hidden}
-.tbl th,.tbl td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--hair2); vertical-align:top}
-.tbl th{background:var(--hair2); font-size:.74rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-family:var(--mono); font-weight:600}
-.tbl tr:last-child td{border-bottom:none}
-.tbl code{font-family:var(--mono); font-size:.86em}
+/* ---- compare two-col ---- */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+@media(max-width:620px){.cmp{grid-template-columns:1fr}}
+.cmp .col{border-radius:13px;padding:15px 16px;border:1px solid var(--border);background:var(--bg-card)}
+.cmp .col h4{font-size:.95rem;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.cmp .col.mit h4{color:var(--violet)} .cmp .col.mit{border-color:var(--violet-soft)}
+.cmp .col.str h4{color:var(--good)} .cmp .col.str{border-color:var(--good-line)}
+.cmp ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.cmp li{display:flex;gap:8px;font-size:.86rem;line-height:1.4}
+.cmp li::before{content:"▸";color:currentColor;opacity:.6;flex-shrink:0}
 
-/* ---------- code / pseudocode blocks ---------- */
-pre.code{background:#0E1620; color:#D8E2EE; border-radius:11px; padding:15px 16px; overflow:auto; font-family:var(--mono); font-size:.86rem; line-height:1.6; margin:14px 0; border:1px solid #1d2935}
-pre.code .kw{color:#7E97FF; font-weight:600}
-pre.code .cm{color:#7C8AA0; font-style:italic}
-pre.code .st{color:#F0B25E}
-pre.code .in{display:inline-block; width:1.4em}
+/* ---- pillars (two strategies) ---- */
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+@media(max-width:720px){.pillars{grid-template-columns:1fr}}
+.pillar{border-radius:15px;padding:20px;border:1px solid var(--border);background:var(--bg-card);position:relative;overflow:hidden}
+.pillar::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--cc)}
+.pillar .pn{font-family:var(--mono);font-size:.66rem;color:var(--text-faint);letter-spacing:.1em}
+.pillar h3{margin:6px 0 9px;font-size:1.18rem}
+.pillar .who{color:var(--text-dim);font-size:.82rem;font-family:var(--mono);margin-bottom:11px}
+.pillar ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.pillar li{display:flex;gap:9px;font-size:.88rem;line-height:1.42}
+.pillar li svg{width:16px;height:16px;flex-shrink:0;margin-top:3px;color:var(--cc)}
 
-/* ---------- 3D stage ---------- */
-.stage{position:relative; width:100%; border-radius:14px; overflow:hidden; border:1px solid var(--hair); background:linear-gradient(180deg,#0E1620,#13202c); min-height:340px}
-.stage canvas{display:block; width:100%}
-.stage .hint{position:absolute; left:12px; bottom:11px; font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; color:#9fb0c4; background:rgba(0,0,0,.35); padding:4px 8px; border-radius:6px; pointer-events:none}
-.stage .ctrls{position:absolute; right:11px; top:11px; display:flex; gap:7px}
-.stage .ctrls button{font-family:var(--mono); font-size:11px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.4); color:#dbe6f1; border-radius:7px; padding:6px 10px; cursor:pointer}
-.stage .ctrls button:hover{border-color:#7E97FF; color:#fff}
-.stage .ctrls button.on{background:var(--alpha); border-color:var(--alpha); color:#fff}
+/* ---- interactive lab shell ---- */
+.lab{border-radius:16px;border:1px solid var(--border);background:var(--bg-card);overflow:hidden;margin:20px 0}
+.lab-head{display:flex;align-items:center;gap:11px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg-card2)}
+.lab-head .lic{width:22px;height:22px;color:var(--cc);flex-shrink:0}
+.lab-head .lt{font-weight:700;color:var(--text-bright);font-size:1rem}
+.lab-head .lx{margin-left:auto;font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint);border:1px solid var(--border);padding:3px 9px;border-radius:14px}
+.lab-canvas{position:relative;height:380px;background:var(--bg-deep)}
+.lab-canvas canvas{width:100%;height:100%;display:block}
+.nogl{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px;color:var(--text-dim)}
+.nogl svg{width:34px;height:34px;color:var(--text-faint)}
+.lab-controls{padding:15px 18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-top:1px solid var(--border)}
+.toggle{display:inline-flex;align-items:center;gap:9px;padding:8px 13px;border-radius:10px;border:1px solid var(--border);
+  background:var(--bg-card2);cursor:pointer;font-size:.83rem;color:var(--text);transition:all .16s;user-select:none}
+.toggle:hover{border-color:var(--cc-line)}
+.toggle.on{background:var(--good-soft);border-color:var(--good-line);color:var(--text-bright)}
+.toggle .sw{width:34px;height:19px;border-radius:11px;background:var(--border);position:relative;transition:background .18s;flex-shrink:0}
+.toggle .sw::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:var(--text-faint);transition:.18s}
+.toggle.on .sw{background:var(--good)}
+.toggle.on .sw::after{left:17px;background:#fff}
+.readout{display:flex;gap:18px;flex-wrap:wrap;margin-left:auto;align-items:center}
+.stat{text-align:center}
+.stat .v{font-family:var(--mono);font-size:1.5rem;font-weight:800;line-height:1;color:var(--cc);transition:color .3s}
+.stat .v.lo{color:var(--good)}.stat .v.hi{color:var(--bad)}
+.stat .l{font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);margin-top:4px}
 
-/* ---------- interactive widgets ---------- */
-.widget{border:1px solid var(--hair); border-radius:14px; padding:16px; margin:18px 0; background:var(--card)}
-.widget .wtop{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap}
-.widget .wt{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600}
-.score{font-family:var(--mono); font-size:12px; color:var(--muted)}
-.score b{color:var(--pass)}
-.btn{font-family:var(--sans); font-size:.9rem; border:1px solid var(--hair); background:var(--card); color:var(--ink); border-radius:9px; padding:8px 14px; cursor:pointer; font-weight:600}
-.btn:hover{border-color:var(--alpha)}
-.btn.primary{background:var(--alpha); border-color:var(--alpha); color:#fff}
-.btn.primary:hover{filter:brightness(1.08)}
-.btn.sm{padding:5px 10px; font-size:.82rem}
+/* ---- risk workbench specific ---- */
+.rw-side{padding:14px 18px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.rw-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg-card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px}
+.rw-row .rname{font-weight:600;font-size:.86rem;color:var(--text-bright);min-width:150px;flex:1}
+.rw-row .rpos{font-family:var(--mono);font-size:.7rem;color:var(--text-dim);min-width:88px}
+.rw-treat{display:flex;gap:5px;flex-wrap:wrap}
+.rw-treat button{font-family:var(--sans);font-size:.7rem;font-weight:600;padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all .14s}
+.rw-treat button:hover{border-color:var(--cc-line);color:var(--text)}
+.rw-treat button.sel{background:var(--cc);color:var(--bg-deep);border-color:var(--cc)}
+.rw-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.72rem;color:var(--text-dim);margin-top:2px}
+.rw-legend span{display:inline-flex;align-items:center;gap:6px}
+.rw-legend i{width:11px;height:11px;border-radius:3px;display:block}
 
-/* sorter */
-.pool{display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 14px; min-height:30px}
-.tok{font-family:var(--sans); font-size:.9rem; padding:8px 12px; border-radius:9px; border:1px solid var(--hair); background:var(--card); cursor:pointer; user-select:none; transition:transform .08s, border-color .15s}
-.tok:hover{border-color:var(--alpha); transform:translateY(-1px)}
-.tok.placed{opacity:.55}
-.tok.sel{border-color:var(--alpha); box-shadow:0 0 0 3px var(--alpha-soft)}
-.buckets{display:grid; gap:12px; margin-top:8px}
-.buckets.two{grid-template-columns:repeat(2,1fr)}
-.buckets.three{grid-template-columns:repeat(3,1fr)}
-.bucket{border:1px dashed var(--hair); border-radius:12px; padding:10px; min-height:90px; background:var(--paper)}
-.bucket.over{border-color:var(--alpha); background:var(--alpha-soft)}
-.bhead{font-family:var(--mono); font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; font-weight:600; margin-bottom:7px; color:var(--ink)}
-.bucket[data-cat="app"] .bhead{color:var(--alpha)}
-.bucket[data-cat="func"] .bhead{color:var(--beta)}
-.bucket[data-cat="logical"] .bhead{color:var(--logic)}
-.bucket[data-cat="physical"] .bhead{color:var(--phys)}
-.bdrop{display:flex; flex-wrap:wrap; gap:7px}
-.tok.good{border-color:var(--pass); background:var(--pass-soft)}
-.tok.bad{border-color:var(--trap); background:var(--trap-soft)}
-@media (max-width:620px){.buckets.two,.buckets.three{grid-template-columns:1fr}}
+/* ---- flip cards ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:13px;margin:18px 0}
+.flip{height:158px;perspective:1200px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:13px;padding:16px;
+  display:flex;flex-direction:column;border:1px solid var(--border);background:var(--bg-card)}
+.flip .f{justify-content:space-between}
+.flip .f .term{font-weight:750;color:var(--text-bright);font-size:1.02rem}
+.flip .f .hint{font-size:.68rem;color:var(--text-faint);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.flip .f .tag{align-self:flex-start;font-family:var(--mono);font-size:.6rem;color:var(--cc);border:1px solid var(--cc-line);padding:2px 8px;border-radius:12px}
+.flip .b{transform:rotateY(180deg);background:var(--cc-soft);border-color:var(--cc-line);font-size:.84rem;color:var(--text);align-items:flex-start;justify-content:center;line-height:1.45}
 
-/* reveal */
-.reveal{margin-top:10px}
-.reveal .body{display:none; margin-top:10px}
-.reveal.open .body{display:block}
+/* ---- sorter ---- */
+.sorter{margin:18px 0}
+.sort-pool{display:flex;flex-wrap:wrap;gap:9px;padding:14px;border-radius:13px;border:1px dashed var(--border);background:var(--bg-deep);min-height:64px;margin-bottom:14px}
+.token{font-size:.83rem;font-weight:600;padding:8px 13px;border-radius:9px;border:1px solid var(--border);
+  background:var(--bg-card2);color:var(--text);cursor:grab;user-select:none;transition:all .14s;touch-action:none}
+.token:hover{border-color:var(--cc-line);transform:translateY(-1px)}
+.token.placed{opacity:.45;cursor:default;pointer-events:none}
+.token.drag{opacity:.5}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media(max-width:620px){.bins{grid-template-columns:1fr}}
+.bin{border-radius:13px;border:2px dashed var(--border);padding:13px;min-height:130px;transition:all .16s;background:var(--bg-card)}
+.bin.over{border-color:var(--cc);background:var(--cc-soft)}
+.bin h4{font-size:.9rem;margin-bottom:10px;display:flex;align-items:center;gap:8px;color:var(--text-bright)}
+.bin .drop{display:flex;flex-wrap:wrap;gap:8px;min-height:40px}
+.bin .slot{font-size:.8rem;font-weight:600;padding:7px 11px;border-radius:8px;display:inline-flex;align-items:center;gap:7px}
+.bin .slot.ok{background:var(--good-soft);border:1px solid var(--good-line);color:var(--text-bright)}
+.bin .slot.no{background:var(--bad-soft);border:1px solid var(--bad);color:var(--text-bright)}
+.sorter .sresult{margin-top:13px;font-size:.86rem;font-weight:600;display:none}
 
-/* quiz */
-.q{border:1px solid var(--hair); border-radius:12px; padding:14px 16px; margin:14px 0; background:var(--card)}
-.q .qh{display:flex; gap:10px; align-items:baseline}
-.q .qn{font-family:var(--mono); font-size:12px; color:var(--alpha); font-weight:700}
-.q .qbody{font-weight:600; margin:0}
-.q textarea{width:100%; margin-top:10px; min-height:74px; border:1px solid var(--hair); border-radius:9px; padding:9px 11px; font-family:var(--sans); font-size:.92rem; background:var(--paper); color:var(--ink); resize:vertical}
-.q .marking{display:none; margin-top:10px; border-top:1px dashed var(--hair); padding-top:10px}
-.q.open .marking{display:block}
-.q .marking ul{margin:6px 0 0; padding-left:18px}
-.q .marking li{margin:3px 0; font-size:.92rem}
+/* ---- MCQ ---- */
+.mcq{margin:16px 0;border-radius:13px;border:1px solid var(--border);background:var(--bg-card);padding:18px}
+.mcq .q{font-weight:650;color:var(--text-bright);margin-bottom:12px}
+.mcq .q .qn{font-family:var(--mono);color:var(--cc);margin-right:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:10px;border:1px solid var(--border);
+  background:var(--bg-card2);cursor:pointer;margin-bottom:8px;transition:all .14s;font-size:.9rem}
+.opt:hover{border-color:var(--cc-line)}
+.opt .mk{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:grid;place-items:center;font-size:.7rem;font-weight:800;margin-top:1px}
+.opt.correct{background:var(--good-soft);border-color:var(--good-line)}.opt.correct .mk{border-color:var(--good);background:var(--good);color:#04130d}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}.opt.wrong .mk{border-color:var(--bad);background:var(--bad);color:#fff}
+.mcq .fb{margin-top:6px;font-size:.85rem;padding:11px 13px;border-radius:9px;background:var(--bg-deep);border-left:3px solid var(--cc);display:none}
+.mcq .fb.show{display:block}
 
-/* split halves */
-.halves{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0}
-.halfcard{border-radius:12px; padding:14px 16px; border:1px solid var(--hair); background:var(--card)}
-.halfcard.a{border-top:3px solid var(--alpha)} .halfcard.b{border-top:3px solid var(--beta)}
-.halfcard .ht{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; margin-bottom:5px}
-.halfcard.a .ht{color:var(--alpha)} .halfcard.b .ht{color:var(--beta)}
-.halfcard p{margin:0; font-size:.92rem}
-@media (max-width:560px){.halves{grid-template-columns:1fr}}
+/* ---- exam traps ---- */
+.traps{display:flex;flex-direction:column;gap:11px;margin:18px 0}
+.trap{border-radius:12px;border:1px solid var(--border);background:var(--bg-card);overflow:hidden}
+.trap summary{cursor:pointer;list-style:none;padding:14px 16px;display:flex;align-items:center;gap:11px;font-weight:650;color:var(--text-bright)}
+.trap summary::-webkit-details-marker{display:none}
+.trap summary .tnum{font-family:var(--mono);font-size:.7rem;font-weight:800;color:var(--bad);background:var(--bad-soft);border:1px solid var(--bad);width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+.trap summary .chev{margin-left:auto;transition:transform .2s;color:var(--text-faint)}
+.trap[open] summary .chev{transform:rotate(180deg)}
+.trap .body{padding:0 16px 15px 53px;font-size:.88rem;color:var(--text)}
+.trap .body .fix{margin-top:9px;padding:10px 13px;border-radius:9px;background:var(--good-soft);border-left:3px solid var(--good);font-size:.85rem}
+.trap .body .fix b{color:var(--good)}
 
-/* steps */
-.flow{display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; margin:18px 0; border:1px solid var(--hair); border-radius:12px; overflow:hidden}
-.fnode{padding:14px 14px; background:var(--card); border-right:1px solid var(--hair); position:relative}
-.fnode:last-child{border-right:none}
-.fnode .fn{font-family:var(--mono); font-size:11px; color:var(--alpha); font-weight:700}
-.fnode .fh{font-weight:700; margin:3px 0 4px}
-.fnode p{margin:0; font-size:.86rem; color:var(--muted)}
-@media (max-width:620px){.flow{grid-template-columns:1fr}.fnode{border-right:none; border-bottom:1px solid var(--hair)}}
+/* ---- P-E-L writing trainer ---- */
+.pel{border-radius:15px;border:1px solid var(--border);background:var(--bg-card);overflow:hidden;margin:18px 0}
+.pel-head{padding:15px 18px;border-bottom:1px solid var(--border);background:var(--bg-card2)}
+.pel-head h3{margin:0 0 4px}
+.pel-head p{margin:0;font-size:.84rem;color:var(--text-dim);max-width:none}
+.pel-body{padding:16px 18px}
+.pel-steps{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.pstep{flex:1;min-width:150px;border-radius:11px;border:1px solid var(--border);background:var(--bg-card2);padding:12px 13px}
+.pstep .pl{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;color:var(--cc);font-weight:700}
+.pstep .pd{font-size:.82rem;color:var(--text-dim);margin-top:4px;line-height:1.4}
+.pel textarea{width:100%;min-height:120px;resize:vertical;border-radius:11px;border:1px solid var(--border);
+  background:var(--bg-deep);color:var(--text);padding:13px;font-family:var(--sans);font-size:.92rem;line-height:1.55}
+.pel textarea:focus{outline:none;border-color:var(--cc-line);box-shadow:0 0 0 3px var(--cc-soft)}
+.pel-meter{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0}
+.kw{font-family:var(--mono);font-size:.72rem;padding:5px 10px;border-radius:8px;border:1px solid var(--border);color:var(--text-faint);transition:all .2s}
+.kw.hit{background:var(--good-soft);border-color:var(--good-line);color:var(--good);font-weight:700}
+.pel-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-size:.85rem;font-weight:650;padding:10px 17px;border-radius:9px;border:none;cursor:pointer;transition:all .15s}
+.btn.primary{background:var(--cc);color:var(--bg-deep);box-shadow:0 6px 18px -8px var(--cc)}
+.btn.primary:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text-dim)}
+.btn.ghost:hover{border-color:var(--cc-line);color:var(--text)}
+.pel-model{margin-top:14px;border-radius:11px;border:1px solid var(--good-line);background:var(--good-soft);padding:0 15px;max-height:0;overflow:hidden;transition:max-height .4s,padding .4s}
+.pel-model.show{max-height:600px;padding:14px 15px}
+.pel-model h4{color:var(--good);font-size:.9rem;margin-bottom:7px}
+.pel-model p{font-size:.86rem;margin-bottom:0}
 
-/* footer */
-footer{background:#0E1620; color:#9fb0c4; padding:30px 0; font-size:.86rem; border-top:3px solid var(--beta)}
-footer b{color:#C9D4E2}
+/* ---- practice questions ---- */
+.pq{border-radius:15px;border:1px solid var(--border);background:var(--bg-card);margin:16px 0;overflow:hidden}
+.pq-head{padding:15px 18px;display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid var(--border)}
+.pq-head .marks{font-family:var(--mono);font-size:.66rem;font-weight:800;color:var(--cc);background:var(--cc-soft);border:1px solid var(--cc-line);padding:4px 9px;border-radius:8px;flex-shrink:0;white-space:nowrap}
+.pq-head .cmd{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-top:5px}
+.pq-head .qtext{font-weight:600;color:var(--text-bright);font-size:.98rem}
+.pq-body{padding:16px 18px}
+.pq-toggle{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.pq-toggle button{flex:1;min-width:120px;font-family:var(--sans);font-size:.8rem;font-weight:650;padding:9px 12px;border-radius:9px;
+  border:1px solid var(--border);background:var(--bg-card2);color:var(--text-dim);cursor:pointer;transition:all .15s}
+.pq-toggle button.weak.on{background:var(--bad-soft);border-color:var(--bad);color:var(--text-bright)}
+.pq-toggle button.strong.on{background:var(--good-soft);border-color:var(--good-line);color:var(--text-bright)}
+.pq-toggle button.guide.on{background:var(--info-soft);border-color:var(--info);color:var(--text-bright)}
+.pq-ans{display:none;border-radius:11px;padding:14px 15px;font-size:.88rem;line-height:1.55;margin-bottom:6px}
+.pq-ans.show{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+.pq-ans.weak{background:var(--bad-soft);border:1px solid var(--bad)}
+.pq-ans.strong{background:var(--good-soft);border:1px solid var(--good-line)}
+.pq-ans.guide{background:var(--info-soft);border:1px solid var(--info)}
+.pq-ans .at{font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.pq-ans.weak .at{color:var(--bad)}.pq-ans.strong .at{color:var(--good)}.pq-ans.guide .at{color:var(--info)}
+.pq-ans ul{margin:6px 0 0 18px}.pq-ans li{margin-bottom:4px}
+.anno{border-bottom:2px dotted;cursor:help;position:relative}
+.anno.bad{border-color:var(--bad)}.anno.good{border-color:var(--good)}
+.selfmark{display:flex;align-items:center;gap:11px;margin-top:12px;padding-top:13px;border-top:1px solid var(--border)}
+.selfmark .sq{font-size:.82rem;color:var(--text-dim)}
+.selfmark button{font-size:.78rem;font-weight:650;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all .14s}
+.selfmark button.got:hover,.selfmark button.got.on{background:var(--good-soft);border-color:var(--good-line);color:var(--good)}
+.selfmark button.miss:hover,.selfmark button.miss.on{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
 
-/* misc */
-.kbd{font-family:var(--mono); font-size:.82em; background:var(--hair2); border:1px solid var(--hair); border-radius:5px; padding:1px 6px}
-.hot{position:relative; display:inline-block}
-.center{text-align:center}
-.small{font-size:.85rem; color:var(--muted)}
+/* ---- score dock ---- */
+#dock{position:fixed;right:20px;bottom:20px;z-index:55;display:flex;align-items:center;gap:13px;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:9px 18px 9px 9px;
+  box-shadow:0 14px 40px -12px var(--shadow);transition:transform .3s}
+#dock.tuck{transform:translateY(120px)}
+#ring{width:52px;height:52px;flex-shrink:0}
+#dock .dl{font-size:.64rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint)}
+#dock .dv{font-family:var(--mono);font-weight:800;font-size:1.05rem;color:var(--text-bright)}
+#dock .dv b{color:var(--cc)}
+#dock .dreset{background:none;border:none;color:var(--text-faint);cursor:pointer;font-size:.7rem;text-decoration:underline;padding:0;margin-top:2px}
+@media(max-width:560px){#dock{right:12px;bottom:12px;padding:7px 14px 7px 7px}#ring{width:44px;height:44px}}
 
+/* ---- summary takeaways ---- */
+.takeaways{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:18px 0}
+@media(max-width:620px){.takeaways{grid-template-columns:1fr}}
+.take{display:flex;gap:12px;padding:15px;border-radius:12px;border:1px solid var(--border);background:var(--bg-card)}
+.take .ti{width:30px;height:30px;border-radius:9px;background:var(--cc-soft);color:var(--cc);display:grid;place-items:center;flex-shrink:0;font-family:var(--mono);font-weight:800;font-size:.8rem}
+.take p{margin:0;font-size:.87rem}
+.take p b{color:var(--text-bright)}
+
+/* ---- footer ---- */
+footer{max-width:1180px;margin:0 auto;padding:30px 22px 80px;color:var(--text-faint);font-size:.78rem;text-align:center;line-height:1.7}
+footer .bm{color:var(--cc);font-weight:700;font-family:var(--mono)}
+
+.disclaimer{font-size:.74rem;color:var(--text-faint);font-style:italic;border-top:1px solid var(--border-soft);margin-top:24px;padding-top:14px;line-height:1.6}
 </style>
 <style id="dv-xref-style">.dv-xref{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-decoration-thickness:1px;text-underline-offset:2px;cursor:pointer;transition:opacity .15s}.dv-xref:hover{text-decoration-style:solid;opacity:.85}</style><link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YzVjZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNWIzZmQxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHJ4PSIxNCIgZmlsbD0idXJsKCNnKSIvPgogIDwhLS0gbW9ydGFyYm9hcmQgKGdyYWR1YXRpb24gY2FwKSAtLT4KICA8cGF0aCBkPSJNMzIgMTUgTDU0IDI0IEwzMiAzMyBMMTAgMjQgWiIgZmlsbD0iI2ZmZmZmZiIvPgogIDwhLS0gY2FwIGJhc2UgLyBoZWFkIC0tPgogIDxwYXRoIGQ9Ik0yMCAyOC41IEwyMCAzOCBDMjAgNDEuNiAyNS40IDQ0LjUgMzIgNDQuNSBDMzguNiA0NC41IDQ0IDQxLjYgNDQgMzggTDQ0IDI4LjUgTDMyIDMzLjQgWiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC45MiIvPgogIDwhLS0gdGFzc2VsIC0tPgogIDxwYXRoIGQ9Ik01NCAyNCBMNTQgMzYiIHN0cm9rZT0iI2ZmZDM0ZCIgc3Ryb2tlLXdpZHRoPSIyLjQiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxjaXJjbGUgY3g9IjU0IiBjeT0iMzguNCIgcj0iMi43IiBmaWxsPSIjZmZkMzRkIi8+CiAgPCEtLSBleGFtIGNoZWNrbWFyayBiYWRnZSAtLT4KICA8Y2lyY2xlIGN4PSI0NS41IiBjeT0iNDcuNSIgcj0iOS41IiBmaWxsPSIjMjJjMDhiIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMi4yIi8+CiAgPHBhdGggZD0iTTQxLjMgNDcuNyBMNDQuMiA1MC42IEw1MCA0NC44IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg=="><!--dv-app-icon--></head>
 <body>
-
-<!-- ============ HEADER ============ -->
-<header class="top">
-  <div class="wrap">
-    <div class="brand"><b>Digital Vector</b> &nbsp;·&nbsp; VCE Software Development &nbsp;·&nbsp; Problem-Solving Methodology</div>
-    <h1 class="title">Stage 2 — <span class="a">Design</span>:<br>deciding <span class="a">how</span> it looks and <span class="b">how</span> it works</h1>
-    <p class="subtitle">Analysis told you <em>what</em> the solution must do. Design is where you decide <em>how</em> — on paper, in detail, before a single line of code. Get this right and Development almost writes itself.</p>
-    <div class="meta-row">
-      <span class="tag">Unit 3 · Outcome 2</span>
-      <span class="tag">PSM Stage 2 of 4</span>
-      <span class="tag">Year 12 · SAT-aligned</span>
-      <span class="tag">Study Design 2025–2028</span>
-    </div>
+<!-- ============ TOP BAR ============ -->
+<div id="top">
+  <div class="dots"><i class="d1"></i><i class="d2"></i><i class="d3"></i></div>
+  <div class="crumb">
+    <b>Digital Vector</b><span class="sep">/</span>
+    <span>Cyber Security</span><span class="sep">/</span>
+    <span class="file">KK10 · Strategies for improving secure development</span>
   </div>
-</header>
-
-<!-- ============ TOOLBAR ============ -->
-<div class="toolbar">
-  <div class="wrap">
-    <span class="tbtn" id="fsDn" title="Smaller text">A−</span>
-    <span class="tbtn" id="fsUp" title="Larger text">A+</span>
-    <div class="progress" title="How far you've scrolled"><i id="prog"></i></div>
-    <span class="tbtn" id="themeBtn" title="Toggle dark / light">◐ Theme</span>
+  <div class="spacer"></div>
+  <div class="fsgrp">
+    <button onclick="fontStep(-1)" title="Smaller text">A−</button>
+    <span class="lbl fslabelwrap" id="fsLbl">100%</span>
+    <button onclick="fontStep(1)" title="Larger text">A+</button>
   </div>
+  <button class="tbtn" onclick="toggleTheme()" id="themeBtn">
+    <svg class="ic" id="themeIc" viewBox="0 0 24 24" fill="currentColor"></svg>
+    <span id="themeLbl">Dark</span>
+  </button>
 </div>
+<div id="prog"></div>
 
-<div class="wrap">
-
-  <!-- PIPELINE -->
-  <div class="pipeline" aria-label="The four stages of the problem-solving methodology">
-    <div class="pstep"><div class="num">01</div><div class="lbl">Analysis</div><div class="sub">what is needed</div></div>
-    <div class="pstep is-design"><div class="num">02</div><div class="lbl">Design</div><div class="sub">how it looks &amp; works</div></div>
-    <div class="pstep"><div class="num">03</div><div class="lbl">Development</div><div class="sub">build it</div></div>
-    <div class="pstep"><div class="num">04</div><div class="lbl">Evaluation</div><div class="sub">did it work</div></div>
-  </div>
-
-  <!-- TOC -->
-  <nav class="toc" aria-label="Contents">
-    <h3>What's inside · 13 chapters</h3>
-    <ol>
-      <li><a href="#orient">Where Design sits in the PSM</a></li>
-      <li><a href="#analogy">The architect analogy</a></li>
-      <li><a href="#twostep">The two-step design process</a></li>
-      <li><a href="#bench">3D: the ideation bench</a></li>
-      <li><a href="#appfunc">Appearance vs functionality vs structure</a></li>
-      <li><a href="#logphys">The toolbox: logical vs physical</a></li>
-      <li><a href="#mopid">The five SD design tools (MOP-ID)</a></li>
-      <li><a href="#ipo3d">3D: the IPO machine</a></li>
-      <li><a href="#wider">The wider toolbox</a></li>
-      <li><a href="#principles">Design principles</a></li>
-      <li><a href="#criteria">Evaluation criteria</a></li>
-      <li><a href="#traps">Exam traps &amp; how to answer</a></li>
-      <li><a href="#practice">Practice questions</a></li>
-    </ol>
+<div id="shell">
+  <!-- ============ SCROLL-SPY RAIL ============ -->
+  <nav id="rail">
+    <div class="rk">KK10 · U4·O2</div>
+    <a href="#hero" class="on"><span class="n">00</span><span>The near-miss</span></a>
+    <a href="#bigidea"><span class="n">01</span><span>Improve the practice, not the patch</span></a>
+    <a href="#train"><span class="n">02</span><span>Onboarding &amp; developer training</span></a>
+    <a href="#risk"><span class="n">03</span><span>Risk management plans</span></a>
+    <a href="#labA"><span class="n">04</span><span>Lab · Secure-dev culture sim</span></a>
+    <a href="#labB"><span class="n">05</span><span>Lab · Risk register workbench</span></a>
+    <a href="#more"><span class="n">06</span><span>Other strategies</span></a>
+    <a href="#cards"><span class="n">07</span><span>Key terms</span></a>
+    <a href="#sort"><span class="n">08</span><span>Sort: strategy vs mitigation</span></a>
+    <a href="#mcq"><span class="n">09</span><span>Quick check</span></a>
+    <a href="#traps"><span class="n">10</span><span>Exam traps</span></a>
+    <a href="#writing"><span class="n">11</span><span>Writing trainer</span></a>
+    <a href="#practice"><span class="n">12</span><span>VCE practice</span></a>
+    <a href="#summary"><span class="n">13</span><span>Takeaways</span></a>
   </nav>
 
-  <main>
-
-  <!-- ============ 01 ORIENT ============ -->
-  <section id="orient">
-    <div class="eyebrow"><span class="dot"></span>Chapter 01 · Orientation</div>
-    <h2 class="sec">Design is the bridge between "what" and "build"</h2>
-    <p class="lead">By the end of Analysis you had a <strong><a href="chapter-2-analysis-and-design/kk09-srs.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK09: Purpose and features of software requirements specifications">Software Requirements Specification</a> (<a href="chapter-2-analysis-and-design/kk09-srs.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK09: Purpose and features of software requirements specifications">SRS</a>)</strong>: the functional and non-functional requirements, constraints and scope. That document answers one question — <em>what must the solution do?</em></p>
-    <p>Design answers the next question: <strong>how?</strong> How will the screens look? How will the data move? What variables, objects and algorithms will the program need? You decide all of this <span class="k-app">on paper</span>, in enough detail that someone else could pick up your designs and build the solution without guessing.</p>
-
-    <div class="halves">
-      <div class="halfcard a">
-        <div class="ht">Design IS</div>
-        <p>Planning the look (appearance) and the logic (functionality) of the solution in detail — mock-ups, object descriptions, data dictionaries, IPO charts, pseudocode.</p>
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section id="hero">
+      <span class="kkpill">KK10 · KEY KNOWLEDGE · U4·O2</span>
+      <div class="eyebrow">Cyber Security · Outcome 2 · the capstone dot point</div>
+      <h1>Strategies for improving the security of software development practices</h1>
+      <p class="lead">The last nine dot points were about spotting weaknesses and patching them. This one is different: it asks how an organisation <em class="k">gets better at building secure software</em> — permanently, across the whole team, before the next bug is ever written.</p>
+      <div class="hero-grid">
+        <div id="heroCanvasWrap">
+          <canvas id="heroCanvas"></canvas>
+          <div class="hero-cap">A training wave sweeps the dev team — rose (untrained) nodes turn emerald, and vulnerability sparks fall away. That's a <em class="k">strategy</em>, not a patch.</div>
+        </div>
       </div>
-      <div class="halfcard b">
-        <div class="ht">Design is NOT</div>
-        <p>Writing real code. No bricks are laid here. The second you open Python and start typing program statements, you have crossed into <strong>Development</strong>.</p>
+      <div class="chips">
+        <span class="chip">Onboarding &amp; induction</span>
+        <span class="chip">Developer training</span>
+        <span class="chip">Risk management plans</span>
+        <span class="chip">Secure-by-default culture</span>
       </div>
-    </div>
 
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>🧱 "NO BRICKS YET"</h4>
-      <p>Picture an architect standing on an empty block holding a rolled-up blueprint, shouting at an over-eager bricklayer: <span class="word">"NO BRICKS YET!"</span> The architect designs every wall, window and wire — but lays nothing. Design produces the <em>plans</em>; Development lays the <em>bricks</em>. If your answer mentions actual code, loops you've typed, or "I ran the program," you've wandered out of the Design stage.</p>
-    </div>
-
-    <div class="callout tip">
-      <div class="ct">Why examiners care</div>
-      <p>In the SAT, Unit 3 Outcome 2 is graded on your <strong>analysis and design</strong>. Markers literally look for the named design tools, done with conventions, annotations and justifications. Design is worth roughly the same as the entire Development half of the project — it is not a warm-up.</p>
-    </div>
-  </section>
-
-  <!-- ============ 02 ANALOGY ============ -->
-  <section id="analogy">
-    <div class="eyebrow"><span class="dot"></span>Chapter 02 · Make it stick</div>
-    <h2 class="sec">Three ways to feel what Design is</h2>
-    <p class="lead">The same idea — <em>plan in full before you build</em> — shows up everywhere. Pick whichever analogy lands for you; they all map onto the PSM.</p>
-
-    <div class="flow">
-      <div class="fnode"><div class="fn">A</div><div class="fh">🏗️ The architect</div><p>Blueprints, elevations and wiring diagrams are drawn and approved before a single brick is laid. Change a wall on paper: cheap. Change it once it's built: expensive.</p></div>
-      <div class="fnode"><div class="fn">B</div><div class="fh">🍳 The recipe</div><p>You decide the dish, ingredients and steps before turning on the stove. The recipe is the design; cooking is development; tasting is evaluation.</p></div>
-      <div class="fnode"><div class="fn">C</div><div class="fh">🎬 The storyboard</div><p>A film is storyboarded shot-by-shot before cameras roll. Cheap to redraw a frame; ruinous to re-shoot a scene.</p></div>
-    </div>
-
-    <p>Notice the shared logic: <strong>mistakes caught in design cost pennies; mistakes caught in development cost a fortune.</strong> That is the entire economic argument for spending real effort here.</p>
-
-    <div class="callout warn">
-      <div class="ct">The continuity rule</div>
-      <p>Your designs are written against the SRS, and the <strong><a href="chapter-2-analysis-and-design/kk13-evaluationcriteri.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK13: Criteria for evaluating design ideas and the efficiency and effectiveness of solutions">evaluation criteria</a></strong> you write here will be dug up again in Unit 4 to judge the finished solution. Design is wired into the stages on both sides of it.</p>
-    </div>
-  </section>
-
-  <!-- ============ 03 TWO STEP ============ -->
-  <section id="twostep">
-    <div class="eyebrow"><span class="dot"></span>Chapter 03 · The core idea</div>
-    <h2 class="sec">Design is a two-step process</h2>
-    <p class="lead">This is the single most examined fact about the Design stage, and the one students most often get wrong. Design is not "draw one design." It is two distinct steps.</p>
-
-    <div class="flow">
-      <div class="fnode"><div class="fn">STEP 1</div><div class="fh">Generate ideas</div><p>Using <strong>design thinking</strong> and <strong>systems thinking</strong>, generate <strong>two or three</strong> different design ideas. Each is <em>briefly</em> stated — rough sketches with annotations showing key functions and layout. Diverge on purpose.</p></div>
-      <div class="fnode"><div class="fn">STEP 2</div><div class="fh">Evaluate &amp; choose</div><p>Develop <strong>evaluation criteria</strong>, apply them to your ideas, and select the single <strong>preferred design</strong>. The criteria justify the choice — you don't just pick your favourite.</p></div>
-      <div class="fnode"><div class="fn">THEN</div><div class="fh">Detail it</div><p>Fully detail the preferred design — addressing <span class="k-app">appearance</span>, <span class="k-func">functionality</span> and structure — using the formal design tools, with annotations and justifications.</p></div>
-    </div>
-
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>🎤 "AUDITION → JUDGES → MAKEOVER"</h4>
-      <p>Imagine a TV talent show. <span class="word">Three contestants (your 2–3 ideas) AUDITION.</span> A panel of <span class="word">JUDGES (your evaluation criteria)</span> scores them with little number paddles. One winner is crowned — the <span class="word">preferred design</span> — and is whisked off for a full <span class="word">MAKEOVER (the detailed design)</span>. The two losing acts go home; you don't build them. If you only ever had <em>one</em> contestant on stage, it wasn't a real audition — and you've lost marks.</p>
-    </div>
-
-    <!-- interactive: sequence the steps -->
-    <div class="widget" id="seqW">
-      <div class="wtop"><span class="wt">Order the design process</span><span class="score" id="seqScore">tap the steps in order</span></div>
-      <p class="small">Tap these in the correct sequence. They'll lock in if you're right.</p>
-      <div class="pool" id="seqPool"></div>
-      <div id="seqSlots" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px"></div>
-      <div style="margin-top:10px"><button class="btn sm" id="seqReset">Reset</button></div>
-    </div>
-
-    <div class="callout trap">
-      <div class="ct">Trap</div>
-      <p>"How many design ideas must you generate?" — the answer is <strong>two or three</strong>, not one and not ten. And the criteria are developed <em>to choose between the ideas</em>, then reused at Evaluation. Saying "I designed my solution" (singular, no alternatives, no criteria) describes the wrong process.</p>
-    </div>
-  </section>
-
-  <!-- ============ 04 BENCH 3D ============ -->
-  <section id="bench">
-    <div class="eyebrow"><span class="dot" style="background:var(--alpha)"></span>Chapter 04 · 3D interactive</div>
-    <h2 class="sec">The ideation bench</h2>
-    <p class="lead">Watch the two-step process happen. Three rough wireframe design ideas sit on the drafting bench. Press <strong>Score</strong> and the evaluation criteria fill their bars; the highest total wins and <strong>renders</strong> from a grey wireframe into a finished, coloured interface — your detailed preferred design.</p>
-
-    <div class="stage" id="benchStage">
-      <div class="ctrls">
-        <button id="benchScore">▶ Score &amp; choose</button>
-        <button id="benchReset">↺ Reset</button>
+      <div class="box scen" style="margin-top:22px">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>Our running scenario · Beanstalk</div>
+        <p><strong>Beanstalk</strong> is a Melbourne fintech whose app helps students budget, split rent and track casual-job pay. In 18 months it exploded from 4 founders to <strong>45 developers</strong>. Last sprint, <span class="actor"><span class="av" style="background:#fbbf24">D</span>Devi</span>, a graduate hired on Monday, pushed code to the app's public GitHub repo on <strong>Wednesday</strong> — with a live database password sitting in plain text. A security researcher found it in 40 minutes. Nothing was stolen, but it could have been catastrophic.</p>
+        <p>CTO <span class="actor"><span class="av" style="background:#fb7185">M</span>Mara</span> doesn't just delete the password (that's a <em class="k">mitigation</em>). She asks the bigger question: <strong>"How do we make sure no new hire ever does this again?"</strong> Her answer is two strategies — and they're exactly what this dot point examines.</p>
       </div>
-      <div class="hint">Drag to rotate · the winning board gains colour + detail</div>
-    </div>
-    <p class="small" id="benchCaption" style="margin-top:8px">Three candidate mock-ups — none chosen yet. The bars above each board are empty evaluation-criteria scores.</p>
+    </section>
 
-    <div class="callout tip">
-      <div class="ct">Read the animation like a marker</div>
-      <p>Grey wireframe = a <em>brief</em> design idea (Step 1). The growing bars = <em>applying evaluation criteria</em> (Step 2). The board that gains full colour and detail = the <em>preferred design, fully detailed</em>. The two that stay grey are the ideas you evaluated but didn't build — keep them in your SAT folder as evidence you actually had alternatives.</p>
-    </div>
-  </section>
+    <!-- ============ BIG IDEA ============ -->
+    <section id="bigidea">
+      <div class="eyebrow">01 · The examiner's distinction</div>
+      <h2>Improve the practice, don't just patch the product</h2>
+      <p>This is the single idea VCAA rewards here, and it's the one students most often miss. A <strong>mitigation measure</strong> (KK09) is a <em class="k">point fix</em> — you found a specific threat or vulnerability and you reduced it. A <strong>strategy for improving security practices</strong> (KK10) changes <em class="k">the way software gets built</em>, so the whole team produces fewer vulnerabilities in the first place, and keeps improving over time.</p>
 
-  <!-- ============ 05 APP VS FUNC ============ -->
-  <section id="appfunc">
-    <div class="eyebrow"><span class="dot"></span>Chapter 05 · The big split</div>
-    <h2 class="sec">Appearance, functionality &amp; structure</h2>
-    <p class="lead">A detailed design must cover two faces of the solution. Knowing which tool covers which face is worth easy marks — and stops you reaching for the wrong tool.</p>
-
-    <div class="halves">
-      <div class="halfcard a">
-        <div class="ht">Appearance — how it LOOKS</div>
-        <p>The user interface: screen layouts, colours, fonts, button placement, navigation. The user <em>sees</em> this. Covered mainly by the <strong>mock-up</strong>.</p>
+      <div class="box analogy">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 2"/></svg>The airbag vs. the driving school</div>
+        <p>An <strong>airbag</strong> reduces harm <em>when</em> a crash happens — that's a mitigation. A <strong>driving school</strong>, ongoing driver training, and a car-maintenance schedule reduce how <em>often</em> crashes happen at all, for every driver, year after year — that's a strategy. KK10 is the driving school. You're not reacting to one crash; you're raising the standard of every driver who ever touches the wheel.</p>
       </div>
-      <div class="halfcard b">
-        <div class="ht">Functionality — how it WORKS</div>
-        <p>The logic and data: what variables exist, what objects do, how input becomes output, the algorithms. The user <em>never sees</em> this directly. Covered by <strong>object descriptions, data dictionaries, IPO charts and pseudocode</strong>.</p>
+
+      <div class="cmp">
+        <div class="col mit">
+          <h4><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Mitigation measure (KK09)</h4>
+          <ul>
+            <li>Reactive — responds to a <em>specific</em> threat or vulnerability</li>
+            <li>Acts on the <em>product</em>: this app, this bug, this server</li>
+            <li>Often a one-off: patch it, encrypt it, restrict it</li>
+            <li>Example: delete the leaked password, rotate the key</li>
+          </ul>
+        </div>
+        <div class="col str">
+          <h4><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>Improvement strategy (KK10)</h4>
+          <ul>
+            <li>Proactive — lifts security <em>before</em> bugs are written</li>
+            <li>Acts on the <em>practice</em>: people, process, culture</li>
+            <li>Ongoing and organisation-wide, not one-off</li>
+            <li>Example: train every dev so leaks never happen again</li>
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>💄 "MOCK-UP = MAKE-UP"</h4>
-      <p><span class="word">Mock-up</span> sounds like <span class="word">make-up</span> — and that's exactly its job: the <em>face</em> of the solution, the appearance. Make-up doesn't change the engine under the bonnet; a mock-up doesn't show the logic. So if a question asks how the program <em>calculates</em> something, a mock-up is the wrong answer — you want pseudocode, IPO or an object description (the "engine" tools).</p>
-    </div>
-
-    <!-- interactive: appearance vs functionality sorter -->
-    <div class="widget" id="afW">
-      <div class="wtop"><span class="wt">Which face does each item belong to?</span><span class="score" id="afScore">0 / 8 placed</span></div>
-      <p class="small">Tap an item, then tap the bucket it belongs in. Green = correct.</p>
-      <div class="pool" id="afPool"></div>
-      <div class="buckets two">
-        <div class="bucket" data-cat="app"><div class="bhead">Appearance (look)</div><div class="bdrop" id="af-app"></div></div>
-        <div class="bucket" data-cat="func"><div class="bhead">Functionality (works)</div><div class="bdrop" id="af-func"></div></div>
+      <div class="box key">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Lock this sentence in</div>
+        <p>Strategies improve the <strong>way software is developed</strong> — the people and the process — so the organisation produces fewer vulnerabilities over time, not just fixes the one in front of it. The study design names two: <em class="k">onboarding/induction &amp; developer training</em>, and <em class="k">developing risk management plans</em>.</p>
       </div>
-      <div style="margin-top:10px"><button class="btn sm" id="afReset">Reset</button></div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============ 06 LOGICAL VS PHYSICAL ============ -->
-  <section id="logphys">
-    <div class="eyebrow"><span class="dot" style="background:var(--logic)"></span>Chapter 06 · The toolbox</div>
-    <h2 class="sec">Two families of design tool: logical vs physical</h2>
-    <p class="lead">Design tools come in two broad families. The difference is the level of "how-to" detail. This taxonomy comes straight from the design-tools toolbox — useful for sorting any tool you meet.</p>
+    <!-- ============ STRATEGY 1: TRAINING ============ -->
+    <section id="train">
+      <div class="eyebrow">02 · Strategy one · the people</div>
+      <h2>Onboarding, induction &amp; developer training for secure development</h2>
+      <p>Most vulnerabilities aren't planted by attackers — they're <em>introduced by developers</em> who didn't know better. Devi's leaked password wasn't malice; nobody had shown her how Beanstalk handles secrets. The fix that scales is education, applied at two moments.</p>
 
-    <div class="halves">
-      <div class="halfcard a">
-        <div class="ht" style="color:var(--logic)">Logical tools</div>
-        <p>Describe a system's overall structure and <em>what it should achieve</em> — without saying how to build it. The big-picture plan. Often used in Analysis as well. E.g. context diagrams, data dictionaries, hierarchy charts, decision trees, use case diagrams.</p>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pn">2A · DAY ONE</div>
+          <h3>Secure onboarding &amp; induction</h3>
+          <div class="who">When: every new developer joins</div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>A structured induction that covers the org's secure-development rules <em>before</em> the dev's first commit</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>How secrets are stored (never in code), how to use the secrets manager, repo access rules</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Least-privilege accounts set up correctly from the start</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>A mentor / buddy who reviews early work so mistakes are caught safely</li>
+          </ul>
+        </div>
+        <div class="pillar">
+          <div class="pn">2B · EVERY SPRINT</div>
+          <h3>Ongoing developer training</h3>
+          <div class="who">When: continuously, for the whole team</div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Secure-coding training (input validation, safe auth, avoiding common flaws)</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Threat awareness — how phishing, social engineering and supply-chain attacks actually land</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Refreshers when new risks emerge, so senior devs don't drift into bad habits</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Builds a <em>culture</em> where flagging a risk is normal, not embarrassing</li>
+          </ul>
+        </div>
       </div>
-      <div class="halfcard b">
-        <div class="ht" style="color:var(--phys)">Physical tools</div>
-        <p>Actually plan <em>how to build</em> the system — step-by-step instructions a developer follows. E.g. data flow diagrams, storyboards, flowcharts &amp; Nassi-Shneiderman charts, structure charts, IPO charts, layout diagrams / mock-ups, pseudocode.</p>
+
+      <div class="box good">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M8 12l3 3 5-6"/></svg>Why it's a "strategy", not a "control"</div>
+        <p>A security <em>control</em> (KK04) like <a href="kk04-security-controls.html" class="dv-xref" target="_blank" rel="noopener" title="U4·O2 KK04: Security controls used to protect development practices and data stored within applications">encryption</a> is a switch you flip on the product. Training is a <em>strategy</em> because it changes the people who build every future product. One trained developer prevents dozens of bugs you'll never even see. That leverage — many future vulnerabilities avoided from one investment — is what makes it strategic.</p>
       </div>
-    </div>
+      <p style="font-size:.88rem;color:var(--text-dim)"><strong>Beanstalk's move:</strong> Mara writes a one-day <em>Secure Dev Induction</em> every new hire completes before repo access, plus a 30-minute secure-coding session each fortnight. Six weeks later, Devi catches a teammate about to hard-code an API key — the training worked.</p>
+    </section>
 
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>🧱 "LEGO BOX vs LEGO BOOKLET"</h4>
-      <p><span class="word">Logical</span> = the glossy <em>picture on the front of the Lego box</em> — it shows you <em>what you'll end up with</em>, but not a single building step. <span class="word">Physical</span> = the <em>numbered instruction booklet inside</em> — brick-by-brick <em>how to build it</em>. Same set, two views: the promise vs the procedure. When a tool tells you <em>how</em> to assemble, it's physical; when it just shows the shape of the thing, it's logical.</p>
-    </div>
+    <!-- ============ STRATEGY 2: RISK MANAGEMENT PLANS ============ -->
+    <section id="risk">
+      <div class="eyebrow">03 · Strategy two · the process</div>
+      <h2>Developing risk management plans</h2>
+      <p>Training reduces vulnerabilities at the source. A <strong>risk management plan</strong> is the process side: a living document that lists what could go wrong, how bad and how likely it is, and what the organisation will <em>do</em> about each one — reviewed regularly so nothing is forgotten. It turns "we hope it's fine" into "we've planned for it."</p>
 
-    <!-- interactive: logical vs physical sorter -->
-    <div class="widget" id="lpW">
-      <div class="wtop"><span class="wt">Sort the tools</span><span class="score" id="lpScore">0 / 8 placed</span></div>
-      <p class="small">Tap a tool, then tap its family.</p>
-      <div class="pool" id="lpPool"></div>
-      <div class="buckets two">
-        <div class="bucket" data-cat="logical"><div class="bhead">Logical (the box picture)</div><div class="bdrop" id="lp-logical"></div></div>
-        <div class="bucket" data-cat="physical"><div class="bhead">Physical (the booklet)</div><div class="bdrop" id="lp-physical"></div></div>
+      <h3>The four-step cycle (know this for the exam)</h3>
+      <div class="box">
+        <p style="margin-bottom:8px"><strong>1 · Identify</strong> — brainstorm what could threaten the software and its data (leaked secrets, unpatched libraries, insider error, phishing, third-party breach…).</p>
+        <p style="margin-bottom:8px"><strong>2 · Assess</strong> — score each risk by <em class="k">likelihood</em> × <em class="k">consequence</em> (impact). Plot it on a risk matrix so the worst risks rise to the top.</p>
+        <p style="margin-bottom:8px"><strong>3 · Treat</strong> — choose a response for each: <em class="k">Avoid</em>, <em class="k">Reduce</em> (mitigate), <em class="k">Transfer</em>, or <em class="k">Accept</em>.</p>
+        <p style="margin-bottom:0"><strong>4 · Monitor &amp; review</strong> — risks change, so the plan is revisited regularly and the risk register kept current.</p>
       </div>
-      <div style="margin-top:10px"><button class="btn sm" id="lpReset">Reset</button></div>
-    </div>
 
-    <div class="callout warn">
-      <div class="ct">Exam reality check</div>
-      <p>The logical/physical split is great for understanding, but for <strong>Software Development</strong> the study design names a specific short list of design tools you must know how to read and use. That list is the next chapter — learn those five cold, then treat everything else as useful background.</p>
-    </div>
-  </section>
-
-  <!-- ============ 07 MOP-ID ============ -->
-  <section id="mopid">
-    <div class="eyebrow"><span class="dot"></span>Chapter 07 · The examinable five</div>
-    <h2 class="sec">The five Software Development design tools</h2>
-    <p class="lead">These five are the ones VCAA names for Software Development. You must be able to read them <em>and</em> create them. Memorise the set with one ridiculous image.</p>
-
-    <div class="mne">
-      <span class="tag2">Visual mnemonic · the big one</span>
-      <h4>🧹 "Every design needs a MOP-ID"</h4>
-      <p>Picture a cleaner who mops the school at night — but this mop is wearing a laminated <span class="word">ID</span> badge on a lanyard, and it won't let you near the design studio without scanning in. <span class="word">M-O-P-I-D</span>:</p>
-      <table class="tbl" style="margin-top:10px">
-        <tr><th>Letter</th><th>Tool</th><th>One-line job</th></tr>
-        <tr><td><b>M</b></td><td>Mock-up</td><td>How the interface <span class="k-app">looks</span> (appearance)</td></tr>
-        <tr><td><b>O</b></td><td>Object description</td><td>Each object's properties &amp; methods</td></tr>
-        <tr><td><b>P</b></td><td>Pseudocode</td><td>The <span class="k-func">logic</span> of an algorithm</td></tr>
-        <tr><td><b>I</b></td><td>IPO chart</td><td>Input → Process → Output</td></tr>
-        <tr><td><b>D</b></td><td><a href="chapter-2-analysis-and-design/kk14-designtools.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK14: Design tools for generating solution designs from design ideas">Data dictionary</a></td><td>Every variable + its data type</td></tr>
-      </table>
-    </div>
-
-    <h3 class="sub">M — Mock-up <span class="chip app" style="margin-left:6px">appearance</span></h3>
-    <p>A drawn layout of a screen, with every object (button, text box, label, image) <strong>named and described</strong>. It shows the user interface — and <em>only</em> the interface. It never shows logic or data structure.</p>
-    <div class="widget" id="mockW">
-      <div class="wtop"><span class="wt">Annotated mock-up · tap the hotspots</span><span class="score" id="mockScore">0 / 4 found</span></div>
-      <p class="small">A login screen mock-up. Tap each numbered object to read its annotation — exactly what you'd write beside it.</p>
-      <div id="mockBoard" style="position:relative; border:1px solid var(--hair); border-radius:10px; background:var(--paper); height:230px; margin:8px 0; overflow:hidden"></div>
-      <div id="mockNote" class="small" style="min-height:20px">Tap a numbered marker…</div>
-    </div>
-
-    <h3 class="sub">O — Object description <span class="chip func" style="margin-left:6px">functionality</span></h3>
-    <p>A table listing each object (or class) with its <strong>type</strong> and a description of its <strong>properties</strong> (its data/attributes) and <strong>methods</strong> (what it can do). It describes the parts of the program, not the screen.</p>
-    <div class="mne">
-      <span class="tag2">mini-mnemonic</span>
-      <h4>🎭 "The actor's résumé"</h4>
-      <p>An object description is each object's <span class="word">résumé</span>: its <em>name</em>, what <em>type</em> of role it plays, its <em>features</em> (properties) and its <em>skills</em> (methods). A casting director reads résumés, not the set decoration — that's why it's a functionality tool, not appearance.</p>
-    </div>
-    <table class="tbl">
-      <tr><th>Object name</th><th>Type</th><th>Properties</th><th>Methods</th></tr>
-      <tr><td><code>btnLogin</code></td><td>Button</td><td>caption = "Log in", enabled</td><td>onClick() → validateLogin()</td></tr>
-      <tr><td><code>txtUser</code></td><td>Text box</td><td>text, maxLength = 20</td><td>getText(), clear()</td></tr>
-      <tr><td><code>user</code></td><td>Account (class)</td><td>username, passwordHash, attempts</td><td>checkPassword(), lockAccount()</td></tr>
-    </table>
-
-    <h3 class="sub">P — Pseudocode <span class="chip func" style="margin-left:6px">functionality</span></h3>
-    <p>Structured English that shows the <strong>logic of an algorithm</strong> — halfway between plain language and code. It lets you plan the flow (sequence, selection, repetition) without getting bogged down in the exact syntax of Python or any one language.</p>
-    <div class="mne">
-      <span class="tag2">mini-mnemonic</span>
-      <h4>🎬 "Subtitles for code"</h4>
-      <p>Pseudocode is the <span class="word">subtitles</span>: it tells you exactly what's happening, in plain language, so anyone can follow the plot — then a "translator" turns it into the actual programming language. Note the spelling: <em>pseudo</em>code (silent p), not "sudo-code".</p>
-    </div>
-    <pre class="code"><span class="cm">// Validate a login attempt</span>
-<span class="kw">BEGIN</span> validateLogin
-<span class="in"></span>attempts <span class="kw">←</span> attempts + 1
-<span class="in"></span><span class="kw">IF</span> txtUser.text = "" <span class="kw">OR</span> txtPass.text = "" <span class="kw">THEN</span>
-<span class="in"></span><span class="in"></span>display <span class="st">"Please fill in both fields"</span>
-<span class="in"></span><span class="kw">ELSE IF</span> user.checkPassword(txtPass.text) <span class="kw">THEN</span>
-<span class="in"></span><span class="in"></span>display <span class="st">"Welcome back"</span>
-<span class="in"></span><span class="kw">ELSE IF</span> attempts &gt;= 3 <span class="kw">THEN</span>
-<span class="in"></span><span class="in"></span>user.lockAccount()
-<span class="in"></span><span class="kw">ELSE</span>
-<span class="in"></span><span class="in"></span>display <span class="st">"Incorrect — try again"</span>
-<span class="in"></span><span class="kw">ENDIF</span>
-<span class="kw">END</span></pre>
-
-    <h3 class="sub">I — IPO chart <span class="chip func" style="margin-left:6px">functionality</span></h3>
-    <p>An <strong>Input–Process–Output</strong> chart: a three-column table that shows what data comes <em>in</em>, what is <em>done</em> to it, and what comes <em>out</em>. Brilliant for nailing down a calculation before you design the algorithm. The next chapter has a 3D version you can feed.</p>
-    <table class="tbl">
-      <tr><th>Input</th><th>Process</th><th>Output</th></tr>
-      <tr><td>hoursWorked (real)<br>hourlyRate (real)</td><td>grossPay ← hoursWorked × hourlyRate<br>tax ← grossPay × 0.30<br>super ← grossPay × 0.12<br>netPay ← grossPay − tax</td><td>grossPay<br>tax<br>netPay</td></tr>
-    </table>
-
-    <h3 class="sub">D — Data dictionary <span class="chip func" style="margin-left:6px">functionality</span></h3>
-    <p>A table listing every <strong>variable</strong> the program will use, with its <strong>data type</strong>, size/format, validation and purpose. It's the master reference that keeps naming consistent across the whole solution.</p>
-    <div class="mne">
-      <span class="tag2">mini-mnemonic</span>
-      <h4>🌶️ "The spice rack"</h4>
-      <p>A data dictionary is a <span class="word">spice rack</span>: every jar (variable) has a clear label saying its <em>name</em> and what's inside (its <em>data type</em>). No unlabelled jars, no two jars with the same label. Open the rack and you instantly know every ingredient the program cooks with.</p>
-    </div>
-    <table class="tbl">
-      <tr><th>Variable</th><th>Data type</th><th>Format / validation</th><th>Purpose</th></tr>
-      <tr><td><code>username</code></td><td>String</td><td>max 20 chars, not blank</td><td>Identifies the account</td></tr>
-      <tr><td><code>attempts</code></td><td>Integer</td><td>0–3</td><td>Counts failed logins</td></tr>
-      <tr><td><code>hourlyRate</code></td><td>Float</td><td>&gt; 0, 2 dp</td><td>Pay per hour worked</td></tr>
-      <tr><td><code>isLocked</code></td><td>Boolean</td><td>true / false</td><td>Whether account is locked</td></tr>
-    </table>
-
-    <!-- which tool? interactive -->
-    <div class="widget" id="whichW">
-      <div class="wtop"><span class="wt">Which of the five tools?</span><span class="score" id="whichScore">0 / 6</span></div>
-      <p class="small">Read each job and pick the right MOP-ID tool.</p>
-      <div id="whichBox"></div>
-    </div>
-  </section>
-
-  <!-- ============ 08 IPO 3D ============ -->
-  <section id="ipo3d">
-    <div class="eyebrow"><span class="dot" style="background:var(--beta)"></span>Chapter 08 · 3D interactive</div>
-    <h2 class="sec">The IPO machine</h2>
-    <p class="lead">An IPO chart is just a machine on paper: data drops in, gets processed, results come out. Feed this machine and watch the three columns light up. Pick a job, then drop inputs into the hopper.</p>
-
-    <div class="stage" id="ipoStage">
-      <div class="ctrls">
-        <button id="ipoFeed">⬇ Drop input</button>
-        <button id="ipoLabels" class="on">Labels</button>
-        <button id="ipoReset">↺ Reset</button>
+      <h3>The four treatment options</h3>
+      <div class="cmp">
+        <div class="col" style="border-color:var(--cc-line)">
+          <h4 style="color:var(--cc)">Avoid</h4>
+          <ul><li>Eliminate the risk entirely by not doing the risky thing</li><li>e.g. don't store card numbers at all — use a payment provider</li></ul>
+        </div>
+        <div class="col" style="border-color:var(--good-line)">
+          <h4 style="color:var(--good)">Reduce (mitigate)</h4>
+          <ul><li>Lower the likelihood and/or impact with controls</li><li>e.g. enforce MFA + auto-patching to cut breach odds</li></ul>
+        </div>
+        <div class="col" style="border-color:var(--info)">
+          <h4 style="color:var(--info)">Transfer</h4>
+          <ul><li>Shift the risk to a third party</li><li>e.g. cyber-insurance, or outsource hosting to a secure cloud</li></ul>
+        </div>
+        <div class="col" style="border-color:var(--warn)">
+          <h4 style="color:var(--warn)">Accept</h4>
+          <ul><li>Acknowledge a low risk and monitor it, no action now</li><li>e.g. a rare, low-impact bug logged but not yet fixed</li></ul>
+        </div>
       </div>
-      <div class="hint">Input hopper → process drum → output tray · drag to rotate</div>
-    </div>
-    <p class="small" id="ipoCaption" style="margin-top:8px">Job: <b>pay calculator</b> — Input: hours &amp; rate · Process: multiply &amp; deduct tax · Output: net pay.</p>
 
-    <div class="callout tip">
-      <div class="ct">Why this matters</div>
-      <p>If you can't fill the three columns of an IPO chart, you don't yet understand the problem well enough to design the algorithm. IPO comes <em>before</em> pseudocode for exactly that reason — it forces you to name every input and output first.</p>
-    </div>
-  </section>
+      <div class="box analogy">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>The school camp risk plan</div>
+        <p>You've seen a risk management plan before — a school camp has one. It lists hazards (river crossing, allergies, lost student), rates each by how likely and how serious, and states the plan (qualified guides, EpiPens on hand, head-counts). A software risk plan is the same tool pointed at <em>data and code</em> instead of canoes.</p>
+      </div>
+    </section>
+    <!-- ============ LAB A: SECURE DEV CULTURE SIM ============ -->
+    <section id="labA">
+      <div class="eyebrow">04 · Interactive lab · the people, made visible</div>
+      <h2>Secure-dev culture simulator</h2>
+      <p>Each glowing node is a Beanstalk developer; the centre is the codebase. Red sparks are <em class="k">vulnerabilities being introduced</em>. Turn on each strategy and watch the live counters — training turns devs emerald and cuts vulnerabilities at the source; the risk plan adds a shield that catches incidents early.</p>
 
-  <!-- ============ 09 WIDER TOOLBOX ============ -->
-  <section id="wider">
-    <div class="eyebrow"><span class="dot" style="background:var(--phys)"></span>Chapter 09 · Extension</div>
-    <h2 class="sec">The wider design toolbox</h2>
-    <p class="lead">Beyond the examinable five, the broader design-tools toolbox has many more instruments. You won't be asked to <em>create</em> all of these in Software Development, but recognising them — and knowing what each is <em>for</em> — makes you fluent. (Some, like flowcharts and Nassi-Shneiderman charts, sit outside the current SD course but are worth meeting.)</p>
+      <div class="lab">
+        <div class="lab-head">
+          <svg class="lic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 7l3 3M17 7l-3 3M7 17l3-3M17 17l-3-3"/></svg>
+          <span class="lt">Beanstalk dev team · live</span>
+          <span class="lx">drag to orbit</span>
+        </div>
+        <div class="lab-canvas">
+          <canvas id="cultCanvas"></canvas>
+          <div class="nogl" id="cultNoGl">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M12 2v20"/><circle cx="12" cy="12" r="9"/></svg>
+            <div>3D view needs WebGL (it's off on this locked-down machine).<br>The toggles and counters below still work.</div>
+          </div>
+        </div>
+        <div class="lab-controls">
+          <button class="toggle" id="tgOnboard" onclick="cultToggle('onboard',this)"><span class="sw"></span>Secure onboarding</button>
+          <button class="toggle" id="tgTrain" onclick="cultToggle('train',this)"><span class="sw"></span>Ongoing training</button>
+          <button class="toggle" id="tgPlan" onclick="cultToggle('plan',this)"><span class="sw"></span>Risk management plan</button>
+          <div class="readout">
+            <div class="stat"><div class="v hi" id="cVuln">12</div><div class="l">Vulns / sprint</div></div>
+            <div class="stat"><div class="v" id="cCaught">0</div><div class="l">Caught early</div></div>
+            <div class="stat"><div class="v" id="cTrained">0%</div><div class="l">Team trained</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="box warn">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Read the trade-off, not just the number</div>
+        <p>Notice the risk plan <em>alone</em> barely moves "vulns/sprint" — it catches problems, it doesn't stop them being made. Training <em>alone</em> cuts vulns but catches nothing once one slips through. The lowest-risk team runs <strong>both</strong>: people who make fewer mistakes <em>and</em> a process that catches the ones who do. Examiners love a "people + process" answer.</p>
+      </div>
+    </section>
 
-    <table class="tbl">
-      <tr><th>Tool</th><th>Family</th><th>What it shows</th></tr>
-      <tr><td><a href="chapter-2-analysis-and-design/kk08-analyticaltools.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK08: Analytical tools for depicting the relationships between users, data and systems">Context diagram</a> (DFD level&nbsp;0)</td><td><span class="k-log">Logical</span></td><td>The whole system as one process and the external entities it talks to</td></tr>
-      <tr><td><a href="chapter-2-analysis-and-design/kk08-analyticaltools.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK08: Analytical tools for depicting the relationships between users, data and systems">Data flow diagram</a> (level&nbsp;1+)</td><td><span class="k-phy">Physical</span></td><td>How data moves between processes, stores and entities</td></tr>
-      <tr><td>Hierarchy / organisational chart</td><td><span class="k-log">Logical</span></td><td>Levels of a system or authority, top down (parent → sublevels)</td></tr>
-      <tr><td>Decision tree</td><td><span class="k-log">Logical</span></td><td>Yes/no decisions branching to consequent actions (underlies expert systems)</td></tr>
-      <tr><td>Flowchart</td><td><span class="k-phy">Physical</span></td><td>Step-by-step process using start/end, process, decision &amp; connector shapes</td></tr>
-      <tr><td>Nassi-Shneiderman chart</td><td><span class="k-phy">Physical</span></td><td>A compact flowchart with special-purpose loop/branch boxes</td></tr>
-      <tr><td>Structure chart</td><td><span class="k-phy">Physical</span></td><td>Modules of a program and the data passed between them</td></tr>
-      <tr><td><a href="chapter-2-analysis-and-design/kk08-analyticaltools.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK08: Analytical tools for depicting the relationships between users, data and systems">Use case diagram</a></td><td><span class="k-log">Logical</span></td><td>Actors (roles) and their interactions with the system</td></tr>
-      <tr><td>Storyboard</td><td><span class="k-phy">Physical</span></td><td>Screen-to-screen navigation and flow of a solution</td></tr>
-      <tr><td>Entity relationship diagram (ERD)</td><td><span class="k-log">Logical</span></td><td>Data entities and how they relate (Chen / crow's-foot notation)</td></tr>
-    </table>
+    <!-- ============ LAB B: RISK REGISTER WORKBENCH ============ -->
+    <section id="labB">
+      <div class="eyebrow">05 · Interactive lab · the process, made visible</div>
+      <h2>Risk register workbench</h2>
+      <p>This is a risk management plan you can operate. Beanstalk's four biggest risks sit on a <strong>likelihood × consequence</strong> matrix — most start in the red zone. Pick a treatment for each (<em class="k">Avoid · Reduce · Transfer · Accept</em>) and watch the block move and the residual-risk score fall. Get every risk out of the red zone.</p>
 
-    <div class="callout warn">
-      <div class="ct">Decision tree, decoded</div>
-      <p>A decision tree asks a series of yes/no questions and branches to an action — e.g. "<em>divisible by 4? → divisible by 100? → divisible by 400?</em>" to decide a leap year, or a gift-buying tree branching on age. They're prized in design because they make complex rules <strong>clear and unambiguous</strong> — the same quality a good SRS demands.</p>
-    </div>
-  </section>
+      <div class="lab">
+        <div class="lab-head">
+          <svg class="lic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="6" y="13" width="3" height="5"/><rect x="11" y="9" width="3" height="9"/><rect x="16" y="6" width="3" height="12"/></svg>
+          <span class="lt">Likelihood × consequence matrix</span>
+          <span class="lx" id="rwResidual">residual risk: 100%</span>
+        </div>
+        <div class="lab-canvas" style="height:360px">
+          <canvas id="riskCanvas"></canvas>
+          <div class="nogl" id="riskNoGl">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/></svg>
+            <div>3D matrix needs WebGL. The treatment controls below still work and update the score.</div>
+          </div>
+        </div>
+        <div class="rw-side" id="rwRows"><!-- rows injected by JS --></div>
+        <div class="rw-side" style="border-top:none;padding-top:0">
+          <div class="rw-legend">
+            <span><i style="background:#34d399"></i>Low</span>
+            <span><i style="background:#fbbf24"></i>Medium</span>
+            <span><i style="background:#fb7185"></i>High</span>
+            <span><i style="background:#f87171"></i>Extreme</span>
+            <span style="margin-left:auto;font-style:italic">x-axis = likelihood · y-axis = consequence</span>
+          </div>
+        </div>
+      </div>
+      <div class="box key">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>What the matrix teaches</div>
+        <p>The plan doesn't make risk disappear — <strong>Accept</strong> leaves it on the board (monitored). The goal is to move every risk to a <em>tolerable</em> position using the cheapest appropriate treatment, then keep watching. That ongoing "identify → assess → treat → monitor" loop <em>is</em> the strategy.</p>
+      </div>
+    </section>
 
-  <!-- ============ 10 PRINCIPLES ============ -->
-  <section id="principles">
-    <div class="eyebrow"><span class="dot"></span>Chapter 10 · Quality</div>
-    <h2 class="sec">Design principles</h2>
-    <p class="lead">Detailed designs aren't judged only on "does it work" — they should follow <strong>design principles</strong> that influence both <span class="k-app">appearance</span> and <span class="k-func">functionality</span>. These give you the vocabulary to justify your mock-up choices.</p>
+    <!-- ============ MORE STRATEGIES ============ -->
+    <section id="more">
+      <div class="eyebrow">06 · Widen your range</div>
+      <h2>Other strategies worth naming</h2>
+      <p>The study design highlights training and risk plans, but a strong answer shows breadth. These all <em>improve the practice</em> rather than patch a product — name one or two extra to lift a response.</p>
+      <div class="takeaways">
+        <div class="take"><div class="ti">SDL</div><p><b>Adopt a secure SDLC.</b> Bake security checkpoints into every stage — design review, secure coding standards, security testing — rather than bolting it on at the end.</p></div>
+        <div class="take"><div class="ti">CR</div><p><b>Mandatory <a href="kk04-security-controls.html" class="dv-xref" target="_blank" rel="noopener" title="U4·O2 KK04: Security controls used to protect development practices and data stored within applications">code review</a>.</b> Require a second developer to review every change before it merges, so risky code is caught before it ships.</p></div>
+        <div class="take"><div class="ti">CH</div><p><b>Security champions.</b> Embed a trained "champion" in each team to spread good habits and answer day-to-day security questions.</p></div>
+        <div class="take"><div class="ti">SEP</div><p><b>Separate environments.</b> Keep development, testing and production apart so experiments can't touch real customer data.</p></div>
+        <div class="take"><div class="ti">POL</div><p><b>Clear security policies.</b> Written, enforced rules (secret handling, access, patching cadence) give everyone the same standard to meet.</p></div>
+        <div class="take"><div class="ti">CI</div><p><b>Continuous improvement loop.</b> Review every incident and near-miss, then feed lessons back into training and the risk plan so the practice keeps maturing.</p></div>
+      </div>
+      <div class="box analogy">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg>The thread that ties them together</div>
+        <p>Every item here answers the same question — <em>"how do we keep getting better at building secure software?"</em> If a candidate strategy only fixes one bug, it's a mitigation. If it raises the standard for all future work, it's a KK10 strategy.</p>
+      </div>
+    </section>
+    <!-- ============ FLIP CARDS ============ -->
+    <section id="cards">
+      <div class="eyebrow">07 · Key terms · tap to flip</div>
+      <h2>The vocabulary examiners look for</h2>
+      <div class="cards" id="cardGrid">
+        <div class="flip" onclick="this.classList.toggle('on')"><div class="in">
+          <div class="f"><span class="tag">strategy</span><div class="term">Improvement strategy</div><span class="hint">tap →</span></div>
+          <div class="b">An ongoing, organisation-wide change to how software is built (people/process/culture) that reduces future vulnerabilities — not a one-off product fix.</div>
+        </div></div>
+        <div class="flip" onclick="this.classList.toggle('on')"><div class="in">
+          <div class="f"><span class="tag">people</span><div class="term">Onboarding / induction</div><span class="hint">tap →</span></div>
+          <div class="b">Structured training a new developer completes when they join, teaching the org's secure-development rules before their first commit.</div>
+        </div></div>
+        <div class="flip" onclick="this.classList.toggle('on')"><div class="in">
+          <div class="f"><span class="tag">people</span><div class="term">Developer training</div><span class="hint">tap →</span></div>
+          <div class="b">Continuous secure-coding and threat-awareness education for the whole team, keeping skills current and building a security culture.</div>
+        </div></div>
+        <div class="flip" onclick="this.classList.toggle('on')"><div class="in">
+          <div class="f"><span class="tag">process</span><div class="term">Risk management plan</div><span class="hint">tap →</span></div>
+          <div class="b">A living document that identifies risks, assesses each by likelihood × consequence, assigns a treatment, and is monitored and reviewed over time.</div>
+        </div></div>
+        <div class="flip" onclick="this.classList.toggle('on')"><div class="in">
+          <div class="f"><span class="tag">process</span><div class="term">Risk register</div><span class="hint">tap →</span></div>
+          <div class="b">The table inside a risk plan: each row is a risk with its likelihood, consequence, chosen treatment and owner.</div>
+        </div></div>
+        <div class="flip" onclick="this.classList.toggle('on')"><div class="in">
+          <div class="f"><span class="tag">assess</span><div class="term">Likelihood × consequence</div><span class="hint">tap →</span></div>
+          <div class="b">How a risk is scored: how probable it is, multiplied by how damaging it would be. Plotted on a risk matrix to rank priorities.</div>
+        </div></div>
+        <div class="flip" onclick="this.classList.toggle('on')"><div class="in">
+          <div class="f"><span class="tag">treat</span><div class="term">Avoid · Reduce · Transfer · Accept</div><span class="hint">tap →</span></div>
+          <div class="b">The four treatment options. Avoid = don't do the risky thing. Reduce = lower likelihood/impact. Transfer = shift to a third party. Accept = monitor a low risk.</div>
+        </div></div>
+        <div class="flip" onclick="this.classList.toggle('on')"><div class="in">
+          <div class="f"><span class="tag">contrast</span><div class="term">Mitigation vs strategy</div><span class="hint">tap →</span></div>
+          <div class="b">Mitigation = fix this specific threat now (KK09). Strategy = raise the standard so the whole team makes fewer mistakes in future (KK10).</div>
+        </div></div>
+      </div>
+    </section>
 
-    <div class="mne">
-      <span class="tag2">Visual mnemonic · appearance</span>
-      <h4>💩 "Good design isn't CRAP… it IS C.R.A.P."</h4>
-      <p>The four appearance principles spell a word you will never forget: <span class="word">Contrast, Repetition, Alignment, Proximity</span>. Picture each one literally arguing about how a screen should look. Add <em>balance</em> and <em>white space</em> and you've covered appearance.</p>
-      <table class="tbl" style="margin-top:10px">
-        <tr><th>Principle</th><th>Means</th><th>On a screen</th></tr>
-        <tr><td><b>C</b>ontrast</td><td>Make different things look different</td><td>A bold primary button stands out from greyed-out ones</td></tr>
-        <tr><td><b>R</b>epetition</td><td>Reuse styles consistently</td><td>Every heading uses the same font, size and colour</td></tr>
-        <tr><td><b>A</b>lignment</td><td>Line elements up to a grid</td><td>Labels and fields share a clean left edge</td></tr>
-        <tr><td><b>P</b>roximity</td><td>Group related things together</td><td>The username + password fields sit together, away from "Help"</td></tr>
-      </table>
-    </div>
+    <!-- ============ SORTER ============ -->
+    <section id="sort">
+      <div class="eyebrow">08 · Drag to sort</div>
+      <h2>Strategy or mitigation?</h2>
+      <p>The most common KK10 error is calling a one-off fix a "strategy". Drag each action into the right bin. (On touch, tap an item then tap a bin.)</p>
+      <div class="sorter">
+        <div class="sort-pool" id="sortPool"></div>
+        <div class="bins">
+          <div class="bin" data-bin="str"><h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--good)" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>Strategy (improves the practice)</h4><div class="drop" id="dropStr"></div></div>
+          <div class="bin" data-bin="mit"><h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Mitigation (fixes one product issue)</h4><div class="drop" id="dropMit"></div></div>
+        </div>
+        <div class="sresult" id="sortResult"></div>
+      </div>
+    </section>
 
-    <h3 class="sub">Functionality principles</h3>
-    <p>For how the solution <em>behaves</em>, designers also weigh: <strong>navigation</strong> (can users always find their way?), <strong>consistency</strong> (the same action works the same way everywhere), <strong>error tolerance</strong> (mistakes are prevented or recoverable), and <strong>accessibility</strong> (usable by people with differing needs — adequate colour contrast, scalable text, keyboard use).</p>
+    <!-- ============ MCQ ============ -->
+    <section id="mcq">
+      <div class="eyebrow">09 · Quick check</div>
+      <h2>Five to test yourself</h2>
+      <div id="mcqHost"></div>
+    </section>
 
-    <!-- before/after toggle -->
-    <div class="widget">
-      <div class="wtop"><span class="wt">Apply the principles · before → after</span></div>
-      <p class="small">Same form, two designs. Tap to flip and see which principles were fixed.</p>
-      <div id="baBoard" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px"></div>
-    </div>
+    <!-- ============ EXAM TRAPS ============ -->
+    <section id="traps">
+      <div class="eyebrow">10 · Don't fall for these</div>
+      <h2>Named exam traps</h2>
+      <div class="traps">
+        <details class="trap"><summary><span class="tnum">1</span>Listing a mitigation when asked for a strategy<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="body">"Encrypt the database" or "patch the bug" are mitigations — single product fixes. If the question says <em>improve practices</em>, you need people/process answers.
+          <div class="fix"><b>Fix:</b> Name training, induction or a risk management plan, and say it lifts the standard for <em>all future work</em>.</div></div>
+        </details>
+        <details class="trap"><summary><span class="tnum">2</span>Naming a strategy but never explaining <em>how</em> it improves security<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="body">Writing only "do developer training" earns almost nothing. The marks are in the mechanism.
+          <div class="fix"><b>Fix:</b> "Training teaches secure-coding habits, so developers introduce fewer vulnerabilities in the first place — preventing bugs across every future project."</div></div>
+        </details>
+        <details class="trap"><summary><span class="tnum">3</span>Confusing a risk management plan with a backup/recovery plan<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="body">A risk plan identifies, assesses and <em>treats</em> risks before they occur. A recovery plan is what you do <em>after</em> an incident.
+          <div class="fix"><b>Fix:</b> Use the four steps — identify, assess (likelihood × consequence), treat (avoid/reduce/transfer/accept), monitor.</div></div>
+        </details>
+        <details class="trap"><summary><span class="tnum">4</span>Forgetting "Accept" is a valid treatment<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="body">Students assume every risk must be eliminated. For a low likelihood + low impact risk, <em>accepting</em> and monitoring is the correct, cost-justified choice.
+          <div class="fix"><b>Fix:</b> Justify the treatment using the risk's matrix position, not a reflex to "fix everything".</div></div>
+        </details>
+        <details class="trap"><summary><span class="tnum">5</span>Treating strategies as one-and-done<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="body">The word "improving" is continuous. A plan written once and never reviewed, or training given only at induction, loses value as risks change.
+          <div class="fix"><b>Fix:</b> Stress that strategies are <em>ongoing</em> — training refreshes, plans get reviewed, lessons feed back in.</div></div>
+        </details>
+        <details class="trap"><summary><span class="tnum">6</span>Generic answers with no scenario link<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="body">Case-study questions reward applying the idea to <em>this</em> organisation, its data and its people.
+          <div class="fix"><b>Fix:</b> Tie it back: "Beanstalk handles students' financial data, so onboarding must cover secret-handling before repo access."</div></div>
+        </details>
+      </div>
+    </section>
 
-    <div class="callout tip">
-      <div class="ct">Tie it back</div>
-      <p>"<em>Adheres to design principles</em>" is itself a common evaluation criterion. So the principles here aren't decoration — they become measuring sticks in the very next chapter.</p>
-    </div>
-  </section>
+    <!-- ============ P-E-L WRITING TRAINER ============ -->
+    <section id="writing">
+      <div class="eyebrow">11 · Build the answer</div>
+      <h2>The P·E·L writing trainer</h2>
+      <p>High-scoring KK10 answers follow a shape: <strong>Point</strong> (name the strategy) → <strong>Explain</strong> (how it improves security) → <strong>Link</strong> (tie it to the scenario). Try it below — keyword chips light up as your answer hits the moves.</p>
+      <div class="pel">
+        <div class="pel-head">
+          <h3>Prompt</h3>
+          <p>"Recommend <strong>one</strong> strategy Beanstalk could use to improve the security of its software development practices, and explain how it would help." <span style="color:var(--cc)">(3 marks)</span></p>
+        </div>
+        <div class="pel-body">
+          <div class="pel-steps">
+            <div class="pstep"><div class="pl">P · Point</div><div class="pd">Name a real strategy: training, onboarding, or a risk management plan.</div></div>
+            <div class="pstep"><div class="pl">E · Explain</div><div class="pd">Say <em>how</em> it reduces vulnerabilities or manages risk — the mechanism.</div></div>
+            <div class="pstep"><div class="pl">L · Link</div><div class="pd">Connect to Beanstalk's students, financial data or new hires.</div></div>
+          </div>
+          <textarea id="pelInput" placeholder="Write your 3-mark answer here…"></textarea>
+          <div class="pel-meter" id="pelMeter"></div>
+          <div class="pel-actions">
+            <button class="btn primary" onclick="pelModel()">Reveal model answer</button>
+            <button class="btn ghost" onclick="pelClear()">Clear</button>
+            <span style="font-size:.78rem;color:var(--text-faint)" id="pelCount">0 keyword moves hit</span>
+          </div>
+          <div class="pel-model" id="pelModelBox">
+            <h4>Model answer (3/3)</h4>
+            <p><strong>Point:</strong> Beanstalk should introduce a secure onboarding and ongoing developer-training program. <strong>Explain:</strong> Teaching every developer secure-coding habits — like never storing secrets in code and validating input — means vulnerabilities are prevented at the source, across all future work, rather than being patched one at a time. <strong>Link:</strong> Because Beanstalk handles students' financial data and is hiring rapidly, inducting each new developer before they get repo access would have stopped Devi's password leak entirely.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- ============ 11 CRITERIA ============ -->
-  <section id="criteria">
-    <div class="eyebrow"><span class="dot"></span>Chapter 11 · The handover</div>
-    <h2 class="sec">Evaluation criteria — written here, used later</h2>
-    <p class="lead">During Design you write the <strong>evaluation criteria</strong>: measurable statements that will later judge whether the finished solution is <span class="k-app">effective</span> (does it do the job well?) and <span class="k-func">efficient</span> (does it use time, effort and money well?). They are reused, unchanged, in Unit 4.</p>
+    <!-- ============ VCE PRACTICE ============ -->
+    <section id="practice">
+      <div class="eyebrow">12 · Exam practice · weak vs strong</div>
+      <h2>VCE-style practice questions</h2>
+      <p>Reveal the weak and strong responses, read the annotations, then self-mark. Your score tracks in the dock (bottom-right). Total: <strong>19 marks</strong>.</p>
+      <div id="pqHost"></div>
+    </section>
 
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>⏳ "The TIME CAPSULE"</h4>
-      <p>You write your criteria at Design and <span class="word">bury them in a time capsule</span>. Months later, at Evaluation (Unit 4), you <span class="word">dig the capsule up</span> and measure the finished solution against the <em>exact same</em> criteria. You don't get to rewrite them once you've seen how the build turned out — that would be marking your own homework. Same criteria, two moments in time.</p>
-    </div>
-
-    <h3 class="sub">Weak vs strong criteria</h3>
-    <p>A criterion must be <strong>measurable</strong>. "The solution should be good" can't be tested. Rewrite vague wants into specific, checkable statements.</p>
-    <table class="tbl">
-      <tr><th>❌ Weak (vague)</th><th>✅ Strong (measurable)</th></tr>
-      <tr><td>The interface is easy to use</td><td>A new user can complete a booking in under 3 steps without help</td></tr>
-      <tr><td>It runs fast</td><td>Each search returns results in under 2 seconds</td></tr>
-      <tr><td>It looks nice</td><td>The layout follows contrast, alignment and proximity, rated by 5 users at ≥4/5</td></tr>
-      <tr><td>It's reliable</td><td>The solution processes 100 test records with zero crashes</td></tr>
-    </table>
-
-    <div class="widget" id="critW">
-      <div class="wtop"><span class="wt">Measurable or not?</span><span class="score" id="critScore">0 / 6</span></div>
-      <p class="small">Tap each criterion as <b>Measurable</b> or <b>Too vague</b>.</p>
-      <div id="critBox"></div>
-    </div>
-
-    <div class="halves">
-      <div class="halfcard a"><div class="ht">Effectiveness</div><p>How <em>well</em> the solution meets the need — accuracy, completeness, readability, usability, reliability, relevance, timeliness. The "is it any good?" question.</p></div>
-      <div class="halfcard b"><div class="ht">Efficiency</div><p>How <em>economically</em> it works — time taken, cost, labour, effort, resources used. The "at what cost?" question.</p></div>
-    </div>
-  </section>
-
-  <!-- ============ 12 TRAPS ============ -->
-  <section id="traps">
-    <div class="eyebrow"><span class="dot" style="background:var(--trap)"></span>Chapter 12 · Don't lose marks</div>
-    <h2 class="sec">Exam traps &amp; how to answer</h2>
-
-    <div class="callout trap"><div class="ct">Trap 1 · Design = coding</div><p>Writing actual program statements is Development, not Design. Pseudocode is design; Python is not.</p></div>
-    <div class="callout trap"><div class="ct">Trap 2 · One idea</div><p>Design generates <strong>two or three</strong> ideas, then chooses one with criteria. "I designed my app" (singular) misses the process.</p></div>
-    <div class="callout trap"><div class="ct">Trap 3 · Mock-up does everything</div><p>A mock-up shows <strong>appearance only</strong>. It does not show logic, data structure or processing.</p></div>
-    <div class="callout trap"><div class="ct">Trap 4 · Confusing object description with data dictionary</div><p>Object description = objects' properties &amp; <strong>methods</strong>. Data dictionary = <strong>variables</strong> &amp; data types. Different tables, different jobs.</p></div>
-    <div class="callout trap"><div class="ct">Trap 5 · Vague criteria</div><p>"Easy to use" is not measurable. Every criterion must be testable with a number, count or clear pass/fail.</p></div>
-    <div class="callout trap"><div class="ct">Trap 6 · New criteria at Evaluation</div><p>The criteria are written at Design and reused unchanged at Evaluation. Don't invent them after the build.</p></div>
-
-    <h3 class="sub">How to phrase a strong answer</h3>
-    <table class="tbl">
-      <tr><th>Command word</th><th>What it wants</th></tr>
-      <tr><td>Identify / State</td><td>Name the tool or term — one word or phrase.</td></tr>
-      <tr><td>Describe</td><td>Name it <em>and</em> say what it does / shows, in subject terms.</td></tr>
-      <tr><td>Explain</td><td>Describe <em>and</em> give the reason / how it works in this scenario.</td></tr>
-      <tr><td>Justify</td><td>Argue why this choice beats alternatives, grounded in the scenario.</td></tr>
-    </table>
-    <div class="callout pass">
-      <div class="ct">A model sentence</div>
-      <p>"A <b>mock-up</b> is the right tool here because the client's feedback is about <em>appearance</em> — the screen layout and button placement — which a mock-up represents with each object named and annotated, without committing to any processing logic."</p>
-    </div>
-  </section>
-
-  <!-- ============ 13 PRACTICE ============ -->
-  <section id="practice">
-    <div class="eyebrow"><span class="dot" style="background:var(--pass)"></span>Chapter 13 · Self-mark</div>
-    <h2 class="sec">Practice questions</h2>
-    <p class="lead">Write your answer, then reveal the marking guide and grade yourself honestly. Use the exact VCAA term each time.</p>
-    <div id="quiz"></div>
-  </section>
-
+    <!-- ============ SUMMARY ============ -->
+    <section id="summary">
+      <div class="eyebrow">13 · Lock it in</div>
+      <h2>Six takeaways</h2>
+      <div class="takeaways">
+        <div class="take"><div class="ti">01</div><p><b>Practice, not patch.</b> Strategies change how software is built so fewer vulnerabilities are ever created.</p></div>
+        <div class="take"><div class="ti">02</div><p><b>People + process.</b> The two named strategies are training (people) and risk management plans (process).</p></div>
+        <div class="take"><div class="ti">03</div><p><b>Training scales.</b> One trained developer prevents many future bugs — that leverage is what makes it strategic.</p></div>
+        <div class="take"><div class="ti">04</div><p><b>Plan the cycle.</b> Identify → assess (likelihood × consequence) → treat (avoid/reduce/transfer/accept) → monitor.</p></div>
+        <div class="take"><div class="ti">05</div><p><b>Accept is valid.</b> Low-likelihood, low-impact risks can be monitored rather than fixed — justify with the matrix.</p></div>
+        <div class="take"><div class="ti">06</div><p><b>It's ongoing.</b> "Improving" is continuous — refresh training, review the plan, feed incidents back in.</p></div>
+      </div>
+      <div class="box key">
+        <div class="bt"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>One-line exam summary</div>
+        <p>Strategies for improving secure development raise the <strong>standard of the whole practice</strong> — through trained people and a managed risk process — so the organisation produces fewer vulnerabilities and keeps getting safer over time.</p>
+      </div>
+      <p class="disclaimer">"Beanstalk", "Devi" and "Mara" are fictional teaching devices created for this module. Examples are illustrative and conceptual — they describe <em>defensive</em> practice only and contain no exploit detail. Always check wording and emphasis against the official VCAA Applied Computing Study Design 2025–2028 and the current exam specifications. Australian English throughout.</p>
+    </section>
   </main>
 </div>
 
-<footer>
-  <div class="wrap">
-    <b>Digital Vector</b> — VCE Software Development courseware · The <b>Design</b> stage of the problem-solving methodology.<br>
-    Aligned to the VCE Applied Computing Study Design (2025–2028), Units 3 &amp; 4. Single-file, offline, Australian English. For classroom use.
+<!-- ============ SCORE DOCK ============ -->
+<div id="dock">
+  <svg id="ring" viewBox="0 0 36 36">
+    <path d="M18 2.5a15.5 15.5 0 1 1 0 31 15.5 15.5 0 0 1 0-31" fill="none" stroke="var(--border)" stroke-width="3"/>
+    <path id="ringFill" d="M18 2.5a15.5 15.5 0 1 1 0 31 15.5 15.5 0 0 1 0-31" fill="none" stroke="var(--cc)" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 100"/>
+    <text x="18" y="20.5" text-anchor="middle" font-size="9" font-weight="800" fill="var(--text-bright)" font-family="monospace" id="ringPct">0%</text>
+  </svg>
+  <div>
+    <div class="dl">Self-marked score</div>
+    <div class="dv"><b id="dockGot">0</b> / <span id="dockTot">19</span> marks</div>
+    <button class="dreset" onclick="resetScore()">reset</button>
   </div>
-</footer>
+</div>
 
+<footer>
+  <div class="bm">DIGITAL VECTOR</div>
+  VCE Software Development · Unit 4 · Outcome 2 · Cyber Security · KK10<br>
+  Strategies for improving the security of software development practices · Mapped to VCAA Applied Computing 2025–2028<br>
+  Single-file offline module · Three.js r128 inlined · digitalvector.com.au
+</footer>
 <script>/**
  * @license
  * Copyright 2010-2021 Three.js Authors
@@ -734,482 +790,582 @@ footer b{color:#C9D4E2}
 </script>
 <script>
 "use strict";
+/* ============================================================
+   Digital Vector · KK10 · Strategies for improving secure dev
+   ============================================================ */
+const LS = "cyk10_";
+const store = {
+  get(k,d){ try{const v=localStorage.getItem(LS+k);return v===null?d:JSON.parse(v);}catch(e){return d;} },
+  set(k,v){ try{localStorage.setItem(LS+k,JSON.stringify(v));}catch(e){} }
+};
 
-/* ============ THEME + FONT + PROGRESS ============ */
-(function(){
-  var root=document.documentElement;
-  try{
-    var t=localStorage.getItem('dv-design-theme'); if(t) root.setAttribute('data-theme',t);
-    var f=localStorage.getItem('dv-design-fs'); if(f) root.style.setProperty('--fs',f);
-  }catch(e){}
-  function setTheme(v){root.setAttribute('data-theme',v); try{localStorage.setItem('dv-design-theme',v);}catch(e){}}
-  document.getElementById('themeBtn').onclick=function(){
-    setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
-  };
-  function clampFs(v){return Math.max(0.85,Math.min(1.4,v));}
-  function getFs(){return parseFloat(getComputedStyle(root).getPropertyValue('--fs'))||1;}
-  function setFs(v){v=clampFs(v); root.style.setProperty('--fs',v); try{localStorage.setItem('dv-design-fs',v);}catch(e){}}
-  document.getElementById('fsUp').onclick=function(){setFs(getFs()+0.08);};
-  document.getElementById('fsDn').onclick=function(){setFs(getFs()-0.08);};
-  var prog=document.getElementById('prog');
-  function onScroll(){
-    var h=document.documentElement, max=h.scrollHeight-h.clientHeight;
-    prog.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
-  }
-  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
-})();
+/* ---------- theme ---------- */
+const SUN='<path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-13a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1zm0 14a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zM4 12a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm14 0a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2h-1a1 1 0 0 1-1-1zM6.3 6.3a1 1 0 0 1 1.4 0l.7.7A1 1 0 1 1 7 8.5l-.7-.8a1 1 0 0 1 0-1.4zm9.5 9.5a1 1 0 0 1 1.4 0l.7.7a1 1 0 1 1-1.4 1.4l-.7-.7a1 1 0 0 1 0-1.4zM6.3 17.7a1 1 0 0 1 0-1.4l.7-.7A1 1 0 1 1 8.5 17l-.8.7a1 1 0 0 1-1.4 0zm9.5-9.5a1 1 0 0 1 0-1.4l.7-.7a1 1 0 1 1 1.4 1.4l-.7.7a1 1 0 0 1-1.4 0z"/>';
+const MOON='<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-9.54-9.54c-.44-.06-.9-.1-1.36-.1z"/>';
+let theme = store.get("theme","dark");
+function applyTheme(){
+  document.documentElement.setAttribute("data-theme",theme);
+  const d = theme==="dark";
+  document.getElementById("themeIc").innerHTML = d?MOON:SUN;
+  document.getElementById("themeLbl").textContent = d?"Dark":"Light";
+}
+function toggleTheme(){ theme = theme==="dark"?"light":"dark"; store.set("theme",theme); applyTheme(); }
+applyTheme();
 
-/* ============ generic tap-sorter ============ */
-function makeSorter(opts){
-  var pool=document.getElementById(opts.pool);
-  var scoreEl=document.getElementById(opts.score);
-  var sel=null, placed=0, total=opts.items.length;
-  function render(){
-    pool.innerHTML='';
-    opts.items.forEach(function(it){
-      if(it._done) return;
-      var t=document.createElement('span');
-      t.className='tok'; t.textContent=it.label;
-      t.onclick=function(){
-        if(sel===t){sel=null; t.classList.remove('sel'); return;}
-        if(sel) sel.classList.remove('sel');
-        sel=t; t.classList.add('sel');
-      };
-      t._it=it; pool.appendChild(t);
+/* ---------- font scaling ---------- */
+let fs = store.get("fs",16);
+function applyFont(){ document.documentElement.style.setProperty("--fs",fs+"px"); document.getElementById("fsLbl").textContent=Math.round(fs/16*100)+"%"; }
+function fontStep(d){ fs=Math.max(13,Math.min(21,fs+d)); store.set("fs",fs); applyFont(); }
+applyFont();
+
+/* ---------- reading progress + scroll-spy ---------- */
+const railLinks = [...document.querySelectorAll("#rail a")];
+const secs = railLinks.map(a=>document.querySelector(a.getAttribute("href")));
+function onScroll(){
+  const h = document.documentElement;
+  const max = h.scrollHeight - h.clientHeight;
+  document.getElementById("prog").style.width = (max>0?(h.scrollTop/max*100):0)+"%";
+  let idx=0;
+  for(let i=0;i<secs.length;i++){ if(secs[i] && secs[i].getBoundingClientRect().top<=120) idx=i; }
+  railLinks.forEach((a,i)=>a.classList.toggle("on",i===idx));
+  // tuck dock near footer
+  const dock=document.getElementById("dock");
+  dock.classList.toggle("tuck", (max-h.scrollTop)<140);
+}
+window.addEventListener("scroll",onScroll,{passive:true});
+window.addEventListener("resize",onScroll);
+
+/* ============================================================
+   SORTER · strategy vs mitigation
+   ============================================================ */
+const SORT_DATA = [
+  {t:"Run a fortnightly secure-coding workshop", bin:"str"},
+  {t:"Delete the leaked password from the repo", bin:"mit"},
+  {t:"Induct every new hire before repo access", bin:"str"},
+  {t:"Write and review a risk management plan", bin:"str"},
+  {t:"Patch one vulnerable library version", bin:"mit"},
+  {t:"Encrypt this app's customer table", bin:"mit"},
+  {t:"Make code review mandatory for all merges", bin:"str"},
+  {t:"Rotate the one exposed API key", bin:"mit"}
+];
+let sortDrag=null;
+function buildSorter(){
+  const pool=document.getElementById("sortPool");
+  SORT_DATA.forEach((d,i)=>{
+    const el=document.createElement("div");
+    el.className="token"; el.textContent=d.t; el.draggable=true; el.dataset.i=i;
+    el.addEventListener("dragstart",e=>{sortDrag=el;el.classList.add("drag");});
+    el.addEventListener("dragend",e=>{el.classList.remove("drag");sortDrag=null;});
+    el.addEventListener("click",()=>{ // tap-to-select for touch
+      document.querySelectorAll(".token.sel").forEach(t=>t.classList.remove("sel"));
+      el.classList.toggle("sel");
     });
-  }
-  opts.buckets.forEach(function(bid){
-    var b=document.getElementById(bid);
-    var cat=b.parentElement.getAttribute('data-cat');
-    b.parentElement.onclick=function(){
-      if(!sel) return;
-      var it=sel._it;
-      var ok=(it.cat===cat);
-      var chip=document.createElement('span');
-      chip.className='tok '+(ok?'good':'bad'); chip.textContent=it.label+(ok?' ✓':' ✗');
-      b.appendChild(chip);
-      if(ok){ it._done=true; placed++; }
-      else { setTimeout(function(){ b.removeChild(chip); }, 700); }
-      sel.classList.remove('sel'); sel=null; render(); update();
-    };
+    pool.appendChild(el);
   });
-  function update(){ scoreEl.innerHTML=placed+' / '+total+' placed'+(placed===total?' &nbsp;✓ done':''); if(placed===total) scoreEl.querySelector?scoreEl.style.color='var(--pass)':0; }
-  document.getElementById(opts.reset).onclick=function(){
-    opts.items.forEach(function(it){it._done=false;}); placed=0; sel=null;
-    opts.buckets.forEach(function(bid){document.getElementById(bid).innerHTML='';});
-    render(); update();
-  };
-  render(); update();
+  document.querySelectorAll(".bin").forEach(bin=>{
+    bin.addEventListener("dragover",e=>{e.preventDefault();bin.classList.add("over");});
+    bin.addEventListener("dragleave",()=>bin.classList.remove("over"));
+    bin.addEventListener("drop",e=>{e.preventDefault();bin.classList.remove("over");if(sortDrag)place(sortDrag,bin);});
+    bin.addEventListener("click",()=>{const sel=document.querySelector(".token.sel");if(sel)place(sel,bin);});
+  });
+}
+function place(tok,bin){
+  if(tok.classList.contains("placed"))return;
+  const i=+tok.dataset.i, correct=SORT_DATA[i].bin===bin.dataset.bin;
+  const drop=bin.querySelector(".drop");
+  const slot=document.createElement("span");
+  slot.className="slot "+(correct?"ok":"no");
+  slot.innerHTML=(correct?"✓ ":"✗ ")+SORT_DATA[i].t;
+  drop.appendChild(slot);
+  tok.classList.add("placed","sel");tok.classList.remove("sel");
+  checkSorter();
+}
+function checkSorter(){
+  const placed=document.querySelectorAll(".token.placed").length;
+  if(placed===SORT_DATA.length){
+    const wrong=document.querySelectorAll(".slot.no").length;
+    const r=document.getElementById("sortResult");r.style.display="block";
+    r.style.color=wrong?"var(--warn)":"var(--good)";
+    r.textContent=wrong? `${SORT_DATA.length-wrong}/${SORT_DATA.length} correct — the ✗ items are point-fixes to one product, so they're mitigations, not strategies.`
+      : `All ${SORT_DATA.length} correct — you can tell a practice-level strategy from a product-level mitigation.`;
+  }
 }
 
-/* appearance vs functionality */
-makeSorter({
-  pool:'afPool', score:'afScore', reset:'afReset',
-  buckets:['af-app','af-func'],
-  items:[
-    {label:'Button colour & placement', cat:'app'},
-    {label:'Screen layout', cat:'app'},
-    {label:'Font and navigation', cat:'app'},
-    {label:'Which fields appear', cat:'app'},
-    {label:'How total is calculated', cat:'func'},
-    {label:'Variables & data types', cat:'func'},
-    {label:'An object\u2019s methods', cat:'func'},
-    {label:'Input \u2192 output flow', cat:'func'}
-  ]
-});
-
-/* logical vs physical */
-makeSorter({
-  pool:'lpPool', score:'lpScore', reset:'lpReset',
-  buckets:['lp-logical','lp-physical'],
-  items:[
-    {label:'Context diagram', cat:'logical'},
-    {label:'Use case diagram', cat:'logical'},
-    {label:'Decision tree', cat:'logical'},
-    {label:'Hierarchy chart', cat:'logical'},
-    {label:'Flowchart', cat:'physical'},
-    {label:'Pseudocode', cat:'physical'},
-    {label:'Storyboard', cat:'physical'},
-    {label:'IPO chart', cat:'physical'}
-  ]
-});
-
-/* ============ sequence widget ============ */
-(function(){
-  var steps=[
-    {n:1,t:'Generate 2\u20133 design ideas'},
-    {n:2,t:'Develop evaluation criteria'},
-    {n:3,t:'Apply criteria \u2192 pick preferred design'},
-    {n:4,t:'Fully detail the chosen design'}
-  ];
-  var order=steps.slice().sort(function(){return Math.random()-0.5;});
-  var pool=document.getElementById('seqPool'), slots=document.getElementById('seqSlots'),
-      sc=document.getElementById('seqScore'); var next=1;
-  function render(){
-    pool.innerHTML='';
-    order.forEach(function(s){
-      if(s._done)return;
-      var t=document.createElement('span'); t.className='tok'; t.textContent=s.t;
-      t.onclick=function(){
-        if(s.n===next){
-          s._done=true;
-          var c=document.createElement('span'); c.className='tok good'; c.textContent=next+'. '+s.t+' ✓';
-          slots.appendChild(c); next++; render();
-          sc.textContent = next>4 ? 'Correct sequence ✓' : 'good — now step '+next;
-          sc.style.color = next>4 ? 'var(--pass)':'';
-        } else {
-          t.classList.add('bad'); sc.textContent='not yet — that\u2019s step '+s.n; sc.style.color='var(--trap)';
-          setTimeout(function(){t.classList.remove('bad');},600);
-        }
+/* ============================================================
+   MCQ
+   ============================================================ */
+const MCQ=[
+ {q:"Which best describes a 'strategy for improving secure development practices'?",
+  o:["A one-off fix to a specific vulnerability","An ongoing change to how the team builds software, reducing future vulnerabilities","A firewall rule on the production server","A backup taken after an incident"],a:1,
+  fb:"Strategies act on the practice (people/process) and reduce vulnerabilities over time — not a single product fix."},
+ {q:"Why is developer training considered a strategy rather than a mitigation?",
+  o:["It only fixes one bug","It encrypts stored data","It changes the people who build all future software, preventing many vulnerabilities","It is required by law"],a:2,
+  fb:"Training has leverage: one trained developer prevents many future bugs across every project."},
+ {q:"In a risk management plan, what does the 'Accept' treatment mean?",
+  o:["Eliminate the risk completely","Shift the risk to an insurer","Acknowledge a low risk and monitor it without further action","Reduce the likelihood with controls"],a:2,
+  fb:"Accept is valid for low-likelihood, low-impact risks — fixing everything isn't always cost-justified."},
+ {q:"A risk is scored in a risk plan by combining…",
+  o:["Cost and time","Likelihood and consequence (impact)","Speed and storage","Users and revenue"],a:1,
+  fb:"Likelihood × consequence places each risk on the matrix so the worst rise to the top."},
+ {q:"Beanstalk wants new hires to never leak secrets again. The best strategy is to…",
+  o:["Delete the leaked secret","Introduce secure onboarding before repo access","Email staff a warning once","Buy a bigger server"],a:1,
+  fb:"Onboarding lifts the standard for every future hire — a practice-level strategy, not a one-off fix."}
+];
+function buildMCQ(){
+  const host=document.getElementById("mcqHost");
+  MCQ.forEach((m,qi)=>{
+    const card=document.createElement("div");card.className="mcq";
+    card.innerHTML=`<div class="q"><span class="qn">Q${qi+1}</span>${m.q}</div>`;
+    m.o.forEach((opt,oi)=>{
+      const el=document.createElement("div");el.className="opt";
+      el.innerHTML=`<span class="mk">${String.fromCharCode(65+oi)}</span><span>${opt}</span>`;
+      el.onclick=()=>{
+        if(card.dataset.done)return; card.dataset.done="1";
+        const opts=card.querySelectorAll(".opt");
+        opts[m.a].classList.add("correct");
+        if(oi!==m.a) el.classList.add("wrong");
+        const fb=card.querySelector(".fb");fb.classList.add("show");
       };
-      pool.appendChild(t);
+      card.appendChild(el);
     });
-  }
-  document.getElementById('seqReset').onclick=function(){
-    steps.forEach(function(s){s._done=false;}); next=1; slots.innerHTML='';
-    order=steps.slice().sort(function(){return Math.random()-0.5;});
-    sc.textContent='tap the steps in order'; sc.style.color=''; render();
-  };
-  render();
-})();
-
-/* ============ which-tool MCQ ============ */
-(function(){
-  var qs=[
-    {q:'A client says the buttons are in the wrong place and the colours clash.', a:'Mock-up', opts:['Mock-up','Pseudocode','Data dictionary']},
-    {q:'You need to list every variable and its data type.', a:'Data dictionary', opts:['IPO chart','Data dictionary','Object description']},
-    {q:'You want to plan the logic of a search algorithm before coding.', a:'Pseudocode', opts:['Mock-up','Pseudocode','Object description']},
-    {q:'You must show what data goes in, what is done, and what comes out.', a:'IPO chart', opts:['IPO chart','Mock-up','Data dictionary']},
-    {q:'Describe an object\u2019s properties and methods.', a:'Object description', opts:['Object description','Pseudocode','IPO chart']},
-    {q:'Decide screen layout and name each on-screen object.', a:'Mock-up', opts:['Data dictionary','Mock-up','IPO chart']}
-  ];
-  var box=document.getElementById('whichBox'), sc=document.getElementById('whichScore'); var got=0, done=0;
-  qs.forEach(function(item,i){
-    var d=document.createElement('div'); d.style.margin='12px 0';
-    var p=document.createElement('p'); p.style.fontWeight='600'; p.style.margin='0 0 6px'; p.textContent=(i+1)+'. '+item.q; d.appendChild(p);
-    var row=document.createElement('div'); row.style.display='flex'; row.style.flexWrap='wrap'; row.style.gap='7px';
-    var answered=false;
-    item.opts.forEach(function(o){
-      var b=document.createElement('button'); b.className='btn sm'; b.textContent=o;
-      b.onclick=function(){
-        if(answered)return; answered=true; done++;
-        if(o===item.a){b.style.background='var(--pass)';b.style.color='#fff';b.style.borderColor='var(--pass)';got++;}
-        else{b.style.background='var(--trap)';b.style.color='#fff';b.style.borderColor='var(--trap)';
-          Array.from(row.children).forEach(function(x){if(x.textContent===item.a){x.style.background='var(--pass)';x.style.color='#fff';x.style.borderColor='var(--pass)';}});
-        }
-        sc.textContent=got+' / '+qs.length; if(done===qs.length&&got===qs.length)sc.style.color='var(--pass)';
-      };
-      row.appendChild(b);
-    });
-    d.appendChild(row); box.appendChild(d);
+    const fb=document.createElement("div");fb.className="fb";fb.innerHTML="<b>Why:</b> "+m.fb;card.appendChild(fb);
+    host.appendChild(card);
   });
-})();
-
-/* ============ measurable-or-not ============ */
-(function(){
-  var items=[
-    {t:'A booking completes in under 3 steps', m:true},
-    {t:'The app is user-friendly', m:false},
-    {t:'Search returns results in under 2 seconds', m:true},
-    {t:'It looks professional', m:false},
-    {t:'Processes 100 records with zero crashes', m:true},
-    {t:'The interface is nice and clean', m:false}
-  ];
-  var box=document.getElementById('critBox'), sc=document.getElementById('critScore'); var got=0,done=0;
-  items.forEach(function(it){
-    var d=document.createElement('div'); d.style.cssText='display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:9px 0;border:1px solid var(--hair);border-radius:9px;padding:8px 10px;background:var(--paper)';
-    var s=document.createElement('span'); s.textContent=it.t; s.style.flex='1'; s.style.minWidth='180px'; s.style.fontSize='.92rem';
-    var done2=false;
-    function mk(label,val){
-      var b=document.createElement('button'); b.className='btn sm'; b.textContent=label;
-      b.onclick=function(){ if(done2)return; done2=true; done++;
-        var right=(val===it.m);
-        if(right){b.style.background='var(--pass)';b.style.color='#fff';b.style.borderColor='var(--pass)';got++;}
-        else{b.style.background='var(--trap)';b.style.color='#fff';b.style.borderColor='var(--trap)';}
-        sc.textContent=got+' / '+items.length; if(done===items.length&&got===items.length)sc.style.color='var(--pass)';
-      };
-      return b;
-    }
-    d.appendChild(s); d.appendChild(mk('Measurable',true)); d.appendChild(mk('Too vague',false));
-    box.appendChild(d);
-  });
-})();
-
-/* ============ mock-up hotspots ============ */
-(function(){
-  var board=document.getElementById('mockBoard'), note=document.getElementById('mockNote'), sc=document.getElementById('mockScore');
-  var found=0;
-  function el(html,css){var d=document.createElement('div');d.style.cssText=css;d.innerHTML=html;board.appendChild(d);return d;}
-  // faux login UI
-  el('Member Login','position:absolute;left:50%;top:18px;transform:translateX(-50%);font-weight:700;color:var(--ink)');
-  el('','position:absolute;left:50%;top:58px;transform:translateX(-50%);width:62%;height:30px;background:var(--card);border:1px solid var(--hair);border-radius:7px');
-  el('','position:absolute;left:50%;top:98px;transform:translateX(-50%);width:62%;height:30px;background:var(--card);border:1px solid var(--hair);border-radius:7px');
-  el('Log in','position:absolute;left:50%;top:140px;transform:translateX(-50%);width:62%;height:32px;background:var(--alpha);color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.85rem');
-  el('Forgot password?','position:absolute;left:50%;top:182px;transform:translateX(-50%);font-size:.8rem;color:var(--alpha)');
-  var spots=[
-    {x:'19%',y:58,n:1,txt:'#1 txtUser \u2014 Text box. Object name: txtUser, type: text input, max 20 chars. Appearance only; validation lives in the data dictionary.'},
-    {x:'19%',y:98,n:2,txt:'#2 txtPass \u2014 Text box (masked). Shows dots as the user types. The mock-up names it; how it checks the password is a method, described elsewhere.'},
-    {x:'50%',y:140,n:3,txt:'#3 btnLogin \u2014 Button. Caption "Log in". High-contrast primary colour so it stands out (Contrast principle).'},
-    {x:'50%',y:182,n:4,txt:'#4 lnkForgot \u2014 Link/label. Placed apart from the login group (Proximity). Navigates to recovery screen.'}
-  ];
-  spots.forEach(function(s){
-    var m=document.createElement('button');
-    m.textContent=s.n;
-    m.style.cssText='position:absolute;left:'+s.x+';top:'+(s.y-2)+'px;transform:translate(-150%,-50%);width:22px;height:22px;border-radius:99px;border:2px solid #fff;background:var(--beta);color:#fff;font-weight:700;font-size:11px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.3);z-index:3';
-    var hit=false;
-    m.onclick=function(){ note.textContent=s.txt; if(!hit){hit=true;found++; m.style.background='var(--pass)'; sc.textContent=found+' / 4 found'; if(found===4)sc.style.color='var(--pass)';} };
-    board.appendChild(m);
-  });
-})();
-
-/* ============ before/after principles ============ */
-(function(){
-  var board=document.getElementById('baBoard');
-  function card(title,fixed,cls){
-    var d=document.createElement('div'); d.style.cssText='border:1px solid var(--hair);border-radius:11px;padding:12px;background:var(--paper);cursor:pointer';
-    var flipped=false;
-    function paint(){
-      if(!flipped){
-        d.innerHTML='<div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--trap);font-weight:600;margin-bottom:8px">Before</div>'+
-        '<div style="font-size:.82rem;line-height:1.5;color:var(--muted)">A cramped form: random fonts, fields scattered, the submit button the same grey as everything else, labels floating far from their fields. Tap to fix it.</div>';
-      } else {
-        d.innerHTML='<div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--pass);font-weight:600;margin-bottom:8px">After</div>'+
-        '<div style="font-size:.82rem;line-height:1.5">'+fixed+'</div>';
-      }
-    }
-    d.onclick=function(){flipped=!flipped;paint();};
-    paint(); return d;
-  }
-  board.appendChild(card('a','<b>Contrast:</b> the submit button is now bold indigo.<br><b>Alignment:</b> all fields share a left edge.<br><b>Repetition:</b> one heading font throughout.<br><b>Proximity:</b> labels sit right above their fields.'));
-  board.appendChild(card('b','<b>Navigation:</b> a clear back link added.<br><b>Consistency:</b> buttons behave the same everywhere.<br><b>Error tolerance:</b> inline "required" hints.<br><b>Accessibility:</b> larger text, stronger colour contrast.'));
-})();
-
-/* ============ quiz ============ */
-(function(){
-  var quiz=[
-    {q:'State the two main steps of the Design stage of the PSM.',
-     marks:'2 marks',
-     pts:['1 mark: generate two or three design ideas.','1 mark: develop and apply evaluation criteria to select (and then fully detail) the preferred design.']},
-    {q:'Distinguish between a mock-up and an object description as design tools.',
-     marks:'3 marks',
-     pts:['Mock-up represents the appearance / user interface — screen layout with objects named.','Object description represents functionality — a table of each object\u2019s properties and methods.','Clear contrast drawn between appearance vs logic/structure.']},
-    {q:'A pay program reads hours worked and an hourly rate, then displays net pay after 30% tax. Name the most suitable tool to plan this calculation, and justify your choice.',
-     marks:'3 marks',
-     pts:['Names IPO chart (or pseudocode).','States what it shows: inputs (hours, rate), process (gross = hours×rate, tax = 30%, net), outputs (net pay).','Justifies: it organises the calculation before coding, ensuring all inputs/outputs are identified.']},
-    {q:'Explain why evaluation criteria are written during Design rather than at Evaluation.',
-     marks:'2 marks',
-     pts:['Criteria are written at Design so the solution is built toward an agreed measure of success.','They are reused unchanged in Unit 4 to judge effectiveness and efficiency — writing them after the build would bias the evaluation.']},
-    {q:'Rewrite this weak evaluation criterion to be measurable: "The app should be easy to use."',
-     marks:'2 marks',
-     pts:['Any specific, testable rewrite, e.g. "A first-time user can complete a booking in under 3 steps without assistance."','Includes a number / count / clear pass-fail condition.']},
-    {q:'Identify whether a flowchart is a logical or physical design tool, and give one reason.',
-     marks:'2 marks',
-     pts:['Physical.','It gives step-by-step instructions on how the process is carried out (the "how to build" booklet), not just the overall structure.']},
-    {q:'Why is no programming code written during the Design stage?',
-     marks:'2 marks',
-     pts:['Writing actual code belongs to the Development stage.','Design plans appearance and logic (using tools like pseudocode) so changes are cheap on paper before building begins.']}
-  ];
-  var box=document.getElementById('quiz');
-  quiz.forEach(function(item,i){
-    var d=document.createElement('div'); d.className='q';
-    d.innerHTML='<div class="qh"><span class="qn">Q'+(i+1)+'</span><p class="qbody">'+item.q+' <span class="small">('+item.marks+')</span></p></div>'+
-      '<textarea placeholder="Write your answer here\u2026"></textarea>'+
-      '<div style="margin-top:8px"><button class="btn sm reveal-btn">Show marking guide</button></div>'+
-      '<div class="marking"><b>Marking guide</b><ul>'+item.pts.map(function(p){return '<li>'+p+'</li>';}).join('')+'</ul></div>';
-    d.querySelector('.reveal-btn').onclick=function(){ d.classList.toggle('open'); this.textContent=d.classList.contains('open')?'Hide marking guide':'Show marking guide'; };
-    box.appendChild(d);
-  });
-})();
-
-/* ============ 3D helpers ============ */
-function hasWebGL(){ try{var c=document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;} }
-function fallback(stage,msg){
-  var d=document.createElement('div');
-  d.style.cssText='display:flex;align-items:center;justify-content:center;text-align:center;color:#9fb0c4;font-family:var(--mono);font-size:13px;height:340px;padding:20px';
-  d.textContent=msg||'3D needs WebGL — enable it to see this scene.';
-  stage.appendChild(d);
 }
 
-/* ============ SCENE A — ideation bench ============ */
-(function(){
-  var stage=document.getElementById('benchStage');
-  if(typeof THREE==='undefined'||!hasWebGL()){ fallback(stage,'Ideation bench needs WebGL.'); return; }
-  var W=stage.clientWidth||820, H=360;
-  var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(W,H); stage.insertBefore(renderer.domElement, stage.firstChild);
-  var scene=new THREE.Scene();
-  var cam=new THREE.PerspectiveCamera(46,W/H,0.1,100); cam.position.set(0,3.4,9.4); cam.lookAt(0,0.6,0);
-  scene.add(new THREE.AmbientLight(0xffffff,0.72));
-  var key=new THREE.DirectionalLight(0xffffff,0.85); key.position.set(4,8,6); scene.add(key);
-  // bench top
-  var bench=new THREE.Mesh(new THREE.BoxGeometry(11,0.4,5),new THREE.MeshStandardMaterial({color:0x223043,roughness:0.9}));
-  bench.position.y=-0.4; scene.add(bench);
+/* ============================================================
+   P-E-L writing trainer
+   ============================================================ */
+const PEL_KW=[
+ {label:"names a strategy", re:/(training|onboard|induction|risk management plan|code review|secure )/i},
+ {label:"explains the mechanism", re:/(prevent|reduce|fewer|before|source|likelihood|teaches?|habit|so that|because)/i},
+ {label:"is ongoing", re:/(ongoing|every|continuous|regular|future|each|all )/i},
+ {label:"links to Beanstalk", re:/(beanstalk|student|financial|devi|new hire|repo|secret|password)/i}
+];
+function buildPel(){
+  const m=document.getElementById("pelMeter");
+  PEL_KW.forEach((k,i)=>{const s=document.createElement("span");s.className="kw";s.id="kw"+i;s.textContent=k.label;m.appendChild(s);});
+}
+function pelCheck(){
+  const v=document.getElementById("pelInput").value;let hit=0;
+  PEL_KW.forEach((k,i)=>{const on=k.re.test(v);document.getElementById("kw"+i).classList.toggle("hit",on);if(on)hit++;});
+  document.getElementById("pelCount").textContent=`${hit} of ${PEL_KW.length} keyword moves hit`;
+}
+function pelModel(){ document.getElementById("pelModelBox").classList.toggle("show"); }
+function pelClear(){ document.getElementById("pelInput").value="";pelCheck(); }
 
-  var COL_WIRE=0x6b7a8d, COL_WIN=0x2D4ED8;
-  var boards=[]; var scores=[0.62,0.91,0.74]; // middle wins
-  var xs=[-3.5,0,3.5];
-  for(var i=0;i<3;i++){
-    var g=new THREE.Group();
-    // board panel
-    var panel=new THREE.Mesh(new THREE.BoxGeometry(2.4,3.0,0.18),
-      new THREE.MeshStandardMaterial({color:0x33414f,roughness:0.8,emissive:0x000000}));
-    g.add(panel);
-    // "wireframe" UI lines
-    var lineMat=new THREE.LineBasicMaterial({color:COL_WIRE});
-    function rect(w,h,y){
-      var pts=[new THREE.Vector3(-w,y+h,0.11),new THREE.Vector3(w,y+h,0.11),new THREE.Vector3(w,y-h,0.11),new THREE.Vector3(-w,y-h,0.11),new THREE.Vector3(-w,y+h,0.11)];
-      return new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),lineMat);
+/* ============================================================
+   VCE PRACTICE QUESTIONS
+   ============================================================ */
+const PQ=[
+ {marks:2,cmd:"Distinguish",
+  q:"Distinguish between a <em>mitigation measure</em> and a <em>strategy for improving the security of software development practices</em>.",
+  weak:`A mitigation measure and a strategy are both about security. A mitigation fixes a problem and a <span class="anno bad" title="Vague — doesn't say what makes them different">strategy is a plan for security</span>. They both help keep the software safe from hackers.`,
+  strong:`A <strong>mitigation measure</strong> is a <span class="anno good" title="Captures the point-fix nature">point fix that reduces a specific, identified threat or vulnerability in a product</span> (e.g. encrypting a database). A <strong>strategy</strong> for improving practices is broader and ongoing: it <span class="anno good" title="Captures practice-level + preventive">changes how the whole team develops software — such as developer training — so fewer vulnerabilities are created across all future work</span>.`,
+  guide:["1 mark: correctly identifies a mitigation as a specific/reactive fix to a single threat or product issue.","1 mark: correctly identifies a strategy as an ongoing, practice-/process-wide improvement that prevents future vulnerabilities.","Full marks require a clear point of contrast, not two separate definitions."]},
+ {marks:4,cmd:"Describe",
+  q:"Beanstalk's CTO wants to improve secure development after a new hire leaked a password. Describe <strong>two</strong> strategies she could use.",
+  weak:`She could <span class="anno bad" title="This is a mitigation, not a strategy">delete the password and change it</span>. She could also <span class="anno bad" title="Named but no description of how it improves security">do some training</span>. This would make Beanstalk more secure.`,
+  strong:`<strong>1 · Secure onboarding &amp; induction:</strong> every new developer completes a structured induction covering Beanstalk's secret-handling and repo rules <span class="anno good" title="Mechanism + prevention">before their first commit, so leaks like Devi's are prevented at the source</span>. <strong>2 · A risk management plan:</strong> Beanstalk <span class="anno good" title="Process described">identifies risks (e.g. leaked secrets), scores each by likelihood × consequence, and assigns a treatment</span>, reviewing it regularly so emerging risks are managed before they cause harm.`,
+  guide:["2 marks per strategy: 1 for correctly naming a genuine practice-level strategy, 1 for describing how it improves security.","Deduct if the answer gives a mitigation (e.g. 'reset the password') instead of a strategy.","Strong answers tie at least one strategy to Beanstalk's context."]},
+ {marks:3,cmd:"Explain",
+  q:"Explain why investing in developer training can improve security more effectively than fixing each vulnerability as it is found.",
+  weak:`Training is good because <span class="anno bad" title="Circular — restates the claim">it makes developers better at security</span> and fixing bugs takes a long time. So training is better.`,
+  strong:`Fixing each vulnerability as it appears is <span class="anno good" title="Identifies the reactive limitation">reactive and only addresses problems already shipped — the same mistakes keep recurring</span>. Training is <span class="anno good" title="Identifies leverage/prevention">preventive: it teaches secure-coding habits so developers introduce fewer vulnerabilities in the first place</span>. Because one trained developer writes safer code on <span class="anno good" title="Scales across future work">every future project, the benefit compounds across the whole team over time</span>.`,
+  guide:["1 mark: identifies bug-by-bug fixing as reactive / recurring / limited to known issues.","1 mark: identifies training as preventive (reduces vulnerabilities at the source).","1 mark: explains the leverage — benefit applies across the team and future work."]},
+ {marks:4,cmd:"Apply",
+  q:"In Beanstalk's risk plan, the risk 'admin account compromised by phishing' is rated high likelihood, severe consequence. Recommend a treatment option and justify it, then state one risk that could instead be <em>accepted</em>.",
+  weak:`They should <span class="anno bad" title="Vague, no named treatment option">just be more careful</span> about phishing. A risk they could accept is <span class="anno bad" title="No reasoning about likelihood/impact">any small one</span>.`,
+  strong:`I recommend <strong>Reduce (mitigate)</strong>: <span class="anno good" title="Names treatment + mechanism">require multi-factor authentication and run phishing-awareness training, which lowers the likelihood of a successful phishing attack</span>. This is justified because the risk is <span class="anno good" title="Justifies with matrix position">high likelihood and severe consequence, so it must be actively brought down rather than monitored</span>. A risk that could be <strong>Accepted</strong> is <span class="anno good" title="Correct use of Accept with reasoning">a rare, cosmetic UI bug that exposes no data — low likelihood and low impact, so it is logged and monitored rather than fixed immediately</span>.`,
+  guide:["1 mark: names an appropriate treatment (Reduce/Transfer) for the high/severe risk.","1 mark: justifies it using likelihood and consequence.","1 mark: identifies a genuinely low/low risk to Accept.","1 mark: justifies Accept with reasoning about cost vs low likelihood/impact."]},
+ {marks:6,cmd:"Discuss",
+  q:"Discuss the relative value of developer training versus a risk management plan as strategies for improving the security of software development practices at a rapidly growing organisation like Beanstalk.",
+  weak:`Training is good and a risk plan is also good. Training teaches developers and a risk plan lists risks. <span class="anno bad" title="No comparison or weighing">Both of them help so Beanstalk should do both.</span> Security is important for a company with lots of data.`,
+  strong:`<strong>Developer training</strong> targets the <span class="anno good" title="People dimension">people who create code: it reduces vulnerabilities at the source, which is especially valuable for Beanstalk because it is hiring rapidly and most incidents (like Devi's leak) stem from inexperience</span>. However, training alone <span class="anno good" title="Limitation acknowledged">cannot catch the mistakes that still slip through</span>. A <strong>risk management plan</strong> targets the <span class="anno good" title="Process dimension">process: it systematically identifies, assesses and treats risks and is monitored over time, catching and managing problems training misses</span> — but it does little to stop vulnerabilities being written. <span class="anno good" title="Weighs them together — the discuss payoff">The two are complementary rather than competing: for a fast-scaling firm handling students' financial data, training delivers the biggest preventive return, while the risk plan provides the safety net and governance</span>. The strongest practice runs both, with incident lessons fed back into each.`,
+  guide:["1–2 marks: explains the value of training (preventive, people, source of vulnerabilities).","1–2 marks: explains the value of a risk management plan (process, identify/assess/treat/monitor, safety net).","1 mark: acknowledges a limitation of each in isolation.","1 mark: reaches a justified judgement that they are complementary, linked to Beanstalk's growth/data context.","Top band requires genuine weighing, not two parallel descriptions."]}
+];
+let pqState=store.get("pq",{});
+function buildPQ(){
+  const host=document.getElementById("pqHost");
+  PQ.forEach((p,i)=>{
+    const card=document.createElement("div");card.className="pq";
+    card.innerHTML=`
+      <div class="pq-head">
+        <span class="marks">${p.marks} mark${p.marks>1?"s":""}</span>
+        <div><div class="qtext">Q${i+1}. ${p.q}</div><div class="cmd">Command word · ${p.cmd}</div></div>
+      </div>
+      <div class="pq-body">
+        <div class="pq-toggle">
+          <button class="weak" onclick="pqShow(${i},'weak',this)">Weak response</button>
+          <button class="strong" onclick="pqShow(${i},'strong',this)">Strong response</button>
+          <button class="guide" onclick="pqShow(${i},'guide',this)">Marking guide</button>
+        </div>
+        <div class="pq-ans weak" id="ans-${i}-weak"><div class="at">✗ Weak — would lose marks</div>${p.weak}</div>
+        <div class="pq-ans strong" id="ans-${i}-strong"><div class="at">✓ Strong — exam-ready</div>${p.strong}</div>
+        <div class="pq-ans guide" id="ans-${i}-guide"><div class="at">⊹ Marking guide</div><ul>${p.guide.map(g=>`<li>${g}</li>`).join("")}</ul></div>
+        <div class="selfmark">
+          <span class="sq">Self-mark — did your answer match the strong response?</span>
+          <button class="got" onclick="pqMark(${i},1,this)">Got it (+${p.marks})</button>
+          <button class="miss" onclick="pqMark(${i},0,this)">Missed it</button>
+        </div>
+      </div>`;
+    host.appendChild(card);
+  });
+  document.getElementById("dockTot").textContent=PQ.reduce((s,p)=>s+p.marks,0);
+  // restore self-marks
+  Object.keys(pqState).forEach(i=>{
+    const card=document.getElementById("pqHost").children[i];if(!card)return;
+    const btn=card.querySelector(pqState[i]?".got":".miss");if(btn)btn.classList.add("on");
+  });
+  updateScore();
+}
+function pqShow(i,kind,btn){
+  const el=document.getElementById(`ans-${i}-${kind}`);
+  const on=el.classList.toggle("show");btn.classList.toggle("on",on);
+}
+function pqMark(i,val,btn){
+  pqState[i]=val;store.set("pq",pqState);
+  const wrap=btn.parentElement;
+  wrap.querySelectorAll("button").forEach(b=>b.classList.remove("on"));
+  btn.classList.add("on");
+  updateScore();
+}
+function updateScore(){
+  let got=0,tot=PQ.reduce((s,p)=>s+p.marks,0);
+  Object.keys(pqState).forEach(i=>{ if(pqState[i]) got+=PQ[i].marks; });
+  document.getElementById("dockGot").textContent=got;
+  const pct=tot?Math.round(got/tot*100):0;
+  document.getElementById("ringPct").textContent=pct+"%";
+  document.getElementById("ringFill").setAttribute("stroke-dasharray",`${pct} 100`);
+}
+function resetScore(){ pqState={};store.set("pq",pqState);
+  document.querySelectorAll(".selfmark button").forEach(b=>b.classList.remove("on"));updateScore(); }
+
+/* ============================================================
+   THREE.JS — shared helpers
+   ============================================================ */
+const TJS = (typeof THREE!=="undefined");
+function orbitDrag(dom, getRot, setRot){
+  let down=false,px=0,py=0;
+  const start=e=>{down=true;const p=e.touches?e.touches[0]:e;px=p.clientX;py=p.clientY;};
+  const move=e=>{ if(!down)return; const p=e.touches?e.touches[0]:e;
+    const r=getRot(); setRot(r.az+(p.clientX-px)*0.008, Math.max(-0.9,Math.min(0.9,r.pol+(p.clientY-py)*0.006)));
+    px=p.clientX;py=p.clientY; if(e.touches)e.preventDefault(); };
+  const end=()=>down=false;
+  dom.addEventListener("mousedown",start);dom.addEventListener("touchstart",start,{passive:false});
+  window.addEventListener("mousemove",move);dom.addEventListener("touchmove",move,{passive:false});
+  window.addEventListener("mouseup",end);window.addEventListener("touchend",end);
+}
+const tickers=[];
+function masterTick(){ requestAnimationFrame(masterTick); for(const t of tickers){try{t();}catch(e){}} }
+if(TJS) masterTick();
+
+/* ============================================================
+   SCENE 1 · HERO — training wave over the dev team
+   ============================================================ */
+function bootHero(){
+  if(!TJS)return;
+  const canvas=document.getElementById("heroCanvas");
+  let renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true}); }
+  catch(e){ return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(46,1,0.1,100);
+  const rig=new THREE.Group();scene.add(rig);
+  let az=0.5,pol=0.15;
+  scene.add(new THREE.AmbientLight(0xffffff,0.7));
+  const key=new THREE.PointLight(0xffffff,0.9);key.position.set(6,8,8);scene.add(key);
+
+  // core
+  const core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.05,1),
+    new THREE.MeshStandardMaterial({color:0x1b1f27,emissive:0xfb7185,emissiveIntensity:.55,metalness:.4,roughness:.4,flatShading:true}));
+  rig.add(core);
+
+  // dev nodes on a sphere
+  const ROSE=new THREE.Color(0xfb7185), EM=new THREE.Color(0x34d399);
+  const nodes=[]; const N=18;
+  for(let i=0;i<N;i++){
+    const ph=Math.acos(1-2*(i+0.5)/N), th=Math.PI*(1+Math.sqrt(5))*i;
+    const r=2.9;
+    const m=new THREE.Mesh(new THREE.SphereGeometry(0.2,16,16),
+      new THREE.MeshStandardMaterial({color:ROSE.clone(),emissive:ROSE.clone(),emissiveIntensity:.4,roughness:.5}));
+    m.position.set(r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph), r*Math.sin(ph)*Math.sin(th));
+    m.userData={trained:0};
+    rig.add(m);nodes.push(m);
+  }
+  // sparks
+  const sparkGeo=new THREE.BufferGeometry();
+  const SP=60, pos=new Float32Array(SP*3), spd=[];
+  for(let i=0;i<SP;i++){ resetSpark(i,pos,spd); }
+  sparkGeo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  const sparks=new THREE.Points(sparkGeo,new THREE.PointsMaterial({color:0xf87171,size:0.13,transparent:true,opacity:.85}));
+  rig.add(sparks);
+  function resetSpark(i,pos,spd){
+    const n=nodes.length?nodes[(Math.random()*nodes.length)|0].position:{x:0,y:0,z:0};
+    pos[i*3]=n.x;pos[i*3+1]=n.y;pos[i*3+2]=n.z;
+    spd[i]={t:Math.random()}; 
+  }
+
+  orbitDrag(canvas,()=>({az,pol}),(a,p)=>{az=a;pol=p;});
+  function size(){const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  let wave=0;
+  tickers.push(()=>{
+    size();
+    az+=0.0016; wave=(wave+0.0028)%1.4;
+    // training wave: nodes whose normalized height < wave become trained
+    let trained=0;
+    nodes.forEach(m=>{
+      const hN=(m.position.y/2.9+1)/2; // 0..1
+      const want=hN < wave ? 1:0;
+      m.userData.trained += (want-m.userData.trained)*0.06;
+      const c=ROSE.clone().lerp(EM,m.userData.trained);
+      m.material.color.copy(c);m.material.emissive.copy(c);
+      const s=1+0.12*m.userData.trained;m.scale.setScalar(s);
+      trained+=m.userData.trained;
+    });
+    const tf=trained/nodes.length;
+    core.rotation.y+=0.004;core.rotation.x+=0.002;
+    core.material.emissive.copy(ROSE.clone().lerp(EM,tf));
+    // sparks travel core<-node, fewer when trained
+    const arr=sparkGeo.attributes.position.array;
+    for(let i=0;i<SP;i++){
+      spd[i].t+=0.02;
+      if(spd[i].t>1||Math.random()<0.002){ if(Math.random()<tf*0.85){/*suppressed when trained*/ arr[i*3+1]=99;spd[i].t=Math.random()*0.5;continue;} resetSpark(i,arr,spd); }
+      const sx=arr[i*3],sy=arr[i*3+1],sz=arr[i*3+2];
+      arr[i*3]=sx+(0-sx)*0.04;arr[i*3+1]=sy+(0-sy)*0.04;arr[i*3+2]=sz+(0-sz)*0.04;
     }
-    var ui=new THREE.Group();
-    ui.add(rect(0.85,0.18,0.95)); ui.add(rect(0.85,0.18,0.45)); ui.add(rect(0.85,0.18,-0.05));
-    ui.add(rect(0.5,0.2,-0.7));
-    g.add(ui); g._ui=ui; g._panel=panel;
-    // criteria bar (above board)
-    var barBg=new THREE.Mesh(new THREE.BoxGeometry(2.0,0.22,0.1),new THREE.MeshStandardMaterial({color:0x1b2533}));
-    barBg.position.set(0,1.95,0.15); g.add(barBg);
-    var barFill=new THREE.Mesh(new THREE.BoxGeometry(0.001,0.16,0.12),new THREE.MeshStandardMaterial({color:0x2bd07a,emissive:0x0a5a32}));
-    barFill.position.set(-1.0,1.95,0.2); g.add(barFill); g._bar=barFill;
-    g.position.set(xs[i],0.9,0); g._x=xs[i]; g._score=scores[i];
-    scene.add(g); boards.push(g);
-  }
-
-  var dragging=false,lastX=0,rotY=0;
-  renderer.domElement.addEventListener('pointerdown',function(e){dragging=true;lastX=e.clientX;});
-  window.addEventListener('pointerup',function(){dragging=false;});
-  window.addEventListener('pointermove',function(e){ if(!dragging)return; rotY+=(e.clientX-lastX)*0.005; lastX=e.clientX;});
-
-  var state='idle', t0=0, winner=1, caption=document.getElementById('benchCaption');
-  function scoreAndChoose(){
-    if(state!=='idle')return; state='scoring'; t0=performance.now();
-    caption.textContent='Applying evaluation criteria… the bars fill to each idea\u2019s score.';
-  }
-  document.getElementById('benchScore').onclick=scoreAndChoose;
-  document.getElementById('benchReset').onclick=function(){
-    state='idle';
-    boards.forEach(function(g,i){
-      g._bar.scale.x=0.001; g._bar.position.x=-1.0;
-      g.position.z=0; g.position.y=0.9; g._panel.material.color.setHex(0x33414f);
-      g._panel.material.emissive.setHex(0x000000);
-      g._ui.children.forEach(function(l){l.material.color.setHex(COL_WIRE);});
-    });
-    caption.textContent='Three candidate mock-ups — none chosen yet. The bars above each board are empty evaluation-criteria scores.';
-  };
-
-  function animate(){
-    requestAnimationFrame(animate);
-    var now=performance.now();
-    boards.forEach(function(g,i){
-      g.rotation.y = rotY*0.4 + Math.sin(now/2600 + i)*0.04;
-      if(state==='scoring'){
-        var p=Math.min(1,(now-t0)/1400);
-        var target=g._score* (2.0); // bar full width 2.0
-        g._bar.scale.x = Math.max(0.001, target*p / 1);
-        g._bar.position.x = -1.0 + (target*p)/2;
-        if(p>=1){ state='choose'; t0=now; }
-      } else if(state==='choose'){
-        var p2=Math.min(1,(now-t0)/1200);
-        if(i===winner){
-          g.position.z = 1.6*p2;
-          g.position.y = 0.9 + 0.25*Math.sin(p2*Math.PI);
-          // render: wireframe -> coloured detail
-          g._panel.material.color.setHex(0x21407a + 0);
-          g._panel.material.color.lerpColors(new THREE.Color(0x33414f), new THREE.Color(0x1f3e86), p2);
-          g._panel.material.emissive.setHex(0x0b1c40);
-          g._ui.children.forEach(function(l){ l.material.color.lerpColors(new THREE.Color(0x6b7a8d), new THREE.Color(0x8fb4ff), p2); });
-        } else {
-          g.position.z = -0.6*p2;
-          g._panel.material.opacity=1; 
-        }
-        if(p2>=1 && state==='choose'){ state='done';
-          caption.textContent='Idea 2 scored highest → it becomes the preferred design and renders into a finished, coloured interface. Ideas 1 & 3 stay as evaluated alternatives.';
-        }
-      }
-    });
+    sparks.material.opacity=0.2+0.65*(1-tf);
+    sparkGeo.attributes.position.needsUpdate=true;
+    rig.rotation.y=az;rig.rotation.x=pol;
+    cam.position.set(0,0,8.4);cam.lookAt(0,0,0);
     renderer.render(scene,cam);
-  }
-  animate();
-  window.addEventListener('resize',function(){
-    var w=stage.clientWidth||W; renderer.setSize(w,H); cam.aspect=w/H; cam.updateProjectionMatrix();
   });
-})();
+}
 
-/* ============ SCENE B — IPO machine ============ */
-(function(){
-  var stage=document.getElementById('ipoStage');
-  if(typeof THREE==='undefined'||!hasWebGL()){ fallback(stage,'IPO machine needs WebGL.'); return; }
-  var W=stage.clientWidth||820, H=360;
-  var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(W,H); stage.insertBefore(renderer.domElement, stage.firstChild);
-  var scene=new THREE.Scene();
-  var cam=new THREE.PerspectiveCamera(46,W/H,0.1,100); cam.position.set(0,3.0,10); cam.lookAt(0,0.2,0);
+/* ============================================================
+   SCENE 2 · LAB A · secure-dev culture simulator
+   ============================================================ */
+const cult={onboard:false,train:false,plan:false};
+function cultStats(){
+  let v=12;
+  if(cult.onboard)v-=2;
+  if(cult.train)v-=6;
+  if(cult.onboard&&cult.train)v-=1; // synergy
+  v=Math.max(2,v);
+  let trainedPct = cult.train?(cult.onboard?95:80):(cult.onboard?25:0);
+  let caught = cult.plan?Math.round(v*0.6):0;
+  return {v,trainedPct,caught};
+}
+function cultRender(){
+  const s=cultStats();
+  const vEl=document.getElementById("cVuln");vEl.textContent=s.v;
+  vEl.className="v "+(s.v<=5?"lo":s.v<=8?"":"hi");
+  document.getElementById("cCaught").textContent=s.caught;
+  document.getElementById("cTrained").textContent=s.trainedPct+"%";
+}
+function cultToggle(key,btn){ cult[key]=!cult[key];btn.classList.toggle("on",cult[key]);cultRender(); if(cultScene)cultScene.sync(); }
+let cultScene=null;
+function bootCult(){
+  cultRender();
+  if(!TJS){document.getElementById("cultNoGl").style.display="flex";return;}
+  const canvas=document.getElementById("cultCanvas");
+  let renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true}); }
+  catch(e){ document.getElementById("cultNoGl").style.display="flex"; return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(48,1,0.1,100);
+  const rig=new THREE.Group();scene.add(rig);
+  let az=0.4,pol=0.2;
   scene.add(new THREE.AmbientLight(0xffffff,0.75));
-  var key=new THREE.DirectionalLight(0xffffff,0.8); key.position.set(3,7,6); scene.add(key);
+  const pl=new THREE.PointLight(0xffffff,0.8);pl.position.set(5,7,6);scene.add(pl);
 
-  function label3d(text,color,x,y){
-    var c=document.createElement('canvas'); c.width=256;c.height=64; var ctx=c.getContext('2d');
-    ctx.fillStyle=color; ctx.font='bold 34px monospace'; ctx.textAlign='center'; ctx.fillText(text,128,44);
-    var tex=new THREE.CanvasTexture(c); var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true}));
-    sp.scale.set(2.6,0.65,1); sp.position.set(x,y,0.6); return sp;
+  const ROSE=new THREE.Color(0xfb7185), EM=new THREE.Color(0x34d399);
+  // codebase core
+  const core=new THREE.Mesh(new THREE.BoxGeometry(1.3,1.3,1.3),
+    new THREE.MeshStandardMaterial({color:0x222732,emissive:0x60a5fa,emissiveIntensity:.25,metalness:.5,roughness:.4}));
+  rig.add(core);
+  // shield ring (risk plan)
+  const shield=new THREE.Mesh(new THREE.TorusGeometry(1.9,0.05,12,60),
+    new THREE.MeshStandardMaterial({color:0x60a5fa,emissive:0x60a5fa,emissiveIntensity:.6,transparent:true,opacity:0}));
+  shield.rotation.x=Math.PI/2;rig.add(shield);
+
+  const nodes=[];const N=24;
+  for(let i=0;i<N;i++){
+    const ph=Math.acos(1-2*(i+0.5)/N), th=Math.PI*(1+Math.sqrt(5))*i, r=3.2;
+    const m=new THREE.Mesh(new THREE.SphereGeometry(0.21,16,16),
+      new THREE.MeshStandardMaterial({color:ROSE.clone(),emissive:ROSE.clone(),emissiveIntensity:.35,roughness:.5}));
+    m.position.set(r*Math.sin(ph)*Math.cos(th),r*Math.cos(ph),r*Math.sin(ph)*Math.sin(th));
+    m.userData={trained:0,target:0};rig.add(m);nodes.push(m);
   }
-  // hopper (input) left, drum (process) centre, tray (output) right
-  var hopper=new THREE.Mesh(new THREE.CylinderGeometry(0.9,0.4,1.4,4),new THREE.MeshStandardMaterial({color:0x2D4ED8,roughness:.5,metalness:.2}));
-  hopper.position.set(-4,1.4,0); hopper.rotation.y=Math.PI/4; scene.add(hopper);
-  var drum=new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.1,1.6,24),new THREE.MeshStandardMaterial({color:0x9aa6b4,roughness:.45,metalness:.4}));
-  drum.position.set(0,1.2,0); drum.rotation.z=Math.PI/2; scene.add(drum);
-  var tray=new THREE.Mesh(new THREE.BoxGeometry(1.8,0.3,1.4),new THREE.MeshStandardMaterial({color:0xC97312,roughness:.6}));
-  tray.position.set(4,0.4,0); scene.add(tray);
-  // chute lines
-  var baseMat=new THREE.MeshStandardMaterial({color:0x33414f,roughness:.9});
-  var base=new THREE.Mesh(new THREE.BoxGeometry(11,0.3,3),baseMat); base.position.y=-0.2; scene.add(base);
+  // sparks
+  const SP=48,sgeo=new THREE.BufferGeometry(),spos=new Float32Array(SP*3),sd=[];
+  for(let i=0;i<SP;i++){spawn(i);}
+  sgeo.setAttribute("position",new THREE.BufferAttribute(spos,3));
+  const sparks=new THREE.Points(sgeo,new THREE.PointsMaterial({color:0xf87171,size:0.15,transparent:true,opacity:.8}));
+  rig.add(sparks);
+  function spawn(i){const n=nodes[(Math.random()*nodes.length)|0].position;spos[i*3]=n.x;spos[i*3+1]=n.y;spos[i*3+2]=n.z;sd[i]={a:1,caught:false};}
 
-  var labels=[label3d('INPUT','#7E97FF',-4,3.1),label3d('PROCESS','#cfd8e3',0,3.1),label3d('OUTPUT','#F0B25E',4,3.1)];
-  labels.forEach(function(l){scene.add(l);});
-  var labelsOn=true;
-
-  var balls=[]; var inputNames=['hours','rate']; var idx=0;
-  function drop(){
-    var name=inputNames[idx%2]; idx++;
-    var geo=new THREE.SphereGeometry(0.28,16,16);
-    var m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0x2D4ED8,emissive:0x0a1838,roughness:.4}));
-    m.position.set(-4,3.0,0); m._phase='in'; m._t=performance.now(); scene.add(m); balls.push(m);
-    document.getElementById('ipoCaption').innerHTML='Dropped <b>'+name+'</b> into the hopper → through the process drum → out as <b>net pay</b>.';
+  function sync(){
+    const s=cultStats();
+    const tCount=Math.round(s.trainedPct/100*nodes.length);
+    nodes.forEach((m,i)=>m.userData.target=i<tCount?1:0);
+    shield.userData={want:cult.plan?1:0};
   }
-  document.getElementById('ipoFeed').onclick=drop;
-  document.getElementById('ipoReset').onclick=function(){ balls.forEach(function(b){scene.remove(b);}); balls.length=0; idx=0;
-    document.getElementById('ipoCaption').innerHTML='Job: <b>pay calculator</b> — Input: hours &amp; rate · Process: multiply &amp; deduct tax · Output: net pay.'; };
-  document.getElementById('ipoLabels').onclick=function(){ labelsOn=!labelsOn; this.classList.toggle('on',labelsOn); labels.forEach(function(l){l.visible=labelsOn;}); };
+  cultScene={sync};sync();
 
-  var dragging=false,lastX=0,rotY=0;
-  renderer.domElement.addEventListener('pointerdown',function(e){dragging=true;lastX=e.clientX;});
-  window.addEventListener('pointerup',function(){dragging=false;});
-  window.addEventListener('pointermove',function(e){ if(!dragging)return; rotY+=(e.clientX-lastX)*0.005; lastX=e.clientX;});
-
-  function animate(){
-    requestAnimationFrame(animate);
-    var now=performance.now();
-    drum.rotation.x += 0.03;
-    scene.rotation.y = rotY;
-    for(var i=balls.length-1;i>=0;i--){
-      var b=balls[i]; var dt=(now-b._t)/1000;
-      if(b._phase==='in'){ b.position.x += 0.045; b.position.y = 3.0 - Math.min(1.6, dt*2.2);
-        if(b.position.x>=0){ b._phase='proc'; b._t=now; }
-      } else if(b._phase==='proc'){ var a=(now-b._t)/700; b.position.x=Math.sin(a*6.28)*0.3; b.position.y=1.2+Math.cos(a*6.28)*0.3;
-        b.material.color.lerpColors(new THREE.Color(0x2D4ED8),new THREE.Color(0xC97312),Math.min(1,a));
-        if(a>=1){ b._phase='out'; b._t=now; }
-      } else if(b._phase==='out'){ b.position.x += 0.05; b.position.y = 1.2 - Math.min(0.8,(now-b._t)/700*0.8);
-        if(b.position.x>=4){ scene.remove(b); balls.splice(i,1); }
-      }
+  orbitDrag(canvas,()=>({az,pol}),(a,p)=>{az=a;pol=p;});
+  function size(){const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  let injTimer=0;
+  tickers.push(()=>{
+    size();az+=0.0012;
+    const s=cultStats();
+    nodes.forEach(m=>{
+      m.userData.trained+=(m.userData.target-m.userData.trained)*0.08;
+      const c=ROSE.clone().lerp(EM,m.userData.trained);
+      m.material.color.copy(c);m.material.emissive.copy(c);
+    });
+    const so=(shield.userData&&shield.userData.want)||0;
+    shield.material.opacity+=((so?0.7:0)-shield.material.opacity)*0.1;
+    shield.rotation.z+=0.01;
+    core.rotation.y+=0.005;
+    // spark flow rate tied to vulns
+    const arr=sgeo.attributes.position.array;
+    for(let i=0;i<SP;i++){
+      const active=i < Math.round(SP*(s.v/12));
+      if(!active){arr[i*3+1]=99;continue;}
+      let x=arr[i*3],y=arr[i*3+1],z=arr[i*3+2];
+      const d=Math.sqrt(x*x+y*y+z*z);
+      if(cult.plan && d<2.0 && !sd[i].caught){ sd[i].caught=true; } // caught at shield
+      const tgt=sd[i].caught?1.9:0; const dir=sd[i].caught? (d<tgt?0.06:-0.06):0.045;
+      arr[i*3]=x+(0-x)*0.045;arr[i*3+1]=y+(0-y)*0.045;arr[i*3+2]=z+(0-z)*0.045;
+      if(d<0.35||(sd[i].caught&&Math.abs(d-1.9)<0.2)){spawn(i);}
     }
+    sgeo.attributes.position.needsUpdate=true;
+    rig.rotation.y=az;rig.rotation.x=pol;
+    cam.position.set(0,0,9);cam.lookAt(0,0,0);
     renderer.render(scene,cam);
-  }
-  animate();
-  window.addEventListener('resize',function(){
-    var w=stage.clientWidth||W; renderer.setSize(w,H); cam.aspect=w/H; cam.updateProjectionMatrix();
   });
-})();
+}
+
+/* ============================================================
+   SCENE 3 · LAB B · risk register workbench (5×5 matrix)
+   ============================================================ */
+const RISKS=[
+ {name:"New dev leaks a secret", L:4,C:5, base:[4,5],
+  treat:{avoid:[1,5],reduce:[2,5],transfer:[4,4],accept:[4,5]}, sel:null},
+ {name:"Unpatched dependency exploited", L:4,C:4, base:[4,4],
+  treat:{avoid:[1,4],reduce:[2,3],transfer:[2,3],accept:[4,4]}, sel:null},
+ {name:"Phishing captures admin login", L:3,C:5, base:[3,5],
+  treat:{avoid:[3,5],reduce:[1,5],transfer:[3,3],accept:[3,5]}, sel:null},
+ {name:"Cosmetic UI bug, no data exposed", L:2,C:1, base:[2,1],
+  treat:{avoid:[1,1],reduce:[1,1],transfer:[2,1],accept:[2,1]}, sel:null}
+];
+const TLABEL={avoid:"Avoid",reduce:"Reduce",transfer:"Transfer",accept:"Accept"};
+function zoneColor(L,C){const s=L*C; if(s<=4)return 0x34d399; if(s<=9)return 0xfbbf24; if(s<=15)return 0xfb7185; return 0xf87171;}
+function buildRiskRows(){
+  const host=document.getElementById("rwRows");host.innerHTML="";
+  RISKS.forEach((r,i)=>{
+    const row=document.createElement("div");row.className="rw-row";
+    row.innerHTML=`<span class="rname">${r.name}</span><span class="rpos" id="rpos${i}">L${r.L} · C${r.C}</span>
+      <span class="rw-treat">${Object.keys(TLABEL).map(k=>`<button id="rt${i}-${k}" onclick="rwTreat(${i},'${k}',this)">${TLABEL[k]}</button>`).join("")}</span>`;
+    host.appendChild(row);
+  });
+  rwResidual();
+}
+let riskScene=null;
+function rwTreat(i,k,btn){
+  const r=RISKS[i];const[L,C]=r.treat[k];r.L=L;r.C=C;r.sel=k;
+  const row=btn.parentElement;row.querySelectorAll("button").forEach(b=>b.classList.remove("sel"));btn.classList.add("sel");
+  document.getElementById("rpos"+i).textContent=`L${L} · C${C}`;
+  rwResidual(); if(riskScene)riskScene.sync();
+}
+function rwResidual(){
+  let cur=0,base=0;RISKS.forEach(r=>{cur+=r.L*r.C;base+=r.base[0]*r.base[1];});
+  const pct=Math.round(cur/base*100);
+  const el=document.getElementById("rwResidual");
+  el.textContent="residual risk: "+pct+"%";
+  el.style.color=pct<=45?"var(--good)":pct<=70?"var(--warn)":"var(--cc)";
+}
+function bootRisk(){
+  buildRiskRows();
+  if(!TJS){document.getElementById("riskNoGl").style.display="flex";return;}
+  const canvas=document.getElementById("riskCanvas");
+  let renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true}); }
+  catch(e){ document.getElementById("riskNoGl").style.display="flex"; return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(45,1,0.1,100);
+  scene.add(new THREE.AmbientLight(0xffffff,0.85));
+  const pl=new THREE.PointLight(0xffffff,0.7);pl.position.set(4,9,5);scene.add(pl);
+  const rig=new THREE.Group();scene.add(rig);
+  rig.rotation.x=-0.62; rig.rotation.y=-0.0;
+
+  // 5x5 grid cells
+  const G=5,cell=1.0,off=(G-1)*cell/2;
+  for(let l=0;l<G;l++)for(let c=0;c<G;c++){
+    const m=new THREE.Mesh(new THREE.BoxGeometry(cell*0.94,0.08,cell*0.94),
+      new THREE.MeshStandardMaterial({color:zoneColor(l+1,c+1),roughness:.85,transparent:true,opacity:.32}));
+    m.position.set(l*cell-off,0,off-c*cell);
+    rig.add(m);
+  }
+  // axis hint markers (small bars)
+  // risk blocks
+  const EM=new THREE.Color(0x34d399);
+  const blocks=RISKS.map((r,i)=>{
+    const m=new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5),
+      new THREE.MeshStandardMaterial({color:zoneColor(r.L,r.C),emissive:zoneColor(r.L,r.C),emissiveIntensity:.3,roughness:.4}));
+    m.userData={tx:0,tz:0,ty:0};
+    rig.add(m);return m;
+  });
+  function sync(){
+    RISKS.forEach((r,i)=>{
+      blocks[i].userData.tx=(r.L-1)*cell-off;
+      blocks[i].userData.tz=off-(r.C-1)*cell;
+      blocks[i].userData.ty=0.4+ (r.L*r.C)/25*0.7;
+      const col=new THREE.Color(zoneColor(r.L,r.C));
+      blocks[i].material.color.copy(col);blocks[i].material.emissive.copy(col);
+    });
+  }
+  riskScene={sync};sync();
+  // make blocks start at base
+  blocks.forEach((b,i)=>{b.position.set((RISKS[i].base[0]-1)*cell-off,0.5,off-(RISKS[i].base[1]-1)*cell);});
+
+  function size(){const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  let spin=0;
+  tickers.push(()=>{
+    size();spin+=0.0026;
+    blocks.forEach(b=>{
+      b.position.x+=(b.userData.tx-b.position.x)*0.12;
+      b.position.z+=(b.userData.tz-b.position.z)*0.12;
+      b.position.y+=(b.userData.ty-b.position.y)*0.12;
+      b.rotation.y+=0.01;
+    });
+    rig.rotation.y=Math.sin(spin)*0.28;
+    cam.position.set(0,6.4,7.2);cam.lookAt(0,0,0);
+    renderer.render(scene,cam);
+  });
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+buildSorter();buildMCQ();buildPel();buildPQ();
+document.getElementById("pelInput").addEventListener("input",pelCheck);
+window.addEventListener("load",()=>{
+  try{bootHero();}catch(e){}
+  try{bootCult();}catch(e){console.warn(e);}
+  try{bootRisk();}catch(e){console.warn(e);}
+  onScroll();
+});
+// expose for inline handlers
+window.toggleTheme=toggleTheme;window.fontStep=fontStep;
+window.cultToggle=cultToggle;window.rwTreat=rwTreat;
+window.pqShow=pqShow;window.pqMark=pqMark;window.resetScore=resetScore;
+window.pelModel=pelModel;window.pelClear=pelClear;
 </script>
-<script defer src="assets/chatbot.js"></script><!--dv-chatbot-->
+<script defer src="../assets/chatbot.js"></script><!--dv-chatbot-->
 </body>
 </html>

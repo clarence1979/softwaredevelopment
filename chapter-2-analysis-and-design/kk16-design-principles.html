@@ -1,729 +1,881 @@
 <!DOCTYPE html>
-<html lang="en-AU" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Design · VCE Software Development · The PSM Design Stage · Digital Vector</title>
+<title>KK16 · Design principles for the UI — Digital Vector</title>
 <style>
-:root{
-  --ink:#16202B; --muted:#5B6976; --paper:#EEF1F5; --card:#FFFFFF;
-  /* Design semantics: appearance = indigo, functionality = amber */
-  --alpha:#2D4ED8; --alpha-soft:#E7ECFB; --alpha-line:#BCC8F2;   /* appearance / "look" */
-  --beta:#C97312;  --beta-soft:#FBEFDE;  --beta-line:#EFD3A8;    /* functionality / "do"  */
-  --pass:#1B7E45; --pass-soft:#E3F2E8;
-  --trap:#C0392F; --trap-soft:#F8E5E3;
-  --logic:#6D3FB0; --logic-soft:#EFE7FA; --logic-line:#D6C4EE;   /* logical tools  */
-  --phys:#0E7C86;  --phys-soft:#DEF3F4;  --phys-line:#AEDDE0;    /* physical tools */
-  --hair:#D3DAE3; --hair2:#E4E9EF;
-  --mono:ui-monospace,"Cascadia Code","SF Mono",Consolas,"Liberation Mono",monospace;
-  --sans:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --fs:1;
+:root, [data-theme="dark"]{
+  --bg:#1e1e1e; --bg-2:#252526; --bg-3:#2d2d30; --bg-frame:#1b1b1d; --titlebar:#323233;
+  --statusbar:#0078d4; --card:#252526; --hover:rgba(255,255,255,.05);
+  --border:#3c3c3c; --border-2:#4a4a4a;
+  --text:#cccccc; --muted:#8a8a8a; --bright:#ffffff;
+  --kw:#4fc1ff; --str:#ce9178; --com:#6a9955; --fn:#dcdcaa;
+  --shadow:rgba(0,0,0,.45); --frame-bg:#fff;
+  --cc:#c084fc;                /* chapter accent: Analysis & Design */
+  --good:#34d399; --bad:#fb7185; --warn:#fbbf24;
+  --p-align:#4fc1ff; --p-bal:#34d399; --p-con:#fbbf24; --p-space:#22d3ee;
+  --p-text:#f472b6; --p-use:#a78bfa; --p-nav:#fb923c;
 }
-[data-theme="dark"]{
-  --ink:#E7EDF4; --muted:#9BA9B8; --paper:#0E141B; --card:#161F29;
-  --alpha-soft:#1B2740; --alpha-line:#2C3E6B;
-  --beta-soft:#3A2A14; --beta-line:#6A4C1E;
-  --pass-soft:#16301F; --trap-soft:#3A1C18;
-  --logic-soft:#251A38; --logic-line:#3E2C5C;
-  --phys-soft:#0F2C2E; --phys-line:#1E4A4D;
-  --hair:#28323D; --hair2:#202A34;
+[data-theme="light"]{
+  --bg:#ffffff; --bg-2:#f3f3f3; --bg-3:#ececec; --bg-frame:#fbfbfb; --titlebar:#dddddd;
+  --statusbar:#007acc; --card:#f8f8f8; --hover:rgba(0,0,0,.05);
+  --border:#d0d0d0; --border-2:#c0c0c0;
+  --text:#2b2b2b; --muted:#6a6a6a; --bright:#111;
+  --kw:#0070c1; --str:#a31515; --com:#008000; --fn:#795e26;
+  --shadow:rgba(0,0,0,.14); --frame-bg:#fff;
+  --cc:#9333ea;
+  --good:#059669; --bad:#e11d48; --warn:#b45309;
+  --p-align:#0ea5e9; --p-bal:#059669; --p-con:#b45309; --p-space:#0891b2;
+  --p-text:#db2777; --p-use:#7c3aed; --p-nav:#ea580c;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth; font-size:calc(16px * var(--fs))}
+:root{ --fs:15px; --maxw:1080px; }
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ font-size:var(--fs); scroll-behavior:smooth; }
 body{
-  margin:0; background:var(--paper); color:var(--ink);
-  font-family:var(--sans); line-height:1.62; font-size:1rem;
-  -webkit-font-smoothing:antialiased; transition:background .3s, color .3s;
+  font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  background:var(--bg); color:var(--text); height:100vh; display:flex; flex-direction:column;
+  overflow:hidden; font-size:1rem; line-height:1.6; transition:background .3s,color .3s;
 }
-.wrap{max-width:920px; margin:0 auto; padding:0 22px}
-a{color:var(--alpha)}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important}}
+code,kbd,.mono{ font-family:'Cascadia Code','Consolas','SF Mono',ui-monospace,monospace; }
+::selection{ background:color-mix(in srgb,var(--cc) 40%,transparent); color:var(--bright); }
 
-/* ---------- header ---------- */
-header.top{
-  background:#0E1620; color:#E9EEF4; padding:46px 0 38px; position:relative; overflow:hidden;
-  border-bottom:3px solid var(--alpha);
-}
-header.top::after{
-  content:""; position:absolute; inset:0;
-  background:
-    radial-gradient(440px 220px at 12% 0%, rgba(45,78,216,.32), transparent 70%),
-    radial-gradient(440px 240px at 90% 120%, rgba(201,115,18,.26), transparent 70%);
-  pointer-events:none;
-}
-.brand{font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:#8FA0B4; margin-bottom:18px; position:relative; z-index:1}
-.brand b{color:#C9D4E2; font-weight:600}
-h1.title{font-size:clamp(30px,5.4vw,48px); line-height:1.05; margin:0 0 14px; letter-spacing:-.02em; font-weight:760; position:relative; z-index:1}
-h1.title .a{color:#7E97FF} h1.title .b{color:#F0B25E}
-.subtitle{color:#AEBCCC; font-size:1.06rem; max-width:660px; margin:0; position:relative; z-index:1}
-.meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; position:relative; z-index:1}
-.tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; padding:6px 11px; border-radius:6px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); color:#C6D2DF}
+/* ---------- title bar ---------- */
+#titlebar{ background:var(--titlebar); height:38px; display:flex; align-items:center; gap:12px;
+  padding:0 14px; border-bottom:1px solid var(--border); user-select:none; flex-shrink:0; }
+#titlebar .dots span{ width:12px; height:12px; border-radius:50%; display:inline-block; margin-right:6px; }
+.dots .c{ background:#ff5f57 } .dots .m{ background:#febc2e } .dots .x{ background:#28c840 }
+#titlebar .brand{ display:flex; align-items:center; gap:8px; font-weight:700; letter-spacing:.3px; color:var(--bright); }
+#titlebar .brand .logo{ width:20px; height:20px; border-radius:5px; background:var(--dv-gradient,linear-gradient(120deg,#2bb8e6,#a855f7));
+  background:linear-gradient(120deg,#2bb8e6,#4fc1ff 40%,#a855f7); box-shadow:0 0 10px rgba(168,85,247,.5); }
+#titlebar .crumb{ flex:1; text-align:center; color:var(--muted); font-size:.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#titlebar .crumb b{ color:var(--cc); font-weight:600; }
+.tb-controls{ display:flex; align-items:center; gap:6px; }
+.tb-btn{ display:flex; align-items:center; gap:5px; height:26px; padding:0 9px; border-radius:6px;
+  background:transparent; border:1px solid transparent; color:var(--muted); cursor:pointer; font-size:.78rem; transition:.15s; }
+.tb-btn:hover{ background:var(--hover); color:var(--bright); border-color:var(--border); }
+.tb-group{ display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+.tb-group .tb-btn{ border:none; border-radius:0; height:26px; }
+.tb-group .lbl{ font-size:.7rem; color:var(--muted); min-width:38px; text-align:center; }
 
-/* ---------- toolbar ---------- */
-.toolbar{position:sticky; top:0; z-index:40; background:color-mix(in srgb,var(--paper) 86%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--hair)}
-.toolbar .wrap{display:flex; align-items:center; gap:10px; padding:9px 22px}
-.progress{flex:1; height:6px; background:var(--hair2); border-radius:99px; overflow:hidden}
-.progress > i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--alpha),var(--beta)); transition:width .25s}
-.tbtn{font-family:var(--mono); font-size:12px; border:1px solid var(--hair); background:var(--card); color:var(--ink); border-radius:7px; padding:6px 10px; cursor:pointer}
-.tbtn:hover{border-color:var(--alpha)}
+/* ---------- shell ---------- */
+#shell{ display:flex; flex:1; overflow:hidden; }
+#rail{ width:248px; flex-shrink:0; background:var(--bg-2); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; overflow:hidden; transition:width .2s; }
+#rail.collapsed{ width:0; border:none; }
+.rail-top{ padding:14px 16px 8px; }
+.rail-eyebrow{ font-size:.62rem; letter-spacing:1.4px; text-transform:uppercase; color:var(--cc); font-weight:800; }
+.rail-title{ font-size:.95rem; color:var(--bright); font-weight:600; margin-top:3px; line-height:1.3; }
+.rail-meta{ font-size:.66rem; color:var(--muted); margin-top:6px; display:flex; gap:6px; flex-wrap:wrap; }
+.rail-meta .pill{ border:1px solid var(--border-2); border-radius:20px; padding:2px 8px; }
+.rail-nav{ flex:1; overflow-y:auto; padding:6px 8px 16px; }
+.rail-nav::-webkit-scrollbar{ width:8px } .rail-nav::-webkit-scrollbar-thumb{ background:var(--border-2); border-radius:4px }
+.nav-item{ display:flex; align-items:center; gap:10px; padding:7px 10px; border-radius:7px; cursor:pointer;
+  color:var(--muted); font-size:.82rem; border-left:2px solid transparent; transition:.12s; }
+.nav-item:hover{ background:var(--hover); color:var(--text); }
+.nav-item.active{ background:color-mix(in srgb,var(--cc) 16%,transparent); color:var(--bright); border-left-color:var(--cc); font-weight:600; }
+.nav-item .n{ font-family:'Cascadia Code',monospace; font-size:.66rem; font-weight:700; color:var(--cc); min-width:20px; }
+.rail-foot{ padding:10px 16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; }
 
-/* ---------- pipeline hero ---------- */
-.pipeline{margin:30px 0 2px; display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--hair); border-radius:12px; overflow:hidden; position:relative; z-index:1}
-.pstep{padding:14px 12px; text-align:center; background:var(--card); border-right:1px solid var(--hair); position:relative}
-.pstep:last-child{border-right:none}
-.pstep .num{font-family:var(--mono); font-size:11px; color:var(--muted)}
-.pstep .lbl{font-weight:680; margin-top:2px; font-size:.96rem}
-.pstep .sub{font-size:.74rem; color:var(--muted); margin-top:1px}
-.pstep.is-design{background:linear-gradient(180deg,var(--alpha-soft),transparent)}
-.pstep.is-design .lbl{color:var(--alpha)}
-.pstep.is-design::after{content:"YOU ARE HERE"; position:absolute; left:50%; transform:translateX(-50%); bottom:-9px; font-family:var(--mono); font-size:8.5px; letter-spacing:.12em; color:#fff; background:var(--alpha); padding:2px 7px; border-radius:99px; white-space:nowrap}
+/* radial score dock */
+.score-dock{ display:flex; align-items:center; gap:11px; }
+.radial{ --pct:0; width:46px; height:46px; border-radius:50%; flex-shrink:0;
+  background:conic-gradient(var(--cc) calc(var(--pct)*1%), var(--bg-3) 0);
+  display:flex; align-items:center; justify-content:center; }
+.radial::before{ content:''; position:absolute; width:34px; height:34px; border-radius:50%; background:var(--bg-2); }
+.radial span{ position:relative; font-size:.62rem; font-weight:800; color:var(--bright); }
+.score-dock .meta{ font-size:.64rem; color:var(--muted); line-height:1.35; }
+.score-dock .meta b{ color:var(--bright); font-size:.74rem; }
 
-/* ---------- table of contents ---------- */
-.toc{background:var(--card); border:1px solid var(--hair); border-radius:14px; padding:18px 20px; margin:30px 0}
-.toc h3{margin:0 0 12px; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-family:var(--mono); font-weight:600}
-.toc ol{margin:0; padding:0; list-style:none; counter-reset:toc; columns:2; column-gap:26px}
-.toc li{counter-increment:toc; break-inside:avoid; margin:5px 0}
-.toc a{display:flex; gap:9px; text-decoration:none; color:var(--ink); padding:3px 0; align-items:baseline}
-.toc a::before{content:counter(toc,decimal-leading-zero); font-family:var(--mono); font-size:11px; color:var(--alpha); font-weight:600}
-.toc a:hover{color:var(--alpha)}
-@media (max-width:620px){.toc ol{columns:1}}
+/* ---------- main ---------- */
+#main{ flex:1; overflow-y:auto; scroll-behavior:smooth; position:relative; }
+#main::-webkit-scrollbar{ width:11px } #main::-webkit-scrollbar-thumb{ background:var(--border-2); border-radius:5px }
+.wrap{ max-width:var(--maxw); margin:0 auto; padding:0 clamp(18px,4vw,46px) 120px; }
+section{ scroll-margin-top:20px; padding-top:46px; }
+.eyebrow{ font-size:.7rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--cc); font-weight:800; display:flex; align-items:center; gap:9px; }
+.eyebrow .sn{ font-family:'Cascadia Code',monospace; background:var(--cc); color:#1a0a2e; padding:2px 8px; border-radius:5px; font-size:.66rem; }
+h1.dh{ font-size:clamp(1.9rem,4.4vw,3rem); font-weight:300; letter-spacing:-1px; color:var(--bright); margin:14px 0; line-height:1.04; }
+h1.dh b{ font-weight:700; background:linear-gradient(110deg,var(--cc),#f472b6); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+h2.sh{ font-size:clamp(1.4rem,3vw,2rem); font-weight:300; color:var(--bright); letter-spacing:-.5px; margin:8px 0 14px; }
+h2.sh b{ font-weight:700; color:var(--cc); }
+h3.ssh{ font-size:1.15rem; font-weight:600; color:var(--bright); margin:22px 0 10px; }
+p.lead{ font-size:1.08rem; color:var(--text); max-width:74ch; }
+p{ max-width:76ch; }
+.muted{ color:var(--muted); }
+a.link{ color:var(--cc); text-decoration:none; border-bottom:1px dotted var(--cc); }
 
-/* ---------- sections ---------- */
-main{padding:14px 0 60px}
-section{padding:34px 0; border-top:1px solid var(--hair)}
-section:first-child{border-top:none}
-.eyebrow{display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:9px}
-.eyebrow .dot{width:9px; height:9px; border-radius:99px; background:var(--alpha); box-shadow:0 0 0 4px var(--alpha-soft)}
-h2.sec{font-size:clamp(22px,3.4vw,30px); line-height:1.16; margin:0 0 8px; letter-spacing:-.01em; font-weight:740}
-h3.sub{font-size:1.12rem; margin:26px 0 8px; font-weight:700}
-.lead{color:var(--muted); font-size:1.04rem; max-width:680px; margin:0 0 8px}
-p{margin:12px 0}
-.wrap > section p strong, section .lead strong{color:var(--ink)}
-.k-app{color:var(--alpha); font-weight:680}
-.k-func{color:var(--beta); font-weight:680}
-.k-log{color:var(--logic); font-weight:680}
-.k-phy{color:var(--phys); font-weight:680}
+.hero{ position:relative; border-radius:18px; overflow:hidden; border:1px solid var(--border);
+  background:radial-gradient(120% 120% at 80% 0%, color-mix(in srgb,var(--cc) 18%,var(--bg-frame)), var(--bg-frame));
+  min-height:380px; display:flex; align-items:flex-end; margin-top:18px; }
+#heroCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.hero-copy{ position:relative; padding:clamp(22px,4vw,40px); z-index:2; }
+.hero-tag{ display:inline-flex; gap:8px; align-items:center; font-size:.72rem; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; color:var(--cc); border:1px solid var(--cc); border-radius:30px; padding:5px 12px;
+  background:color-mix(in srgb,var(--cc) 14%,transparent); backdrop-filter:blur(4px); }
 
-/* ---------- callouts ---------- */
-.callout{border-radius:12px; padding:14px 16px 14px 18px; margin:16px 0; border:1px solid var(--hair); background:var(--card); position:relative}
-.callout .ct{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; margin-bottom:5px}
-.callout.tip{border-left:4px solid var(--alpha)} .callout.tip .ct{color:var(--alpha)}
-.callout.warn{border-left:4px solid var(--beta)} .callout.warn .ct{color:var(--beta)}
-.callout.trap{border-left:4px solid var(--trap); background:var(--trap-soft)} .callout.trap .ct{color:var(--trap)}
-.callout.pass{border-left:4px solid var(--pass); background:var(--pass-soft)} .callout.pass .ct{color:var(--pass)}
-.callout p{margin:6px 0 0}
+.card{ background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px 24px; margin:18px 0; }
+.grid{ display:grid; gap:16px; }
+.g2{ grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }
+.g3{ grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); }
 
-/* ---------- mnemonic block ---------- */
-.mne{border:2px dashed var(--beta-line); background:var(--beta-soft); border-radius:14px; padding:16px 18px; margin:18px 0}
-.mne .tag2{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:#fff; background:var(--beta); padding:3px 9px; border-radius:99px; margin-bottom:8px}
-.mne h4{margin:0 0 6px; font-size:1.18rem; font-weight:780}
-.mne .word{font-family:var(--mono); font-weight:700; letter-spacing:.04em; color:var(--beta)}
-.mne p{margin:6px 0 0; font-size:.96rem}
+.callout{ border-left:3px solid var(--cc); background:color-mix(in srgb,var(--cc) 9%,var(--card));
+  border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0; }
+.callout.good{ border-color:var(--good); background:color-mix(in srgb,var(--good) 9%,var(--card)); }
+.callout.bad{ border-color:var(--bad); background:color-mix(in srgb,var(--bad) 9%,var(--card)); }
+.callout.warn{ border-color:var(--warn); background:color-mix(in srgb,var(--warn) 10%,var(--card)); }
+.callout h4{ font-size:.92rem; margin-bottom:5px; color:var(--bright); display:flex; gap:8px; align-items:center; }
+.callout .tagword{ font-size:.62rem; font-weight:800; letter-spacing:1px; text-transform:uppercase;
+  padding:2px 7px; border-radius:5px; background:var(--cc); color:#1a0a2e; }
+.callout.good .tagword{ background:var(--good); color:#06251a; }
+.callout.bad .tagword{ background:var(--bad); color:#3a0010; }
+.callout.warn .tagword{ background:var(--warn); color:#3a2600; }
 
-/* ---------- generic chips ---------- */
-.chips{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
-.chip{font-family:var(--mono); font-size:12.5px; padding:6px 11px; border-radius:8px; border:1px solid var(--hair); background:var(--card); cursor:default}
-.chip.app{border-color:var(--alpha-line); background:var(--alpha-soft); color:var(--alpha)}
-.chip.func{border-color:var(--beta-line); background:var(--beta-soft); color:var(--beta)}
-.chip.log{border-color:var(--logic-line); background:var(--logic-soft); color:var(--logic)}
-.chip.phy{border-color:var(--phys-line); background:var(--phys-soft); color:var(--phys)}
+.chips{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.chip{ font-size:.72rem; font-weight:600; padding:5px 11px; border-radius:20px; border:1px solid var(--border-2);
+  color:var(--text); background:var(--bg-3); cursor:default; }
+.chip.on{ color:var(--cc); border-color:var(--cc); background:color-mix(in srgb,var(--cc) 12%,transparent); }
 
-/* ---------- tables ---------- */
-.tbl{width:100%; border-collapse:collapse; margin:16px 0; font-size:.94rem; background:var(--card); border:1px solid var(--hair); border-radius:10px; overflow:hidden}
-.tbl th,.tbl td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--hair2); vertical-align:top}
-.tbl th{background:var(--hair2); font-size:.74rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-family:var(--mono); font-weight:600}
-.tbl tr:last-child td{border-bottom:none}
-.tbl code{font-family:var(--mono); font-size:.86em}
+table.tbl{ width:100%; border-collapse:collapse; margin:14px 0; font-size:.86rem; }
+table.tbl th, table.tbl td{ border:1px solid var(--border); padding:9px 12px; text-align:left; vertical-align:top; }
+table.tbl th{ background:var(--bg-3); color:var(--bright); font-weight:600; }
+table.tbl tr:nth-child(even) td{ background:color-mix(in srgb,var(--cc) 4%,transparent); }
 
-/* ---------- code / pseudocode blocks ---------- */
-pre.code{background:#0E1620; color:#D8E2EE; border-radius:11px; padding:15px 16px; overflow:auto; font-family:var(--mono); font-size:.86rem; line-height:1.6; margin:14px 0; border:1px solid #1d2935}
-pre.code .kw{color:#7E97FF; font-weight:600}
-pre.code .cm{color:#7C8AA0; font-style:italic}
-pre.code .st{color:#F0B25E}
-pre.code .in{display:inline-block; width:1.4em}
+.btn{ font-family:inherit; font-size:.82rem; font-weight:600; border:1px solid var(--border-2);
+  background:var(--bg-3); color:var(--text); padding:8px 14px; border-radius:8px; cursor:pointer; transition:.15s; }
+.btn:hover{ border-color:var(--cc); color:var(--bright); transform:translateY(-1px); }
+.btn.primary{ background:var(--cc); color:#1a0a2e; border-color:var(--cc); }
+.btn.sm{ padding:5px 10px; font-size:.74rem; }
+.btnrow{ display:flex; gap:9px; flex-wrap:wrap; margin:12px 0; }
 
-/* ---------- 3D stage ---------- */
-.stage{position:relative; width:100%; border-radius:14px; overflow:hidden; border:1px solid var(--hair); background:linear-gradient(180deg,#0E1620,#13202c); min-height:340px}
-.stage canvas{display:block; width:100%}
-.stage .hint{position:absolute; left:12px; bottom:11px; font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; color:#9fb0c4; background:rgba(0,0,0,.35); padding:4px 8px; border-radius:6px; pointer-events:none}
-.stage .ctrls{position:absolute; right:11px; top:11px; display:flex; gap:7px}
-.stage .ctrls button{font-family:var(--mono); font-size:11px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.4); color:#dbe6f1; border-radius:7px; padding:6px 10px; cursor:pointer}
-.stage .ctrls button:hover{border-color:#7E97FF; color:#fff}
-.stage .ctrls button.on{background:var(--alpha); border-color:var(--alpha); color:#fff}
+/* ===== PRINCIPLE CARDS ===== */
+.pcard{ border:1px solid var(--border); border-radius:13px; padding:18px 20px; background:var(--card);
+  border-top:3px solid var(--pc, var(--cc)); }
+.pcard .ph{ display:flex; align-items:center; gap:11px; margin-bottom:6px; }
+.pcard .pi{ width:34px; height:34px; border-radius:9px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  background:color-mix(in srgb,var(--pc) 20%,transparent); border:1px solid var(--pc); }
+.pcard .pi svg{ width:19px; height:19px; stroke:var(--pc); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.pcard .pt{ font-size:1.02rem; font-weight:700; color:var(--bright); }
+.pcard .pk{ font-size:.6rem; font-weight:800; letter-spacing:1px; color:var(--pc); text-transform:uppercase; }
+.pcard p{ font-size:.88rem; }
+.gb-mini{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+.gb-mini .lab{ font-size:.6rem; font-weight:800; letter-spacing:.5px; text-transform:uppercase; margin-bottom:5px; }
+.gb-mini .bad-l{ color:var(--bad); } .gb-mini .good-l{ color:var(--good); }
 
-/* ---------- interactive widgets ---------- */
-.widget{border:1px solid var(--hair); border-radius:14px; padding:16px; margin:18px 0; background:var(--card)}
-.widget .wtop{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap}
-.widget .wt{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600}
-.score{font-family:var(--mono); font-size:12px; color:var(--muted)}
-.score b{color:var(--pass)}
-.btn{font-family:var(--sans); font-size:.9rem; border:1px solid var(--hair); background:var(--card); color:var(--ink); border-radius:9px; padding:8px 14px; cursor:pointer; font-weight:600}
-.btn:hover{border-color:var(--alpha)}
-.btn.primary{background:var(--alpha); border-color:var(--alpha); color:#fff}
-.btn.primary:hover{filter:brightness(1.08)}
-.btn.sm{padding:5px 10px; font-size:.82rem}
+/* ===== REDESIGN BENCH (signature) ===== */
+.bench{ display:grid; grid-template-columns:320px 1fr; gap:22px; align-items:start; }
+@media(max-width:760px){ .bench{ grid-template-columns:1fr; } }
+.phone{ width:300px; max-width:100%; margin:0 auto; border-radius:30px; padding:12px; background:#0c0c10;
+  border:1px solid #2a2a30; box-shadow:0 18px 50px -20px #000, inset 0 0 0 2px #1a1a20; }
+[data-theme="light"] .phone{ background:#1a1a1f; }
+.screen{ background:#15151b; border-radius:20px; overflow:hidden; color:#e8e8ee; font-size:13px; position:relative;
+  --gap:14px; --pad:16px; --radius:12px; transition:all .35s ease; }
+.scr-status{ display:flex; justify-content:space-between; align-items:center; padding:8px 16px 4px; font-size:11px; color:#9aa; }
+.scr-head{ display:flex; align-items:center; justify-content:space-between; padding:6px var(--pad) 10px; transition:all .35s; }
+.scr-app{ font-weight:800; font-size:16px; color:#c084fc; letter-spacing:.3px; transition:all .35s; }
+.scr-streak{ font-size:11px; background:#2a2333; color:#d8b4fe; padding:3px 9px; border-radius:20px; transition:all .35s; }
+.scr-body{ padding:0 var(--pad) var(--pad); display:flex; flex-direction:column; gap:var(--gap); transition:all .35s; }
+.scr-title{ font-size:18px; font-weight:700; color:#fff; transition:all .35s; }
+.scr-sub{ font-size:12px; color:#9aa; transition:all .35s; }
+.scr-prog{ height:7px; border-radius:6px; background:#26262e; overflow:hidden; transition:all .35s; }
+.scr-prog i{ display:block; height:100%; width:62%; background:linear-gradient(90deg,#c084fc,#f472b6); transition:all .35s; }
+.scr-card{ background:#20202a; border-radius:var(--radius); padding:18px 16px; text-align:center; transition:all .35s; }
+.scr-card .cardq{ font-size:15px; font-weight:600; color:#fff; line-height:1.4; transition:all .35s; }
+.scr-card .hint{ font-size:11px; color:#8a8a99; margin-top:8px; transition:all .35s; }
+.scr-actions{ display:flex; gap:10px; transition:all .35s; }
+.scr-actions button{ flex:1; border:none; border-radius:10px; padding:11px 6px; font-size:12.5px; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:all .35s; }
+.b-flip{ background:#c084fc; color:#1a0a2e; }
+.b-hard{ background:#3a2a30; color:#fca5a5; }
+.b-easy{ background:#26352c; color:#86efac; }
+.scr-nav{ display:flex; justify-content:space-around; padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+  background:#101016; border-top:1px solid #24242c; transition:all .35s; }
+.scr-nav a{ display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9.5px; color:#7a7a88; transition:all .35s; }
+.scr-nav a .ic{ width:20px; height:20px; border-radius:6px; background:#2a2a34; display:flex; align-items:center; justify-content:center; font-size:11px; }
+.scr-nav a.cur{ color:#c084fc; } .scr-nav a.cur .ic{ background:#3a2a4a; color:#c084fc; }
 
-/* sorter */
-.pool{display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 14px; min-height:30px}
-.tok{font-family:var(--sans); font-size:.9rem; padding:8px 12px; border-radius:9px; border:1px solid var(--hair); background:var(--card); cursor:pointer; user-select:none; transition:transform .08s, border-color .15s}
-.tok:hover{border-color:var(--alpha); transform:translateY(-1px)}
-.tok.placed{opacity:.55}
-.tok.sel{border-color:var(--alpha); box-shadow:0 0 0 3px var(--alpha-soft)}
-.buckets{display:grid; gap:12px; margin-top:8px}
-.buckets.two{grid-template-columns:repeat(2,1fr)}
-.buckets.three{grid-template-columns:repeat(3,1fr)}
-.bucket{border:1px dashed var(--hair); border-radius:12px; padding:10px; min-height:90px; background:var(--paper)}
-.bucket.over{border-color:var(--alpha); background:var(--alpha-soft)}
-.bhead{font-family:var(--mono); font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; font-weight:600; margin-bottom:7px; color:var(--ink)}
-.bucket[data-cat="app"] .bhead{color:var(--alpha)}
-.bucket[data-cat="func"] .bhead{color:var(--beta)}
-.bucket[data-cat="logical"] .bhead{color:var(--logic)}
-.bucket[data-cat="physical"] .bhead{color:var(--phys)}
-.bdrop{display:flex; flex-wrap:wrap; gap:7px}
-.tok.good{border-color:var(--pass); background:var(--pass-soft)}
-.tok.bad{border-color:var(--trap); background:var(--trap-soft)}
-@media (max-width:620px){.buckets.two,.buckets.three{grid-template-columns:1fr}}
+/* --- toggle-driven "violations" --- */
+.screen.v-align .scr-title{ transform:translateX(26px); }
+.screen.v-align .scr-sub{ transform:translateX(9px); }
+.screen.v-align .scr-card{ transform:translateX(-14px) rotate(-1.2deg); }
+.screen.v-align .scr-actions{ transform:translateX(18px); }
+.screen.v-align .scr-prog{ transform:translateX(-8px) scaleX(.9); }
+.screen.v-align .scr-head{ transform:translateX(11px); }
 
-/* reveal */
-.reveal{margin-top:10px}
-.reveal .body{display:none; margin-top:10px}
-.reveal.open .body{display:block}
+.screen.v-balance .scr-actions{ justify-content:flex-start; }
+.screen.v-balance .scr-actions button{ flex:0 0 auto; padding:11px 10px; }
+.screen.v-balance .scr-card{ margin-right:48px; }
+.screen.v-balance .scr-title, .screen.v-balance .scr-sub, .screen.v-balance .scr-prog{ margin-right:70px; }
 
-/* quiz */
-.q{border:1px solid var(--hair); border-radius:12px; padding:14px 16px; margin:14px 0; background:var(--card)}
-.q .qh{display:flex; gap:10px; align-items:baseline}
-.q .qn{font-family:var(--mono); font-size:12px; color:var(--alpha); font-weight:700}
-.q .qbody{font-weight:600; margin:0}
-.q textarea{width:100%; margin-top:10px; min-height:74px; border:1px solid var(--hair); border-radius:9px; padding:9px 11px; font-family:var(--sans); font-size:.92rem; background:var(--paper); color:var(--ink); resize:vertical}
-.q .marking{display:none; margin-top:10px; border-top:1px dashed var(--hair); padding-top:10px}
-.q.open .marking{display:block}
-.q .marking ul{margin:6px 0 0; padding-left:18px}
-.q .marking li{margin:3px 0; font-size:.92rem}
+.screen.v-contrast{ background:#3a3a40; color:#5a5a60; }
+.screen.v-contrast .scr-app{ color:#6a6a72; }
+.screen.v-contrast .scr-title{ color:#62626a; }
+.screen.v-contrast .scr-card{ background:#42424a; }
+.screen.v-contrast .scr-card .cardq{ color:#65656d; }
+.screen.v-contrast .scr-prog i{ background:#55555c; }
+.screen.v-contrast .b-flip{ background:#4a4a52; color:#66666e; }
+.screen.v-contrast .b-hard{ background:#46464e; color:#66666e; }
+.screen.v-contrast .b-easy{ background:#46464e; color:#66666e; }
+.screen.v-contrast .scr-streak{ background:#48484f; color:#66666e; }
 
-/* split halves */
-.halves{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0}
-.halfcard{border-radius:12px; padding:14px 16px; border:1px solid var(--hair); background:var(--card)}
-.halfcard.a{border-top:3px solid var(--alpha)} .halfcard.b{border-top:3px solid var(--beta)}
-.halfcard .ht{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; margin-bottom:5px}
-.halfcard.a .ht{color:var(--alpha)} .halfcard.b .ht{color:var(--beta)}
-.halfcard p{margin:0; font-size:.92rem}
-@media (max-width:560px){.halves{grid-template-columns:1fr}}
+.screen.v-space{ --gap:3px; --pad:5px; --radius:5px; }
+.screen.v-space .scr-card{ padding:7px 8px; }
+.screen.v-space .scr-actions{ gap:3px; }
+.screen.v-space .scr-actions button{ padding:6px 4px; }
+.screen.v-space .scr-head{ padding-bottom:3px; }
+.screen.v-space .scr-nav{ padding:4px 8px; }
 
-/* steps */
-.flow{display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; margin:18px 0; border:1px solid var(--hair); border-radius:12px; overflow:hidden}
-.fnode{padding:14px 14px; background:var(--card); border-right:1px solid var(--hair); position:relative}
-.fnode:last-child{border-right:none}
-.fnode .fn{font-family:var(--mono); font-size:11px; color:var(--alpha); font-weight:700}
-.fnode .fh{font-weight:700; margin:3px 0 4px}
-.fnode p{margin:0; font-size:.86rem; color:var(--muted)}
-@media (max-width:620px){.flow{grid-template-columns:1fr}.fnode{border-right:none; border-bottom:1px solid var(--hair)}}
+.screen.v-text .scr-app{ font-size:13px; font-weight:500; }
+.screen.v-text .scr-title{ font-size:13px; font-weight:500; }
+.screen.v-text .scr-sub{ font-size:13px; }
+.screen.v-text .scr-card .cardq{ font-size:13px; font-weight:500; }
+.screen.v-text .scr-card .hint{ font-size:13px; }
+.screen.v-text .scr-actions button{ font-size:13px; font-weight:500; }
+.screen.v-text .scr-streak{ font-size:13px; }
+.screen.v-text .scr-nav a{ font-size:13px; }
 
-/* footer */
-footer{background:#0E1620; color:#9fb0c4; padding:30px 0; font-size:.86rem; border-top:3px solid var(--beta)}
-footer b{color:#C9D4E2}
+.screen.v-use .scr-actions button{ padding:5px 4px; font-size:10px; }
+.screen.v-use .b-flip::after{ content:''; } /* labels swapped in JS */
+.screen.v-use .scr-card{ cursor:default; }
 
-/* misc */
-.kbd{font-family:var(--mono); font-size:.82em; background:var(--hair2); border:1px solid var(--hair); border-radius:5px; padding:1px 6px}
-.hot{position:relative; display:inline-block}
-.center{text-align:center}
-.small{font-size:.85rem; color:var(--muted)}
+.screen.v-nav .scr-nav a span{ visibility:hidden; }
+.screen.v-nav .scr-nav a.cur{ color:#7a7a88; }
+.screen.v-nav .scr-nav a.cur .ic{ background:#2a2a34; color:#7a7a88; }
+.screen.v-nav .scr-nav a .ic{ background:#2a2a34 !important; color:transparent; }
 
+/* toggle controls */
+.bench-controls{ display:flex; flex-direction:column; gap:9px; }
+.tg{ display:flex; align-items:center; gap:12px; padding:9px 13px; border:1px solid var(--border); border-radius:10px;
+  background:var(--card); cursor:pointer; transition:.15s; border-left:3px solid var(--tgc,var(--cc)); }
+.tg:hover{ background:var(--hover); }
+.tg .sw{ width:40px; height:23px; border-radius:20px; background:var(--bad); position:relative; flex-shrink:0; transition:.2s; }
+.tg.on .sw{ background:var(--tgc,var(--good)); }
+.tg .sw::after{ content:''; position:absolute; top:2px; left:2px; width:19px; height:19px; border-radius:50%;
+  background:#fff; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.4); }
+.tg.on .sw::after{ left:19px; }
+.tg .tgname{ font-weight:700; font-size:.86rem; color:var(--bright); }
+.tg .tgdesc{ font-size:.7rem; color:var(--muted); }
+.tg .tgstate{ margin-left:auto; font-size:.62rem; font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
+.tg.on .tgstate{ color:var(--good); } .tg .tgstate{ color:var(--bad); }
+.bench-summary{ display:flex; align-items:center; gap:14px; margin-top:8px; padding:12px 16px; border-radius:11px;
+  background:var(--bg-3); border:1px solid var(--border); }
+.bench-summary .bs-num{ font-size:1.8rem; font-weight:800; color:var(--cc); }
+.bench-summary .bs-txt{ font-size:.82rem; color:var(--text); }
+
+/* ===== balance beam lab ===== */
+.lab{ border:1px solid var(--border); border-radius:14px; overflow:hidden; background:var(--bg-frame); margin:16px 0; }
+.lab-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 16px;
+  border-bottom:1px solid var(--border); background:var(--bg-3); }
+.lab-head .lt{ font-weight:700; font-size:.9rem; color:var(--bright); display:flex; align-items:center; gap:8px; }
+.lab-head .lt::before{ content:''; width:8px; height:8px; border-radius:50%; background:var(--p-bal); box-shadow:0 0 8px var(--p-bal); }
+.lab canvas{ display:block; width:100%; height:330px; }
+.lab-foot{ padding:12px 16px; border-top:1px solid var(--border); }
+.readout{ font-size:.8rem; color:var(--text); }
+.readout b{ color:var(--p-bal); }
+
+/* ===== drag sorter ===== */
+.sorter{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:16px 0; }
+@media(max-width:680px){ .sorter{ grid-template-columns:1fr; } }
+.bins{ display:flex; flex-direction:column; gap:12px; }
+.bin{ border:2px dashed var(--border-2); border-radius:12px; padding:12px; min-height:70px; transition:.15s; }
+.bin.hot{ border-color:var(--cc); background:color-mix(in srgb,var(--cc) 8%,transparent); }
+.bin h4{ font-size:.78rem; color:var(--bright); margin-bottom:8px; display:flex; align-items:center; gap:7px; }
+.bin h4 .dot{ width:9px; height:9px; border-radius:50%; background:var(--bc,var(--cc)); }
+.tokens{ display:flex; flex-wrap:wrap; gap:9px; }
+.token{ padding:8px 13px; border-radius:9px; background:var(--card); border:1px solid var(--border-2);
+  font-size:.8rem; cursor:grab; user-select:none; transition:.12s; }
+.token:hover{ border-color:var(--cc); }
+.token.placed{ cursor:default; }
+.token.right{ border-color:var(--good); background:color-mix(in srgb,var(--good) 12%,transparent); }
+.token.wrong{ border-color:var(--bad); background:color-mix(in srgb,var(--bad) 12%,transparent); animation:shake .3s; }
+@keyframes shake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+/* ===== P-E-L trainer ===== */
+.pel{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:14px 0; }
+@media(max-width:680px){ .pel{ grid-template-columns:1fr; } }
+.pel-step{ border:1px solid var(--border); border-radius:12px; padding:15px; background:var(--card); position:relative; }
+.pel-step .pel-k{ font-size:1.5rem; font-weight:800; color:var(--cc); opacity:.35; position:absolute; top:8px; right:12px; }
+.pel-step h5{ font-size:.92rem; color:var(--bright); margin-bottom:4px; }
+.pel-step p{ font-size:.8rem; color:var(--muted); }
+.pel-demo{ background:var(--bg-3); border-radius:10px; padding:13px 16px; margin-top:10px; font-size:.85rem; }
+.pel-demo .frag{ display:inline; }
+.frag.p{ color:var(--p-use); } .frag.e{ color:var(--good); } .frag.l{ color:var(--cc); }
+
+/* ===== practice questions ===== */
+.q{ border:1px solid var(--border); border-radius:14px; margin:18px 0; overflow:hidden; background:var(--card); }
+.q-head{ padding:15px 20px; border-bottom:1px solid var(--border); background:var(--bg-3); display:flex; align-items:flex-start; gap:12px; }
+.q-num{ font-family:'Cascadia Code',monospace; font-weight:800; color:#1a0a2e; background:var(--cc); padding:4px 9px; border-radius:7px; font-size:.74rem; flex-shrink:0; }
+.q-text{ flex:1; }
+.q-text .qmark{ font-size:.68rem; font-weight:800; color:var(--cc); letter-spacing:.5px; }
+.q-text .qbody{ font-size:.95rem; color:var(--bright); margin-top:3px; }
+.q-cmd{ display:inline-block; font-size:.6rem; font-weight:800; letter-spacing:.8px; text-transform:uppercase;
+  border:1px solid var(--cc); color:var(--cc); border-radius:5px; padding:1px 6px; margin-right:6px; }
+.q-body{ padding:8px 20px 18px; }
+.reveal{ display:none; margin-top:12px; animation:fade .25s; }
+.reveal.show{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(5px)} to{opacity:1} }
+.ans{ border-radius:11px; padding:13px 16px; margin:10px 0; font-size:.86rem; }
+.ans.weak{ background:color-mix(in srgb,var(--bad) 8%,var(--card)); border:1px solid color-mix(in srgb,var(--bad) 35%,var(--border)); }
+.ans.strong{ background:color-mix(in srgb,var(--good) 8%,var(--card)); border:1px solid color-mix(in srgb,var(--good) 35%,var(--border)); }
+.ans .alab{ font-size:.64rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+.ans.weak .alab{ color:var(--bad); } .ans.strong .alab{ color:var(--good); }
+.ans .note{ font-size:.74rem; color:var(--muted); font-style:italic; margin-top:7px; padding-top:7px; border-top:1px dashed var(--border); }
+.marking{ background:var(--bg-3); border-radius:10px; padding:12px 16px; margin-top:10px; font-size:.82rem; }
+.marking ul{ margin:6px 0 0 18px; } .marking li{ margin:3px 0; }
+.selfmark{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-top:12px; }
+.selfmark .lbl{ font-size:.76rem; color:var(--muted); }
+.mk{ width:34px; height:30px; border-radius:7px; border:1px solid var(--border-2); background:var(--bg-3); color:var(--text);
+  font-weight:700; font-size:.8rem; cursor:pointer; transition:.12s; }
+.mk:hover{ border-color:var(--cc); }
+.mk.sel{ background:var(--cc); color:#1a0a2e; border-color:var(--cc); }
+
+/* cheat sheet */
+.cheat{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+.cheat .cc{ border:1px solid var(--border); border-radius:11px; padding:14px 16px; background:var(--card); border-top:2px solid var(--ctc,var(--cc)); }
+.cheat .cc h5{ font-size:.82rem; color:var(--bright); margin-bottom:5px; }
+.cheat .cc p{ font-size:.76rem; color:var(--muted); }
+
+.footer-note{ margin-top:50px; padding-top:20px; border-top:1px solid var(--border); font-size:.74rem; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+.reduced *{ animation:none !important; transition:none !important; }
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
 </style>
 <style id="dv-xref-style">.dv-xref{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-decoration-thickness:1px;text-underline-offset:2px;cursor:pointer;transition:opacity .15s}.dv-xref:hover{text-decoration-style:solid;opacity:.85}</style><link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YzVjZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNWIzZmQxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHJ4PSIxNCIgZmlsbD0idXJsKCNnKSIvPgogIDwhLS0gbW9ydGFyYm9hcmQgKGdyYWR1YXRpb24gY2FwKSAtLT4KICA8cGF0aCBkPSJNMzIgMTUgTDU0IDI0IEwzMiAzMyBMMTAgMjQgWiIgZmlsbD0iI2ZmZmZmZiIvPgogIDwhLS0gY2FwIGJhc2UgLyBoZWFkIC0tPgogIDxwYXRoIGQ9Ik0yMCAyOC41IEwyMCAzOCBDMjAgNDEuNiAyNS40IDQ0LjUgMzIgNDQuNSBDMzguNiA0NC41IDQ0IDQxLjYgNDQgMzggTDQ0IDI4LjUgTDMyIDMzLjQgWiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC45MiIvPgogIDwhLS0gdGFzc2VsIC0tPgogIDxwYXRoIGQ9Ik01NCAyNCBMNTQgMzYiIHN0cm9rZT0iI2ZmZDM0ZCIgc3Ryb2tlLXdpZHRoPSIyLjQiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxjaXJjbGUgY3g9IjU0IiBjeT0iMzguNCIgcj0iMi43IiBmaWxsPSIjZmZkMzRkIi8+CiAgPCEtLSBleGFtIGNoZWNrbWFyayBiYWRnZSAtLT4KICA8Y2lyY2xlIGN4PSI0NS41IiBjeT0iNDcuNSIgcj0iOS41IiBmaWxsPSIjMjJjMDhiIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMi4yIi8+CiAgPHBhdGggZD0iTTQxLjMgNDcuNyBMNDQuMiA1MC42IEw1MCA0NC44IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg=="><!--dv-app-icon--></head>
 <body>
 
-<!-- ============ HEADER ============ -->
-<header class="top">
-  <div class="wrap">
-    <div class="brand"><b>Digital Vector</b> &nbsp;·&nbsp; VCE Software Development &nbsp;·&nbsp; Problem-Solving Methodology</div>
-    <h1 class="title">Stage 2 — <span class="a">Design</span>:<br>deciding <span class="a">how</span> it looks and <span class="b">how</span> it works</h1>
-    <p class="subtitle">Analysis told you <em>what</em> the solution must do. Design is where you decide <em>how</em> — on paper, in detail, before a single line of code. Get this right and Development almost writes itself.</p>
-    <div class="meta-row">
-      <span class="tag">Unit 3 · Outcome 2</span>
-      <span class="tag">PSM Stage 2 of 4</span>
-      <span class="tag">Year 12 · SAT-aligned</span>
-      <span class="tag">Study Design 2025–2028</span>
+<div id="titlebar">
+  <span class="dots"><span class="c"></span><span class="m"></span><span class="x"></span></span>
+  <span class="brand"><span class="logo"></span>Digital&nbsp;Vector</span>
+  <span class="crumb">VCE Software Development · U3·O2 Analysis &amp; Design · <b>KK16 — Design principles for the UI</b></span>
+  <div class="tb-controls">
+    <div class="tb-group">
+      <button class="tb-btn" onclick="chFont(-1)">A−</button>
+      <span class="lbl" id="fsLbl">100%</span>
+      <button class="tb-btn" onclick="chFont(1)">A+</button>
     </div>
-  </div>
-</header>
-
-<!-- ============ TOOLBAR ============ -->
-<div class="toolbar">
-  <div class="wrap">
-    <span class="tbtn" id="fsDn" title="Smaller text">A−</span>
-    <span class="tbtn" id="fsUp" title="Larger text">A+</span>
-    <div class="progress" title="How far you've scrolled"><i id="prog"></i></div>
-    <span class="tbtn" id="themeBtn" title="Toggle dark / light">◐ Theme</span>
+    <button class="tb-btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+    <button class="tb-btn" onclick="toggleRail()">☰ Outline</button>
   </div>
 </div>
 
-<div class="wrap">
+<div id="shell">
+  <aside id="rail">
+    <div class="rail-top">
+      <div class="rail-eyebrow">Unit 3 · Outcome 2 · KK16</div>
+      <div class="rail-title">Design principles for the user interface</div>
+      <div class="rail-meta">
+        <span class="pill">VCAA 2025–2028</span><span class="pill">Examinable</span><span class="pill">SAT-linked</span>
+      </div>
+    </div>
+    <nav class="rail-nav" id="railNav"></nav>
+    <div class="rail-foot">
+      <div class="score-dock">
+        <div class="radial" id="radial"><span id="radialPct">0%</span></div>
+        <div class="meta">Self-mark score<br><b id="scoreTxt">0 / 0 marks</b></div>
+      </div>
+    </div>
+  </aside>
 
-  <!-- PIPELINE -->
-  <div class="pipeline" aria-label="The four stages of the problem-solving methodology">
-    <div class="pstep"><div class="num">01</div><div class="lbl">Analysis</div><div class="sub">what is needed</div></div>
-    <div class="pstep is-design"><div class="num">02</div><div class="lbl">Design</div><div class="sub">how it looks &amp; works</div></div>
-    <div class="pstep"><div class="num">03</div><div class="lbl">Development</div><div class="sub">build it</div></div>
-    <div class="pstep"><div class="num">04</div><div class="lbl">Evaluation</div><div class="sub">did it work</div></div>
+  <main id="main">
+    <div class="wrap">
+
+<!-- ===================== 01 HERO / HOOK ===================== -->
+<section id="s-intro">
+  <div class="eyebrow"><span class="sn">KK16</span> Analysis &amp; Design · Outcome 2</div>
+  <h1 class="dh">Same content.<br>Two screens. <b>One feels broken.</b></h1>
+  <p class="lead">Take any app you actually use. Strip out one invisible rulebook — the <b>design principles</b> — and it instantly feels cheap, confusing, exhausting. This dot point is about those rules: the seven levers that decide whether your interface looks <em>professional</em> and <em>works</em>, or looks thrown together and fights the user at every tap.</p>
+
+  <div class="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-copy">
+      <span class="hero-tag">◆ Live · seven principles, one interface</span>
+      <h2 class="sh" style="margin-top:14px">Order is something you <b>engineer</b>, not something that happens.</h2>
+      <p class="muted" style="max-width:60ch">Watch the panels drift apart, then snap back onto a shared grid. That snap is alignment, balance, contrast, space, text formatting, usability and navigation all doing their job at once.</p>
+    </div>
   </div>
 
-  <!-- TOC -->
-  <nav class="toc" aria-label="Contents">
-    <h3>What's inside · 13 chapters</h3>
-    <ol>
-      <li><a href="#orient">Where Design sits in the PSM</a></li>
-      <li><a href="#analogy">The architect analogy</a></li>
-      <li><a href="#twostep">The two-step design process</a></li>
-      <li><a href="#bench">3D: the ideation bench</a></li>
-      <li><a href="#appfunc">Appearance vs functionality vs structure</a></li>
-      <li><a href="#logphys">The toolbox: logical vs physical</a></li>
-      <li><a href="#mopid">The five SD design tools (MOP-ID)</a></li>
-      <li><a href="#ipo3d">3D: the IPO machine</a></li>
-      <li><a href="#wider">The wider toolbox</a></li>
-      <li><a href="#principles">Design principles</a></li>
-      <li><a href="#criteria">Evaluation criteria</a></li>
-      <li><a href="#traps">Exam traps &amp; how to answer</a></li>
-      <li><a href="#practice">Practice questions</a></li>
-    </ol>
-  </nav>
+  <div class="callout">
+    <h4><span class="tagword">The dot point</span> What VCAA actually asks you to know</h4>
+    <p style="font-size:.92rem"><b>“Design principles that influence the appearance and functionality of the user interface(s)”</b> — including <span class="mono">alignment, balance, contrast, space, text formatting, usability</span> and <span class="mono">navigation</span>. Two words in that sentence are doing the heavy lifting: <b style="color:var(--cc)">appearance</b> (how it looks) and <b style="color:var(--cc)">functionality</b> (how it works). Strong exam answers always tie a principle to one or both.</p>
+  </div>
+</section>
 
-  <main>
+<!-- ===================== 02 FRAMING ===================== -->
+<section id="s-what">
+  <div class="eyebrow"><span class="sn">02</span> Framing the idea</div>
+  <h2 class="sh">Principles are the <b>grammar</b> of an interface</h2>
+  <p class="lead">Words follow grammar so a sentence reads cleanly. UI elements follow design principles so a screen <em>reads</em> cleanly. Break grammar and people can still guess your meaning — but they have to work for it. Break design principles and users can still find the button — but they have to work for it, and they resent you for it.</p>
 
-  <!-- ============ 01 ORIENT ============ -->
-  <section id="orient">
-    <div class="eyebrow"><span class="dot"></span>Chapter 01 · Orientation</div>
-    <h2 class="sec">Design is the bridge between "what" and "build"</h2>
-    <p class="lead">By the end of Analysis you had a <strong><a href="chapter-2-analysis-and-design/kk09-srs.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK09: Purpose and features of software requirements specifications">Software Requirements Specification</a> (<a href="chapter-2-analysis-and-design/kk09-srs.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK09: Purpose and features of software requirements specifications">SRS</a>)</strong>: the functional and non-functional requirements, constraints and scope. That document answers one question — <em>what must the solution do?</em></p>
-    <p>Design answers the next question: <strong>how?</strong> How will the screens look? How will the data move? What variables, objects and algorithms will the program need? You decide all of this <span class="k-app">on paper</span>, in enough detail that someone else could pick up your designs and build the solution without guessing.</p>
-
-    <div class="halves">
-      <div class="halfcard a">
-        <div class="ht">Design IS</div>
-        <p>Planning the look (appearance) and the logic (functionality) of the solution in detail — mock-ups, object descriptions, data dictionaries, IPO charts, pseudocode.</p>
-      </div>
-      <div class="halfcard b">
-        <div class="ht">Design is NOT</div>
-        <p>Writing real code. No bricks are laid here. The second you open Python and start typing program statements, you have crossed into <strong>Development</strong>.</p>
-      </div>
-    </div>
-
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>🧱 "NO BRICKS YET"</h4>
-      <p>Picture an architect standing on an empty block holding a rolled-up blueprint, shouting at an over-eager bricklayer: <span class="word">"NO BRICKS YET!"</span> The architect designs every wall, window and wire — but lays nothing. Design produces the <em>plans</em>; Development lays the <em>bricks</em>. If your answer mentions actual code, loops you've typed, or "I ran the program," you've wandered out of the Design stage.</p>
-    </div>
-
-    <div class="callout tip">
-      <div class="ct">Why examiners care</div>
-      <p>In the SAT, Unit 3 Outcome 2 is graded on your <strong>analysis and design</strong>. Markers literally look for the named design tools, done with conventions, annotations and justifications. Design is worth roughly the same as the entire Development half of the project — it is not a warm-up.</p>
-    </div>
-  </section>
-
-  <!-- ============ 02 ANALOGY ============ -->
-  <section id="analogy">
-    <div class="eyebrow"><span class="dot"></span>Chapter 02 · Make it stick</div>
-    <h2 class="sec">Three ways to feel what Design is</h2>
-    <p class="lead">The same idea — <em>plan in full before you build</em> — shows up everywhere. Pick whichever analogy lands for you; they all map onto the PSM.</p>
-
-    <div class="flow">
-      <div class="fnode"><div class="fn">A</div><div class="fh">🏗️ The architect</div><p>Blueprints, elevations and wiring diagrams are drawn and approved before a single brick is laid. Change a wall on paper: cheap. Change it once it's built: expensive.</p></div>
-      <div class="fnode"><div class="fn">B</div><div class="fh">🍳 The recipe</div><p>You decide the dish, ingredients and steps before turning on the stove. The recipe is the design; cooking is development; tasting is evaluation.</p></div>
-      <div class="fnode"><div class="fn">C</div><div class="fh">🎬 The storyboard</div><p>A film is storyboarded shot-by-shot before cameras roll. Cheap to redraw a frame; ruinous to re-shoot a scene.</p></div>
-    </div>
-
-    <p>Notice the shared logic: <strong>mistakes caught in design cost pennies; mistakes caught in development cost a fortune.</strong> That is the entire economic argument for spending real effort here.</p>
-
-    <div class="callout warn">
-      <div class="ct">The continuity rule</div>
-      <p>Your designs are written against the SRS, and the <strong><a href="chapter-2-analysis-and-design/kk13-evaluationcriteri.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK13: Criteria for evaluating design ideas and the efficiency and effectiveness of solutions">evaluation criteria</a></strong> you write here will be dug up again in Unit 4 to judge the finished solution. Design is wired into the stages on both sides of it.</p>
-    </div>
-  </section>
-
-  <!-- ============ 03 TWO STEP ============ -->
-  <section id="twostep">
-    <div class="eyebrow"><span class="dot"></span>Chapter 03 · The core idea</div>
-    <h2 class="sec">Design is a two-step process</h2>
-    <p class="lead">This is the single most examined fact about the Design stage, and the one students most often get wrong. Design is not "draw one design." It is two distinct steps.</p>
-
-    <div class="flow">
-      <div class="fnode"><div class="fn">STEP 1</div><div class="fh">Generate ideas</div><p>Using <strong>design thinking</strong> and <strong>systems thinking</strong>, generate <strong>two or three</strong> different design ideas. Each is <em>briefly</em> stated — rough sketches with annotations showing key functions and layout. Diverge on purpose.</p></div>
-      <div class="fnode"><div class="fn">STEP 2</div><div class="fh">Evaluate &amp; choose</div><p>Develop <strong>evaluation criteria</strong>, apply them to your ideas, and select the single <strong>preferred design</strong>. The criteria justify the choice — you don't just pick your favourite.</p></div>
-      <div class="fnode"><div class="fn">THEN</div><div class="fh">Detail it</div><p>Fully detail the preferred design — addressing <span class="k-app">appearance</span>, <span class="k-func">functionality</span> and structure — using the formal design tools, with annotations and justifications.</p></div>
-    </div>
-
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>🎤 "AUDITION → JUDGES → MAKEOVER"</h4>
-      <p>Imagine a TV talent show. <span class="word">Three contestants (your 2–3 ideas) AUDITION.</span> A panel of <span class="word">JUDGES (your evaluation criteria)</span> scores them with little number paddles. One winner is crowned — the <span class="word">preferred design</span> — and is whisked off for a full <span class="word">MAKEOVER (the detailed design)</span>. The two losing acts go home; you don't build them. If you only ever had <em>one</em> contestant on stage, it wasn't a real audition — and you've lost marks.</p>
-    </div>
-
-    <!-- interactive: sequence the steps -->
-    <div class="widget" id="seqW">
-      <div class="wtop"><span class="wt">Order the design process</span><span class="score" id="seqScore">tap the steps in order</span></div>
-      <p class="small">Tap these in the correct sequence. They'll lock in if you're right.</p>
-      <div class="pool" id="seqPool"></div>
-      <div id="seqSlots" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px"></div>
-      <div style="margin-top:10px"><button class="btn sm" id="seqReset">Reset</button></div>
-    </div>
-
-    <div class="callout trap">
-      <div class="ct">Trap</div>
-      <p>"How many design ideas must you generate?" — the answer is <strong>two or three</strong>, not one and not ten. And the criteria are developed <em>to choose between the ideas</em>, then reused at Evaluation. Saying "I designed my solution" (singular, no alternatives, no criteria) describes the wrong process.</p>
-    </div>
-  </section>
-
-  <!-- ============ 04 BENCH 3D ============ -->
-  <section id="bench">
-    <div class="eyebrow"><span class="dot" style="background:var(--alpha)"></span>Chapter 04 · 3D interactive</div>
-    <h2 class="sec">The ideation bench</h2>
-    <p class="lead">Watch the two-step process happen. Three rough wireframe design ideas sit on the drafting bench. Press <strong>Score</strong> and the evaluation criteria fill their bars; the highest total wins and <strong>renders</strong> from a grey wireframe into a finished, coloured interface — your detailed preferred design.</p>
-
-    <div class="stage" id="benchStage">
-      <div class="ctrls">
-        <button id="benchScore">▶ Score &amp; choose</button>
-        <button id="benchReset">↺ Reset</button>
-      </div>
-      <div class="hint">Drag to rotate · the winning board gains colour + detail</div>
-    </div>
-    <p class="small" id="benchCaption" style="margin-top:8px">Three candidate mock-ups — none chosen yet. The bars above each board are empty evaluation-criteria scores.</p>
-
-    <div class="callout tip">
-      <div class="ct">Read the animation like a marker</div>
-      <p>Grey wireframe = a <em>brief</em> design idea (Step 1). The growing bars = <em>applying evaluation criteria</em> (Step 2). The board that gains full colour and detail = the <em>preferred design, fully detailed</em>. The two that stay grey are the ideas you evaluated but didn't build — keep them in your SAT folder as evidence you actually had alternatives.</p>
-    </div>
-  </section>
-
-  <!-- ============ 05 APP VS FUNC ============ -->
-  <section id="appfunc">
-    <div class="eyebrow"><span class="dot"></span>Chapter 05 · The big split</div>
-    <h2 class="sec">Appearance, functionality &amp; structure</h2>
-    <p class="lead">A detailed design must cover two faces of the solution. Knowing which tool covers which face is worth easy marks — and stops you reaching for the wrong tool.</p>
-
-    <div class="halves">
-      <div class="halfcard a">
-        <div class="ht">Appearance — how it LOOKS</div>
-        <p>The user interface: screen layouts, colours, fonts, button placement, navigation. The user <em>sees</em> this. Covered mainly by the <strong>mock-up</strong>.</p>
-      </div>
-      <div class="halfcard b">
-        <div class="ht">Functionality — how it WORKS</div>
-        <p>The logic and data: what variables exist, what objects do, how input becomes output, the algorithms. The user <em>never sees</em> this directly. Covered by <strong>object descriptions, data dictionaries, IPO charts and pseudocode</strong>.</p>
-      </div>
-    </div>
-
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>💄 "MOCK-UP = MAKE-UP"</h4>
-      <p><span class="word">Mock-up</span> sounds like <span class="word">make-up</span> — and that's exactly its job: the <em>face</em> of the solution, the appearance. Make-up doesn't change the engine under the bonnet; a mock-up doesn't show the logic. So if a question asks how the program <em>calculates</em> something, a mock-up is the wrong answer — you want pseudocode, IPO or an object description (the "engine" tools).</p>
-    </div>
-
-    <!-- interactive: appearance vs functionality sorter -->
-    <div class="widget" id="afW">
-      <div class="wtop"><span class="wt">Which face does each item belong to?</span><span class="score" id="afScore">0 / 8 placed</span></div>
-      <p class="small">Tap an item, then tap the bucket it belongs in. Green = correct.</p>
-      <div class="pool" id="afPool"></div>
-      <div class="buckets two">
-        <div class="bucket" data-cat="app"><div class="bhead">Appearance (look)</div><div class="bdrop" id="af-app"></div></div>
-        <div class="bucket" data-cat="func"><div class="bhead">Functionality (works)</div><div class="bdrop" id="af-func"></div></div>
-      </div>
-      <div style="margin-top:10px"><button class="btn sm" id="afReset">Reset</button></div>
-    </div>
-  </section>
-
-  <!-- ============ 06 LOGICAL VS PHYSICAL ============ -->
-  <section id="logphys">
-    <div class="eyebrow"><span class="dot" style="background:var(--logic)"></span>Chapter 06 · The toolbox</div>
-    <h2 class="sec">Two families of design tool: logical vs physical</h2>
-    <p class="lead">Design tools come in two broad families. The difference is the level of "how-to" detail. This taxonomy comes straight from the design-tools toolbox — useful for sorting any tool you meet.</p>
-
-    <div class="halves">
-      <div class="halfcard a">
-        <div class="ht" style="color:var(--logic)">Logical tools</div>
-        <p>Describe a system's overall structure and <em>what it should achieve</em> — without saying how to build it. The big-picture plan. Often used in Analysis as well. E.g. context diagrams, data dictionaries, hierarchy charts, decision trees, use case diagrams.</p>
-      </div>
-      <div class="halfcard b">
-        <div class="ht" style="color:var(--phys)">Physical tools</div>
-        <p>Actually plan <em>how to build</em> the system — step-by-step instructions a developer follows. E.g. data flow diagrams, storyboards, flowcharts &amp; Nassi-Shneiderman charts, structure charts, IPO charts, layout diagrams / mock-ups, pseudocode.</p>
-      </div>
-    </div>
-
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>🧱 "LEGO BOX vs LEGO BOOKLET"</h4>
-      <p><span class="word">Logical</span> = the glossy <em>picture on the front of the Lego box</em> — it shows you <em>what you'll end up with</em>, but not a single building step. <span class="word">Physical</span> = the <em>numbered instruction booklet inside</em> — brick-by-brick <em>how to build it</em>. Same set, two views: the promise vs the procedure. When a tool tells you <em>how</em> to assemble, it's physical; when it just shows the shape of the thing, it's logical.</p>
-    </div>
-
-    <!-- interactive: logical vs physical sorter -->
-    <div class="widget" id="lpW">
-      <div class="wtop"><span class="wt">Sort the tools</span><span class="score" id="lpScore">0 / 8 placed</span></div>
-      <p class="small">Tap a tool, then tap its family.</p>
-      <div class="pool" id="lpPool"></div>
-      <div class="buckets two">
-        <div class="bucket" data-cat="logical"><div class="bhead">Logical (the box picture)</div><div class="bdrop" id="lp-logical"></div></div>
-        <div class="bucket" data-cat="physical"><div class="bhead">Physical (the booklet)</div><div class="bdrop" id="lp-physical"></div></div>
-      </div>
-      <div style="margin-top:10px"><button class="btn sm" id="lpReset">Reset</button></div>
-    </div>
-
-    <div class="callout warn">
-      <div class="ct">Exam reality check</div>
-      <p>The logical/physical split is great for understanding, but for <strong>Software Development</strong> the study design names a specific short list of design tools you must know how to read and use. That list is the next chapter — learn those five cold, then treat everything else as useful background.</p>
-    </div>
-  </section>
-
-  <!-- ============ 07 MOP-ID ============ -->
-  <section id="mopid">
-    <div class="eyebrow"><span class="dot"></span>Chapter 07 · The examinable five</div>
-    <h2 class="sec">The five Software Development design tools</h2>
-    <p class="lead">These five are the ones VCAA names for Software Development. You must be able to read them <em>and</em> create them. Memorise the set with one ridiculous image.</p>
-
-    <div class="mne">
-      <span class="tag2">Visual mnemonic · the big one</span>
-      <h4>🧹 "Every design needs a MOP-ID"</h4>
-      <p>Picture a cleaner who mops the school at night — but this mop is wearing a laminated <span class="word">ID</span> badge on a lanyard, and it won't let you near the design studio without scanning in. <span class="word">M-O-P-I-D</span>:</p>
+  <div class="grid g2">
+    <div class="card">
+      <h3 class="ssh" style="margin-top:4px">Appearance vs functionality</h3>
+      <p>Every principle leans toward one side — but the best ones serve both. Use this split to power your explanations in the exam.</p>
       <table class="tbl" style="margin-top:10px">
-        <tr><th>Letter</th><th>Tool</th><th>One-line job</th></tr>
-        <tr><td><b>M</b></td><td>Mock-up</td><td>How the interface <span class="k-app">looks</span> (appearance)</td></tr>
-        <tr><td><b>O</b></td><td>Object description</td><td>Each object's properties &amp; methods</td></tr>
-        <tr><td><b>P</b></td><td>Pseudocode</td><td>The <span class="k-func">logic</span> of an algorithm</td></tr>
-        <tr><td><b>I</b></td><td>IPO chart</td><td>Input → Process → Output</td></tr>
-        <tr><td><b>D</b></td><td><a href="chapter-2-analysis-and-design/kk14-designtools.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK14: Design tools for generating solution designs from design ideas">Data dictionary</a></td><td>Every variable + its data type</td></tr>
+        <tr><th>Principle</th><th>Mostly affects…</th></tr>
+        <tr><td>Alignment</td><td>Appearance → scannability</td></tr>
+        <tr><td>Balance</td><td>Appearance</td></tr>
+        <tr><td>Contrast</td><td>Appearance → hierarchy</td></tr>
+        <tr><td>Space</td><td>Appearance → grouping</td></tr>
+        <tr><td>Text formatting</td><td>Appearance → legibility</td></tr>
+        <tr><td>Usability</td><td><b>Functionality</b></td></tr>
+        <tr><td>Navigation</td><td><b>Functionality</b></td></tr>
       </table>
     </div>
-
-    <h3 class="sub">M — Mock-up <span class="chip app" style="margin-left:6px">appearance</span></h3>
-    <p>A drawn layout of a screen, with every object (button, text box, label, image) <strong>named and described</strong>. It shows the user interface — and <em>only</em> the interface. It never shows logic or data structure.</p>
-    <div class="widget" id="mockW">
-      <div class="wtop"><span class="wt">Annotated mock-up · tap the hotspots</span><span class="score" id="mockScore">0 / 4 found</span></div>
-      <p class="small">A login screen mock-up. Tap each numbered object to read its annotation — exactly what you'd write beside it.</p>
-      <div id="mockBoard" style="position:relative; border:1px solid var(--hair); border-radius:10px; background:var(--paper); height:230px; margin:8px 0; overflow:hidden"></div>
-      <div id="mockNote" class="small" style="min-height:20px">Tap a numbered marker…</div>
-    </div>
-
-    <h3 class="sub">O — Object description <span class="chip func" style="margin-left:6px">functionality</span></h3>
-    <p>A table listing each object (or class) with its <strong>type</strong> and a description of its <strong>properties</strong> (its data/attributes) and <strong>methods</strong> (what it can do). It describes the parts of the program, not the screen.</p>
-    <div class="mne">
-      <span class="tag2">mini-mnemonic</span>
-      <h4>🎭 "The actor's résumé"</h4>
-      <p>An object description is each object's <span class="word">résumé</span>: its <em>name</em>, what <em>type</em> of role it plays, its <em>features</em> (properties) and its <em>skills</em> (methods). A casting director reads résumés, not the set decoration — that's why it's a functionality tool, not appearance.</p>
-    </div>
-    <table class="tbl">
-      <tr><th>Object name</th><th>Type</th><th>Properties</th><th>Methods</th></tr>
-      <tr><td><code>btnLogin</code></td><td>Button</td><td>caption = "Log in", enabled</td><td>onClick() → validateLogin()</td></tr>
-      <tr><td><code>txtUser</code></td><td>Text box</td><td>text, maxLength = 20</td><td>getText(), clear()</td></tr>
-      <tr><td><code>user</code></td><td>Account (class)</td><td>username, passwordHash, attempts</td><td>checkPassword(), lockAccount()</td></tr>
-    </table>
-
-    <h3 class="sub">P — Pseudocode <span class="chip func" style="margin-left:6px">functionality</span></h3>
-    <p>Structured English that shows the <strong>logic of an algorithm</strong> — halfway between plain language and code. It lets you plan the flow (sequence, selection, repetition) without getting bogged down in the exact syntax of Python or any one language.</p>
-    <div class="mne">
-      <span class="tag2">mini-mnemonic</span>
-      <h4>🎬 "Subtitles for code"</h4>
-      <p>Pseudocode is the <span class="word">subtitles</span>: it tells you exactly what's happening, in plain language, so anyone can follow the plot — then a "translator" turns it into the actual programming language. Note the spelling: <em>pseudo</em>code (silent p), not "sudo-code".</p>
-    </div>
-    <pre class="code"><span class="cm">// Validate a login attempt</span>
-<span class="kw">BEGIN</span> validateLogin
-<span class="in"></span>attempts <span class="kw">←</span> attempts + 1
-<span class="in"></span><span class="kw">IF</span> txtUser.text = "" <span class="kw">OR</span> txtPass.text = "" <span class="kw">THEN</span>
-<span class="in"></span><span class="in"></span>display <span class="st">"Please fill in both fields"</span>
-<span class="in"></span><span class="kw">ELSE IF</span> user.checkPassword(txtPass.text) <span class="kw">THEN</span>
-<span class="in"></span><span class="in"></span>display <span class="st">"Welcome back"</span>
-<span class="in"></span><span class="kw">ELSE IF</span> attempts &gt;= 3 <span class="kw">THEN</span>
-<span class="in"></span><span class="in"></span>user.lockAccount()
-<span class="in"></span><span class="kw">ELSE</span>
-<span class="in"></span><span class="in"></span>display <span class="st">"Incorrect — try again"</span>
-<span class="in"></span><span class="kw">ENDIF</span>
-<span class="kw">END</span></pre>
-
-    <h3 class="sub">I — IPO chart <span class="chip func" style="margin-left:6px">functionality</span></h3>
-    <p>An <strong>Input–Process–Output</strong> chart: a three-column table that shows what data comes <em>in</em>, what is <em>done</em> to it, and what comes <em>out</em>. Brilliant for nailing down a calculation before you design the algorithm. The next chapter has a 3D version you can feed.</p>
-    <table class="tbl">
-      <tr><th>Input</th><th>Process</th><th>Output</th></tr>
-      <tr><td>hoursWorked (real)<br>hourlyRate (real)</td><td>grossPay ← hoursWorked × hourlyRate<br>tax ← grossPay × 0.30<br>super ← grossPay × 0.12<br>netPay ← grossPay − tax</td><td>grossPay<br>tax<br>netPay</td></tr>
-    </table>
-
-    <h3 class="sub">D — Data dictionary <span class="chip func" style="margin-left:6px">functionality</span></h3>
-    <p>A table listing every <strong>variable</strong> the program will use, with its <strong>data type</strong>, size/format, validation and purpose. It's the master reference that keeps naming consistent across the whole solution.</p>
-    <div class="mne">
-      <span class="tag2">mini-mnemonic</span>
-      <h4>🌶️ "The spice rack"</h4>
-      <p>A data dictionary is a <span class="word">spice rack</span>: every jar (variable) has a clear label saying its <em>name</em> and what's inside (its <em>data type</em>). No unlabelled jars, no two jars with the same label. Open the rack and you instantly know every ingredient the program cooks with.</p>
-    </div>
-    <table class="tbl">
-      <tr><th>Variable</th><th>Data type</th><th>Format / validation</th><th>Purpose</th></tr>
-      <tr><td><code>username</code></td><td>String</td><td>max 20 chars, not blank</td><td>Identifies the account</td></tr>
-      <tr><td><code>attempts</code></td><td>Integer</td><td>0–3</td><td>Counts failed logins</td></tr>
-      <tr><td><code>hourlyRate</code></td><td>Float</td><td>&gt; 0, 2 dp</td><td>Pay per hour worked</td></tr>
-      <tr><td><code>isLocked</code></td><td>Boolean</td><td>true / false</td><td>Whether account is locked</td></tr>
-    </table>
-
-    <!-- which tool? interactive -->
-    <div class="widget" id="whichW">
-      <div class="wtop"><span class="wt">Which of the five tools?</span><span class="score" id="whichScore">0 / 6</span></div>
-      <p class="small">Read each job and pick the right MOP-ID tool.</p>
-      <div id="whichBox"></div>
-    </div>
-  </section>
-
-  <!-- ============ 08 IPO 3D ============ -->
-  <section id="ipo3d">
-    <div class="eyebrow"><span class="dot" style="background:var(--beta)"></span>Chapter 08 · 3D interactive</div>
-    <h2 class="sec">The IPO machine</h2>
-    <p class="lead">An IPO chart is just a machine on paper: data drops in, gets processed, results come out. Feed this machine and watch the three columns light up. Pick a job, then drop inputs into the hopper.</p>
-
-    <div class="stage" id="ipoStage">
-      <div class="ctrls">
-        <button id="ipoFeed">⬇ Drop input</button>
-        <button id="ipoLabels" class="on">Labels</button>
-        <button id="ipoReset">↺ Reset</button>
+    <div class="card">
+      <h3 class="ssh" style="margin-top:4px">Don't confuse KK16 with KK15 (UX)</h3>
+      <p><b>KK15</b> is about user <b>experience</b> characteristics — <a href="kk15-user-experience.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK15: Characteristics of user experience (UX) and how these affect software design">affordance</a>, interoperability, security, usability. <b>KK16</b> is about the design <b>principles</b> you apply to the interface — alignment, balance, contrast, space, text formatting, usability, navigation.</p>
+      <div class="callout warn" style="margin-top:12px">
+        <h4><span class="tagword">Trap</span> Usability is on both lists</h4>
+        <p style="font-size:.86rem"><b>Usability</b> appears in KK15 (a UX characteristic) <em>and</em> KK16 (a design principle). In an answer, make clear which one you mean: in KK16 it means designing the interface so it is easy and efficient to operate. Read the stem — it tells you which dot point you're in.</p>
       </div>
-      <div class="hint">Input hopper → process drum → output tray · drag to rotate</div>
     </div>
-    <p class="small" id="ipoCaption" style="margin-top:8px">Job: <b>pay calculator</b> — Input: hours &amp; rate · Process: multiply &amp; deduct tax · Output: net pay.</p>
+  </div>
 
-    <div class="callout tip">
-      <div class="ct">Why this matters</div>
-      <p>If you can't fill the three columns of an IPO chart, you don't yet understand the problem well enough to design the algorithm. IPO comes <em>before</em> pseudocode for exactly that reason — it forces you to name every input and output first.</p>
-    </div>
-  </section>
+  <h3 class="ssh">The seven principles at a glance</h3>
+  <div class="chips">
+    <span class="chip on" style="--cc:var(--p-align)">▸ Alignment</span>
+    <span class="chip on" style="--cc:var(--p-bal)">▸ Balance</span>
+    <span class="chip on" style="--cc:var(--p-con)">▸ Contrast</span>
+    <span class="chip on" style="--cc:var(--p-space)">▸ Space</span>
+    <span class="chip on" style="--cc:var(--p-text)">▸ Text formatting</span>
+    <span class="chip on" style="--cc:var(--p-use)">▸ Usability</span>
+    <span class="chip on" style="--cc:var(--p-nav)">▸ Navigation</span>
+  </div>
+  <p class="muted" style="font-size:.86rem">Memory hook — <b>“A Big Cat Sat Texting Under Newspapers”</b> → Alignment, Balance, Contrast, Space, Text formatting, Usability, Navigation.</p>
+</section>
 
-  <!-- ============ 09 WIDER TOOLBOX ============ -->
-  <section id="wider">
-    <div class="eyebrow"><span class="dot" style="background:var(--phys)"></span>Chapter 09 · Extension</div>
-    <h2 class="sec">The wider design toolbox</h2>
-    <p class="lead">Beyond the examinable five, the broader design-tools toolbox has many more instruments. You won't be asked to <em>create</em> all of these in Software Development, but recognising them — and knowing what each is <em>for</em> — makes you fluent. (Some, like flowcharts and Nassi-Shneiderman charts, sit outside the current SD course but are worth meeting.)</p>
+<!-- ===================== 03 REDESIGN BENCH (signature) ===================== -->
+<section id="s-bench">
+  <div class="eyebrow"><span class="sn">03</span> Interactive · The Redesign Bench</div>
+  <h2 class="sh">Meet <b>NoteNest</b> — and break it on purpose</h2>
+  <p class="lead">This is a real screen from <b>NoteNest</b>, a student flashcard app. Every switch below is one design principle. Flip a switch <b>off</b> and watch that single principle's job get undone — the content never changes, only the design does. Turn them all off, then back on, and you'll feel exactly why this dot point matters.</p>
 
-    <table class="tbl">
-      <tr><th>Tool</th><th>Family</th><th>What it shows</th></tr>
-      <tr><td><a href="chapter-2-analysis-and-design/kk08-analyticaltools.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK08: Analytical tools for depicting the relationships between users, data and systems">Context diagram</a> (DFD level&nbsp;0)</td><td><span class="k-log">Logical</span></td><td>The whole system as one process and the external entities it talks to</td></tr>
-      <tr><td><a href="chapter-2-analysis-and-design/kk08-analyticaltools.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK08: Analytical tools for depicting the relationships between users, data and systems">Data flow diagram</a> (level&nbsp;1+)</td><td><span class="k-phy">Physical</span></td><td>How data moves between processes, stores and entities</td></tr>
-      <tr><td>Hierarchy / organisational chart</td><td><span class="k-log">Logical</span></td><td>Levels of a system or authority, top down (parent → sublevels)</td></tr>
-      <tr><td>Decision tree</td><td><span class="k-log">Logical</span></td><td>Yes/no decisions branching to consequent actions (underlies expert systems)</td></tr>
-      <tr><td>Flowchart</td><td><span class="k-phy">Physical</span></td><td>Step-by-step process using start/end, process, decision &amp; connector shapes</td></tr>
-      <tr><td>Nassi-Shneiderman chart</td><td><span class="k-phy">Physical</span></td><td>A compact flowchart with special-purpose loop/branch boxes</td></tr>
-      <tr><td>Structure chart</td><td><span class="k-phy">Physical</span></td><td>Modules of a program and the data passed between them</td></tr>
-      <tr><td><a href="chapter-2-analysis-and-design/kk08-analyticaltools.html" class="dv-xref" target="_blank" rel="noopener" title="U3·O2 KK08: Analytical tools for depicting the relationships between users, data and systems">Use case diagram</a></td><td><span class="k-log">Logical</span></td><td>Actors (roles) and their interactions with the system</td></tr>
-      <tr><td>Storyboard</td><td><span class="k-phy">Physical</span></td><td>Screen-to-screen navigation and flow of a solution</td></tr>
-      <tr><td>Entity relationship diagram (ERD)</td><td><span class="k-log">Logical</span></td><td>Data entities and how they relate (Chen / crow's-foot notation)</td></tr>
-    </table>
-
-    <div class="callout warn">
-      <div class="ct">Decision tree, decoded</div>
-      <p>A decision tree asks a series of yes/no questions and branches to an action — e.g. "<em>divisible by 4? → divisible by 100? → divisible by 400?</em>" to decide a leap year, or a gift-buying tree branching on age. They're prized in design because they make complex rules <strong>clear and unambiguous</strong> — the same quality a good SRS demands.</p>
-    </div>
-  </section>
-
-  <!-- ============ 10 PRINCIPLES ============ -->
-  <section id="principles">
-    <div class="eyebrow"><span class="dot"></span>Chapter 10 · Quality</div>
-    <h2 class="sec">Design principles</h2>
-    <p class="lead">Detailed designs aren't judged only on "does it work" — they should follow <strong>design principles</strong> that influence both <span class="k-app">appearance</span> and <span class="k-func">functionality</span>. These give you the vocabulary to justify your mock-up choices.</p>
-
-    <div class="mne">
-      <span class="tag2">Visual mnemonic · appearance</span>
-      <h4>💩 "Good design isn't CRAP… it IS C.R.A.P."</h4>
-      <p>The four appearance principles spell a word you will never forget: <span class="word">Contrast, Repetition, Alignment, Proximity</span>. Picture each one literally arguing about how a screen should look. Add <em>balance</em> and <em>white space</em> and you've covered appearance.</p>
-      <table class="tbl" style="margin-top:10px">
-        <tr><th>Principle</th><th>Means</th><th>On a screen</th></tr>
-        <tr><td><b>C</b>ontrast</td><td>Make different things look different</td><td>A bold primary button stands out from greyed-out ones</td></tr>
-        <tr><td><b>R</b>epetition</td><td>Reuse styles consistently</td><td>Every heading uses the same font, size and colour</td></tr>
-        <tr><td><b>A</b>lignment</td><td>Line elements up to a grid</td><td>Labels and fields share a clean left edge</td></tr>
-        <tr><td><b>P</b>roximity</td><td>Group related things together</td><td>The username + password fields sit together, away from "Help"</td></tr>
-      </table>
+  <div class="bench">
+    <div class="phone">
+      <div class="screen" id="screen">
+        <div class="scr-status"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="scr-head">
+          <span class="scr-app">NoteNest</span>
+          <span class="scr-streak">🔥 12-day streak</span>
+        </div>
+        <div class="scr-body">
+          <div class="scr-title">Biology · Cell Structure</div>
+          <div class="scr-sub">Deck 3 of 8 · 18 cards left today</div>
+          <div class="scr-prog"><i></i></div>
+          <div class="scr-card">
+            <div class="cardq">Which organelle is the “powerhouse of the cell”?</div>
+            <div class="hint">Tap to flip · then rate how well you knew it</div>
+          </div>
+          <div class="scr-actions">
+            <button class="b-flip" id="bFlip">Flip card</button>
+            <button class="b-hard" id="bHard">Hard</button>
+            <button class="b-easy" id="bEasy">Easy</button>
+          </div>
+        </div>
+        <div class="scr-nav">
+          <a class="cur"><span class="ic">▤</span><span>Decks</span></a>
+          <a><span class="ic">✎</span><span>Study</span></a>
+          <a><span class="ic">📊</span><span>Stats</span></a>
+          <a><span class="ic">☺</span><span>Profile</span></a>
+        </div>
+      </div>
     </div>
 
-    <h3 class="sub">Functionality principles</h3>
-    <p>For how the solution <em>behaves</em>, designers also weigh: <strong>navigation</strong> (can users always find their way?), <strong>consistency</strong> (the same action works the same way everywhere), <strong>error tolerance</strong> (mistakes are prevented or recoverable), and <strong>accessibility</strong> (usable by people with differing needs — adequate colour contrast, scalable text, keyboard use).</p>
+    <div class="bench-controls" id="benchControls">
+      <!-- toggles injected by JS -->
+      <div class="bench-summary">
+        <span class="bs-num" id="benchNum">7</span>
+        <span class="bs-txt"><b id="benchVerdict">Polished.</b><br><span id="benchHint" class="muted" style="font-size:.74rem">All seven principles applied. This is what “good” looks like.</span></span>
+      </div>
+      <div class="btnrow" style="margin-top:4px">
+        <button class="btn sm" onclick="benchAll(false)">💥 Wreck it all</button>
+        <button class="btn sm primary" onclick="benchAll(true)">✨ Fix it all</button>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- before/after toggle -->
-    <div class="widget">
-      <div class="wtop"><span class="wt">Apply the principles · before → after</span></div>
-      <p class="small">Same form, two designs. Tap to flip and see which principles were fixed.</p>
-      <div id="baBoard" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px"></div>
+<!-- ===================== 04 APPEARANCE PRINCIPLES ===================== -->
+<section id="s-appear">
+  <div class="eyebrow"><span class="sn">04</span> The five appearance principles</div>
+  <h2 class="sh">How a screen <b>looks</b>: order, weight, emphasis, breathing room, type</h2>
+  <p class="lead">These five decide whether a screen feels designed or dumped. For the exam, learn each as <b>name → what it does → effect on the user</b>. Naming alone earns nothing.</p>
+
+  <div class="grid g2">
+    <!-- ALIGNMENT -->
+    <div class="pcard" style="--pc:var(--p-align)">
+      <div class="ph"><span class="pi"><svg viewBox="0 0 24 24"><line x1="5" y1="4" x2="5" y2="20"/><rect x="8" y="6" width="11" height="3"/><rect x="8" y="12" width="8" height="3"/><rect x="8" y="18" width="13" height="0.1"/></svg></span>
+        <div><div class="pk">Appearance</div><div class="pt">Alignment</div></div></div>
+      <p>Elements share a common edge or axis (left, centre, baseline, or a grid). Invisible lines connect things, so the eye glides instead of hunting.</p>
+      <p class="muted" style="font-size:.8rem;margin-top:8px"><b>Analogy:</b> a tidy spreadsheet where every column lines up — vs labels typed at random indents. Same data, wildly different effort to read.</p>
+      <div class="gb-mini">
+        <div><div class="lab bad-l">✗ Ragged</div><div style="border:1px solid var(--border);border-radius:8px;padding:8px;font-size:.74rem"><div>Name</div><div style="margin-left:18px">Email</div><div style="margin-left:7px">Phone</div></div></div>
+        <div><div class="lab good-l">✓ Aligned</div><div style="border:1px solid var(--border);border-radius:8px;padding:8px;font-size:.74rem"><div>Name</div><div>Email</div><div>Phone</div></div></div>
+      </div>
     </div>
 
-    <div class="callout tip">
-      <div class="ct">Tie it back</div>
-      <p>"<em>Adheres to design principles</em>" is itself a common evaluation criterion. So the principles here aren't decoration — they become measuring sticks in the very next chapter.</p>
+    <!-- BALANCE -->
+    <div class="pcard" style="--pc:var(--p-bal)">
+      <div class="ph"><span class="pi"><svg viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="6"/><line x1="4" y1="8" x2="20" y2="8"/><circle cx="6" cy="14" r="3"/><circle cx="18" cy="13" r="4"/><line x1="12" y1="6" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg></span>
+        <div><div class="pk">Appearance</div><div class="pt">Balance</div></div></div>
+      <p>Visual “weight” is distributed so no region feels heavier than the rest. <b>Symmetrical</b> balance mirrors weight across an axis; <b>asymmetrical</b> balance offsets a big element with several small ones.</p>
+      <p class="muted" style="font-size:.8rem;margin-top:8px"><b>Analogy:</b> a seesaw. A heavy element close to the centre balances a light element far out. Try it in the lab below.</p>
     </div>
-  </section>
+  </div>
 
-  <!-- ============ 11 CRITERIA ============ -->
-  <section id="criteria">
-    <div class="eyebrow"><span class="dot"></span>Chapter 11 · The handover</div>
-    <h2 class="sec">Evaluation criteria — written here, used later</h2>
-    <p class="lead">During Design you write the <strong>evaluation criteria</strong>: measurable statements that will later judge whether the finished solution is <span class="k-app">effective</span> (does it do the job well?) and <span class="k-func">efficient</span> (does it use time, effort and money well?). They are reused, unchanged, in Unit 4.</p>
+  <!-- BALANCE BEAM 3D LAB -->
+  <div class="lab">
+    <div class="lab-head">
+      <span class="lt">Balance beam · visual weight lab</span>
+      <div class="btnrow" style="margin:0">
+        <button class="btn sm" onclick="beam.preset('sym')">Symmetrical</button>
+        <button class="btn sm" onclick="beam.preset('asym')">Asymmetrical (balanced)</button>
+        <button class="btn sm" onclick="beam.preset('heavy')">Top-heavy (bad)</button>
+        <button class="btn sm" onclick="beam.reset()">Reset</button>
+      </div>
+    </div>
+    <canvas id="beamCanvas"></canvas>
+    <div class="lab-foot">
+      <div class="readout" id="beamRead">Drag the blocks along the beam. A block's <b>weight</b> = its size; its turning effect = weight × distance from the centre. Balance the beam to balance the layout.</div>
+    </div>
+  </div>
 
-    <div class="mne">
-      <span class="tag2">Visual mnemonic</span>
-      <h4>⏳ "The TIME CAPSULE"</h4>
-      <p>You write your criteria at Design and <span class="word">bury them in a time capsule</span>. Months later, at Evaluation (Unit 4), you <span class="word">dig the capsule up</span> and measure the finished solution against the <em>exact same</em> criteria. You don't get to rewrite them once you've seen how the build turned out — that would be marking your own homework. Same criteria, two moments in time.</p>
+  <div class="grid g2" style="margin-top:18px">
+    <!-- CONTRAST -->
+    <div class="pcard" style="--pc:var(--p-con)">
+      <div class="ph"><span class="pi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg></span>
+        <div><div class="pk">Appearance</div><div class="pt">Contrast</div></div></div>
+      <p>Deliberate difference — in colour, size, weight, or shape — that makes important things stand out and creates a clear <b>visual hierarchy</b> (what to look at first, second, third).</p>
+      <p class="muted" style="font-size:.8rem;margin-top:8px"><b>Watch out:</b> contrast is not only colour. A bigger, bolder heading contrasts with body text by <em>size and weight</em>. Low contrast also fails accessibility for low-vision users.</p>
+      <div class="gb-mini">
+        <div><div class="lab bad-l">✗ No hierarchy</div><div style="border:1px solid var(--border);border-radius:8px;padding:9px;font-size:.78rem;color:var(--muted)"><div>Settings</div><div>Account</div><div>Privacy</div></div></div>
+        <div><div class="lab good-l">✓ Clear focus</div><div style="border:1px solid var(--border);border-radius:8px;padding:9px;font-size:.78rem"><div style="font-weight:800;font-size:.95rem;color:var(--bright)">Settings</div><div class="muted">Account</div><div class="muted">Privacy</div></div></div>
+      </div>
     </div>
 
-    <h3 class="sub">Weak vs strong criteria</h3>
-    <p>A criterion must be <strong>measurable</strong>. "The solution should be good" can't be tested. Rewrite vague wants into specific, checkable statements.</p>
-    <table class="tbl">
-      <tr><th>❌ Weak (vague)</th><th>✅ Strong (measurable)</th></tr>
-      <tr><td>The interface is easy to use</td><td>A new user can complete a booking in under 3 steps without help</td></tr>
-      <tr><td>It runs fast</td><td>Each search returns results in under 2 seconds</td></tr>
-      <tr><td>It looks nice</td><td>The layout follows contrast, alignment and proximity, rated by 5 users at ≥4/5</td></tr>
-      <tr><td>It's reliable</td><td>The solution processes 100 test records with zero crashes</td></tr>
-    </table>
+    <!-- SPACE -->
+    <div class="pcard" style="--pc:var(--p-space)">
+      <div class="ph"><span class="pi"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="3"/><rect x="7" y="14" width="6" height="3"/></svg></span>
+        <div><div class="pk">Appearance</div><div class="pt">Space</div></div></div>
+      <p>Empty space (white space / negative space) given on purpose. <b>Proximity</b>: things placed close together are read as a group; space between groups separates them. Space also gives the eye room to rest.</p>
+      <p class="muted" style="font-size:.8rem;margin-top:8px"><b>Analogy:</b> paragraphs. Remove every blank line and the page becomes a wall of text — technically complete, practically unreadable.</p>
+      <div class="gb-mini">
+        <div><div class="lab bad-l">✗ Crammed</div><div style="border:1px solid var(--border);border-radius:8px;padding:4px;font-size:.7rem;line-height:1.1"><div>Title</div><div>Subtitle</div><div>Body line one</div><div>Body line two</div></div></div>
+        <div><div class="lab good-l">✓ Grouped</div><div style="border:1px solid var(--border);border-radius:8px;padding:9px;font-size:.7rem"><div style="margin-bottom:7px"><div>Title</div><div class="muted">Subtitle</div></div><div>Body line one</div><div>Body line two</div></div></div>
+      </div>
+    </div>
+  </div>
 
-    <div class="widget" id="critW">
-      <div class="wtop"><span class="wt">Measurable or not?</span><span class="score" id="critScore">0 / 6</span></div>
-      <p class="small">Tap each criterion as <b>Measurable</b> or <b>Too vague</b>.</p>
-      <div id="critBox"></div>
+  <!-- TEXT FORMATTING (full width) -->
+  <div class="pcard" style="--pc:var(--p-text);margin-top:18px">
+    <div class="ph"><span class="pi"><svg viewBox="0 0 24 24"><path d="M4 6h16M7 6v13M9 12h11M9 17h7"/></svg></span>
+      <div><div class="pk">Appearance</div><div class="pt">Text formatting</div></div></div>
+    <p>Choices about typeface, size, weight, case, colour, line length and line spacing that make text <b>legible</b> and build a reading hierarchy (headings vs body vs captions). It is not “making it pretty” — it is making it readable and ranked.</p>
+    <div class="grid g3" style="margin-top:12px">
+      <div style="border:1px solid var(--border);border-radius:9px;padding:11px;font-size:.78rem"><div class="lab bad-l" style="font-size:.6rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">✗ One flat size</div><div>WEEKLY REVIEW your streak is 12 days keep going tap any deck to start</div></div>
+      <div style="border:1px solid var(--border);border-radius:9px;padding:11px;font-size:.78rem"><div class="good-l" style="font-size:.6rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">✓ Hierarchy</div><div style="font-weight:800;font-size:.9rem;color:var(--bright)">Weekly review</div><div class="muted" style="font-size:.72rem">12-day streak · keep going</div><div style="margin-top:4px">Tap any deck to start</div></div>
+      <div style="border:1px solid var(--border);border-radius:9px;padding:11px;font-size:.78rem"><div class="muted" style="font-size:.6rem;font-weight:800;text-transform:uppercase;margin-bottom:6px">Levers</div>size · weight · case · colour · spacing · line length</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 05 FUNCTIONALITY PRINCIPLES ===================== -->
+<section id="s-function">
+  <div class="eyebrow"><span class="sn">05</span> The two functionality principles</div>
+  <h2 class="sh">How a screen <b>works</b>: can they do it, and can they get there?</h2>
+  <p class="lead">Appearance gets people in the door. <b>Usability</b> and <b>navigation</b> decide whether they can actually complete a task and move around without getting lost.</p>
+
+  <div class="grid g2">
+    <!-- USABILITY -->
+    <div class="pcard" style="--pc:var(--p-use)">
+      <div class="ph"><span class="pi"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+        <div><div class="pk">Functionality</div><div class="pt">Usability</div></div></div>
+      <p>The interface is easy to learn and efficient to operate: clear labels, sensible tap-target sizes, immediate feedback, forgiving of mistakes. A usable button says exactly what it does — <span class="mono">Flip card</span>, not <span class="mono">OK</span>.</p>
+      <ul style="font-size:.82rem;margin:8px 0 0 18px;color:var(--text)">
+        <li><b>Learnability</b> — a new user works it out fast</li>
+        <li><b>Efficiency</b> — fewer taps to finish a task</li>
+        <li><b>Feedback</b> — the screen reacts so users know it worked</li>
+        <li><b>Error prevention</b> — hard to do the wrong thing by accident</li>
+      </ul>
+      <div class="callout warn" style="margin-top:12px"><h4><span class="tagword">Trap</span> Usability ≠ “looks nice”</h4><p style="font-size:.82rem">Always tie usability to a <em>task</em>: “easier to <b>rate a card</b>” beats “nicer”.</p></div>
     </div>
 
-    <div class="halves">
-      <div class="halfcard a"><div class="ht">Effectiveness</div><p>How <em>well</em> the solution meets the need — accuracy, completeness, readability, usability, reliability, relevance, timeliness. The "is it any good?" question.</p></div>
-      <div class="halfcard b"><div class="ht">Efficiency</div><p>How <em>economically</em> it works — time taken, cost, labour, effort, resources used. The "at what cost?" question.</p></div>
+    <!-- NAVIGATION -->
+    <div class="pcard" style="--pc:var(--p-nav)">
+      <div class="ph"><span class="pi"><svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></span>
+        <div><div class="pk">Functionality</div><div class="pt">Navigation</div></div></div>
+      <p>How users move between screens and find features: menus, tabs, back buttons, breadcrumbs — and a clear signal of <b>where they are now</b>. Good navigation is consistent and predictable across the whole solution.</p>
+      <ul style="font-size:.82rem;margin:8px 0 0 18px;color:var(--text)">
+        <li><b>Wayfinding</b> — the current screen is highlighted</li>
+        <li><b>Consistency</b> — the nav bar stays in the same place</li>
+        <li><b>Reachability</b> — key tasks are 1–2 taps away</li>
+        <li><b>Escape</b> — there is always a way back</li>
+      </ul>
+      <p class="muted" style="font-size:.8rem;margin-top:8px"><b>Analogy:</b> a shopping centre. Clear signs and a “you are here” map = you find the food court. No signs = you wander.</p>
     </div>
-  </section>
+  </div>
 
-  <!-- ============ 12 TRAPS ============ -->
-  <section id="traps">
-    <div class="eyebrow"><span class="dot" style="background:var(--trap)"></span>Chapter 12 · Don't lose marks</div>
-    <h2 class="sec">Exam traps &amp; how to answer</h2>
-
-    <div class="callout trap"><div class="ct">Trap 1 · Design = coding</div><p>Writing actual program statements is Development, not Design. Pseudocode is design; Python is not.</p></div>
-    <div class="callout trap"><div class="ct">Trap 2 · One idea</div><p>Design generates <strong>two or three</strong> ideas, then chooses one with criteria. "I designed my app" (singular) misses the process.</p></div>
-    <div class="callout trap"><div class="ct">Trap 3 · Mock-up does everything</div><p>A mock-up shows <strong>appearance only</strong>. It does not show logic, data structure or processing.</p></div>
-    <div class="callout trap"><div class="ct">Trap 4 · Confusing object description with data dictionary</div><p>Object description = objects' properties &amp; <strong>methods</strong>. Data dictionary = <strong>variables</strong> &amp; data types. Different tables, different jobs.</p></div>
-    <div class="callout trap"><div class="ct">Trap 5 · Vague criteria</div><p>"Easy to use" is not measurable. Every criterion must be testable with a number, count or clear pass/fail.</p></div>
-    <div class="callout trap"><div class="ct">Trap 6 · New criteria at Evaluation</div><p>The criteria are written at Design and reused unchanged at Evaluation. Don't invent them after the build.</p></div>
-
-    <h3 class="sub">How to phrase a strong answer</h3>
-    <table class="tbl">
-      <tr><th>Command word</th><th>What it wants</th></tr>
-      <tr><td>Identify / State</td><td>Name the tool or term — one word or phrase.</td></tr>
-      <tr><td>Describe</td><td>Name it <em>and</em> say what it does / shows, in subject terms.</td></tr>
-      <tr><td>Explain</td><td>Describe <em>and</em> give the reason / how it works in this scenario.</td></tr>
-      <tr><td>Justify</td><td>Argue why this choice beats alternatives, grounded in the scenario.</td></tr>
-    </table>
-    <div class="callout pass">
-      <div class="ct">A model sentence</div>
-      <p>"A <b>mock-up</b> is the right tool here because the client's feedback is about <em>appearance</em> — the screen layout and button placement — which a mock-up represents with each object named and annotated, without committing to any processing logic."</p>
+  <!-- USABILITY breakdown — study-design groupings -->
+  <div class="card" style="border-color:color-mix(in srgb,var(--p-use) 38%,var(--border))">
+    <div class="pk" style="color:var(--p-use)">Going deeper · the usability principle</div>
+    <h3 style="margin:4px 0 4px;font-size:1.04rem">What “usability” actually covers</h3>
+    <p class="muted" style="font-size:.85rem;margin:0 0 14px;max-width:64ch">The study design files usability under three headings — <b>ease of use</b>, <b>flexibility &amp; robustness</b>, and <b>accessibility</b> (which folds in navigation and error tolerance). Naming the heading turns “this improves usability” from an opinion into a justified answer.</p>
+    <div class="grid g3">
+      <div class="card" style="margin:0;padding:15px 17px">
+        <div class="pk" style="color:var(--p-use)">01 · Ease of use</div>
+        <p style="font-size:.83rem;margin:6px 0 8px">How fast someone learns the interface and operates it without much thought or effort.</p>
+        <ul style="font-size:.79rem;margin:0 0 8px 18px;color:var(--text)">
+          <li>Quick to learn; low effort to run</li>
+          <li>Predictable &amp; consistent — same action, same result</li>
+          <li>Readable interface <em>and</em> readable output</li>
+          <li>Satisfying to use (the felt “UX”)</li>
+        </ul>
+        <p class="muted" style="font-size:.77rem"><b>NoteNest:</b> a first-timer starts a study session with no tutorial because every control reads plainly.</p>
+      </div>
+      <div class="card" style="margin:0;padding:15px 17px">
+        <div class="pk" style="color:var(--p-use)">02 · Flexibility &amp; robustness</div>
+        <p style="font-size:.83rem;margin:6px 0 8px">Holds up under real use, and bends to suit how different people want to work.</p>
+        <ul style="font-size:.79rem;margin:0 0 8px 18px;color:var(--text)">
+          <li>Reliable and responsive; copes with the data volume</li>
+          <li>Produces correct, good-quality results</li>
+          <li>Adapts to preference — menu, button <em>or</em> shortcut for one action</li>
+          <li>Remappable keys for power users</li>
+        </ul>
+        <p class="muted" style="font-size:.77rem"><b>NoteNest:</b> a power user flips a card with the space bar while a beginner taps the button — one function, two paths.</p>
+      </div>
+      <div class="card" style="margin:0;padding:15px 17px">
+        <div class="pk" style="color:var(--p-use)">03 · Accessibility &amp; error tolerance</div>
+        <p style="font-size:.83rem;margin:6px 0 8px">Usable by the full range of real users, and forgiving when they slip up.</p>
+        <ul style="font-size:.79rem;margin:0 0 8px 18px;color:var(--text)">
+          <li>Works for users with disabilities or particular needs</li>
+          <li>Tolerant of mistakes — easy to undo, hard to lose work</li>
+          <li>Clear way to move around and a way back (links to navigation)</li>
+          <li>Meets the reasonable needs of its actual users</li>
+        </ul>
+        <p class="muted" style="font-size:.77rem"><b>NoteNest:</b> delete the wrong card and Undo restores it; a large-text mode keeps it usable for low-vision students.</p>
+      </div>
     </div>
-  </section>
+    <div class="callout" style="margin:14px 0 0"><p style="font-size:.82rem;margin:0"><b>Exam move:</b> when you claim a change “improves usability”, say <em>which</em> heading — ease of use, flexibility &amp; robustness, or accessibility — so the marker sees a reason, not just an assertion.</p></div>
+  </div>
 
-  <!-- ============ 13 PRACTICE ============ -->
-  <section id="practice">
-    <div class="eyebrow"><span class="dot" style="background:var(--pass)"></span>Chapter 13 · Self-mark</div>
-    <h2 class="sec">Practice questions</h2>
-    <p class="lead">Write your answer, then reveal the marking guide and grade yourself honestly. Use the exact VCAA term each time.</p>
-    <div id="quiz"></div>
-  </section>
+  <div class="callout good">
+    <h4><span class="tagword">Link it up</span> Appearance serves functionality</h4>
+    <p style="font-size:.9rem">The principles are not seven separate boxes — they reinforce each other. <b>Contrast</b> makes the active nav tab obvious (helping <b>navigation</b>). <b>Space</b> makes tap targets easier to hit (helping <b>usability</b>). <b>Text formatting</b> makes a button label readable (helping <b>usability</b>). High-band exam answers show these connections instead of listing principles in isolation.</p>
+  </div>
+</section>
 
+<!-- ===================== 06 SORTER ===================== -->
+<section id="s-sorter">
+  <div class="eyebrow"><span class="sn">06</span> Practice · Classify the principle</div>
+  <h2 class="sh">Which principle fixes each <b>complaint</b>?</h2>
+  <p class="lead">Examiners describe a flaw and ask which principle addresses it. Drag each user complaint onto the principle that fixes it. Wrong drops bounce back.</p>
+
+  <div class="sorter">
+    <div class="bins" id="bins">
+      <div class="bin" data-key="align" style="--bc:var(--p-align)"><h4><span class="dot"></span>Alignment</h4><div class="tokens drop"></div></div>
+      <div class="bin" data-key="contrast" style="--bc:var(--p-con)"><h4><span class="dot"></span>Contrast</h4><div class="tokens drop"></div></div>
+      <div class="bin" data-key="space" style="--bc:var(--p-space)"><h4><span class="dot"></span>Space</h4><div class="tokens drop"></div></div>
+      <div class="bin" data-key="text" style="--bc:var(--p-text)"><h4><span class="dot"></span>Text formatting</h4><div class="tokens drop"></div></div>
+      <div class="bin" data-key="use" style="--bc:var(--p-use)"><h4><span class="dot"></span>Usability</h4><div class="tokens drop"></div></div>
+      <div class="bin" data-key="nav" style="--bc:var(--p-nav)"><h4><span class="dot"></span>Navigation</h4><div class="tokens drop"></div></div>
+    </div>
+    <div>
+      <p class="muted" style="font-size:.8rem;margin-bottom:10px">Drag a complaint into its matching principle:</p>
+      <div class="tokens" id="tokenPool">
+        <div class="token" draggable="true" data-key="align">“The labels start at random indents — it looks messy.”</div>
+        <div class="token" draggable="true" data-key="contrast">“I can't tell which heading is most important.”</div>
+        <div class="token" draggable="true" data-key="space">“Everything's crammed together; I keep tapping the wrong thing.”</div>
+        <div class="token" draggable="true" data-key="text">“All the text is the same size, so nothing stands out.”</div>
+        <div class="token" draggable="true" data-key="use">“The button just says ‘OK' — OK to what?”</div>
+        <div class="token" draggable="true" data-key="nav">“I can't tell which tab I'm on or how to go back.”</div>
+        <div class="token" draggable="true" data-key="contrast">“The grey text on grey background is hard to read.”</div>
+        <div class="token" draggable="true" data-key="space">“The title and its subtitle look unrelated — too far apart.”</div>
+      </div>
+      <div class="btnrow"><button class="btn sm" onclick="resetSorter()">↺ Reset</button></div>
+      <div class="callout good" id="sorterDone" style="display:none"><h4><span class="tagword">Nice</span> All sorted</h4><p style="font-size:.85rem">Notice some complaints fit “space” and some fit “contrast” twice — principles overlap. In the exam, name the <em>best-fit</em> principle and justify it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 07 EXAM TRAPS ===================== -->
+<section id="s-traps">
+  <div class="eyebrow"><span class="sn">07</span> Examiner's report · the seven traps</div>
+  <h2 class="sh">Where marks <b>quietly disappear</b></h2>
+  <p class="lead">These are the recurring ways students lose marks on UI-principle questions. Each one is cheap to avoid once you've seen it.</p>
+
+  <div class="grid g2">
+    <div class="callout bad"><h4><span class="tagword">Trap 1</span> Naming with no effect</h4><p style="font-size:.86rem">“Use contrast and alignment.” — zero marks. The verb is usually <em>explain</em> or <em>justify</em>: state the principle <b>and</b> its effect on appearance or the user. <span class="muted">Name → effect → benefit.</span></p></div>
+    <div class="callout bad"><h4><span class="tagword">Trap 2</span> KK15 / KK16 mix-up</h4><p style="font-size:.86rem">Writing about affordance, interoperability or security when asked for <b>design principles</b>. Those are UX characteristics (KK15). Re-read the stem to confirm which dot point.</p></div>
+    <div class="callout bad"><h4><span class="tagword">Trap 3</span> Alignment = balance?</h4><p style="font-size:.86rem">They're different. <b>Alignment</b> = elements share an axis/edge. <b>Balance</b> = visual weight is evenly distributed. You can be perfectly aligned and still unbalanced.</p></div>
+    <div class="callout bad"><h4><span class="tagword">Trap 4</span> Space ≠ alignment</h4><p style="font-size:.86rem"><b>Space</b> (proximity) groups and separates; <b>alignment</b> lines things up. “The title and subtitle are too far apart” is a <em>space/proximity</em> problem, not an alignment one.</p></div>
+    <div class="callout bad"><h4><span class="tagword">Trap 5</span> Contrast = colour only</h4><p style="font-size:.86rem">Contrast also comes from <b>size, weight and shape</b>. And it must serve a <b>hierarchy</b> — contrast for its own sake just adds noise.</p></div>
+    <div class="callout bad"><h4><span class="tagword">Trap 6</span> Generic, screen-free answers</h4><p style="font-size:.86rem">Answers that could describe any app score low. Anchor every point to the <b>specific interface in the stem</b> — name the actual button, heading or screen.</p></div>
+  </div>
+  <div class="callout bad"><h4><span class="tagword">Trap 7</span> Text formatting treated as decoration</h4><p style="font-size:.86rem">It is about <b>legibility and hierarchy</b> (size, weight, case, colour, spacing), not “choosing a fun font”. Tie it to readability or ranking of information.</p></div>
+</section>
+
+<!-- ===================== 08 P-E-L WRITING TRAINER ===================== -->
+<section id="s-write">
+  <div class="eyebrow"><span class="sn">08</span> Technique · The P–E–L sentence</div>
+  <h2 class="sh">Turn a principle into a <b>mark-scoring sentence</b></h2>
+  <p class="lead">Most “explain/justify” marks come down to one reliable structure. Build every UI-principle point as <b>Principle → Effect → Link to the user/scenario</b>.</p>
+
+  <div class="pel">
+    <div class="pel-step"><span class="pel-k">P</span><h5>Principle</h5><p>Name the design principle precisely.</p></div>
+    <div class="pel-step"><span class="pel-k">E</span><h5>Effect</h5><p>What it does to the appearance or behaviour of the interface.</p></div>
+    <div class="pel-step"><span class="pel-k">L</span><h5>Link</h5><p>Why that helps <em>this</em> user complete <em>this</em> task.</p></div>
+  </div>
+
+  <div class="pel-demo">
+    <div class="muted" style="font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px">Worked example — NoteNest “Flip card” button</div>
+    <p><span class="frag p"><b>Applying contrast</b> by making the primary “Flip card” button violet against the dark card</span> <span class="frag e">makes it the most visually prominent control on the screen</span>, <span class="frag l">so a student mid-revision instantly knows the main action to take without reading every button.</span></p>
+  </div>
+
+  <div class="btnrow"><button class="btn sm" onclick="cyclePEL()">↻ Show another worked P–E–L</button></div>
+  <div class="pel-demo" id="pelDyn" style="display:none"></div>
+
+  <table class="tbl" style="margin-top:18px">
+    <tr><th>Command word</th><th>What the examiner wants</th><th>Your move</th></tr>
+    <tr><td><b>Identify / State</b></td><td>Name the principle</td><td>One or two words is enough</td></tr>
+    <tr><td><b>Describe</b></td><td>Name + what it does</td><td>P + E</td></tr>
+    <tr><td><b>Explain</b></td><td>Name + how + effect on user</td><td>P + E + L</td></tr>
+    <tr><td><b>Justify</b></td><td>Why this principle beats not using it</td><td>P + E + L + contrast with the weaker option</td></tr>
+    <tr><td><b>Compare / Distinguish</b></td><td>Similarities and differences</td><td>Address both principles in every sentence</td></tr>
+  </table>
+</section>
+
+<!-- ===================== 09 PRACTICE QUESTIONS ===================== -->
+<section id="s-exam">
+  <div class="eyebrow"><span class="sn">09</span> Exam practice · 16 marks</div>
+  <h2 class="sh">VCE-style questions with <b>weak vs strong</b> responses</h2>
+  <p class="lead">Attempt each on paper first. Then reveal the sample responses, read the marking guide, and self-mark honestly — your score builds the dial on the left.</p>
+
+  <!-- Q1 -->
+  <div class="q" data-max="2">
+    <div class="q-head"><span class="q-num">Q1</span><div class="q-text"><div class="qmark">2 marks</div>
+      <div class="qbody"><span class="q-cmd">Explain</span>NoteNest's home screen uses a single bright violet “Flip card” button while the “Hard” and “Easy” buttons are muted. Explain how the design principle of <b>contrast</b> improves the interface here.</div></div></div>
+    <div class="q-body">
+      <div class="btnrow"><button class="btn sm primary" onclick="rev(this)">Reveal sample responses</button></div>
+      <div class="reveal">
+        <div class="ans weak"><div class="alab">✗ Weak response</div>“Contrast makes the button stand out and look better. It uses a bright colour so the design is nicer.”
+          <div class="note">Names the principle but stops at “looks better”. No clear effect on the user, and “nicer” is not a functional benefit. Caps at 1 mark.</div></div>
+        <div class="ans strong"><div class="alab">✓ Strong response</div>“Contrast makes the violet ‘Flip card' button the most visually dominant element, establishing a clear hierarchy of actions. Because it stands out from the muted Hard/Easy buttons, the user immediately identifies the primary action to take next, reducing hesitation while revising.”
+          <div class="note">P → E → L: principle named, effect (hierarchy/dominance) stated, linked to the user's task. 2/2.</div></div>
+        <div class="marking"><b>Marking guide (2)</b><ul><li>1 — identifies contrast and that the primary button stands out / has emphasis</li><li>1 — explains the user benefit (knows the main action / clear hierarchy / faster to use)</li></ul></div>
+        <div class="selfmark"><span class="lbl">Self-mark:</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q" data-max="3">
+    <div class="q-head"><span class="q-num">Q2</span><div class="q-text"><div class="qmark">3 marks</div>
+      <div class="qbody"><span class="q-cmd">Describe</span>A reviewer says NoteNest's old screen had “labels at random indents, headings the same size as body text, and the cards squashed together with no gaps.” Identify <b>three</b> design principles that are not being applied, and for each, describe its effect on the user.</div></div></div>
+    <div class="q-body">
+      <div class="btnrow"><button class="btn sm primary" onclick="rev(this)">Reveal sample responses</button></div>
+      <div class="reveal">
+        <div class="ans weak"><div class="alab">✗ Weak response</div>“Alignment, contrast and space are missing. The screen looks bad and messy and is hard to use.”
+          <div class="note">All three principles correctly named (1 mark of identification each is fine) but a single shared “looks bad” covers them — the question wants an effect <em>per principle</em>. Likely 1–1.5/3.</div></div>
+        <div class="ans strong"><div class="alab">✓ Strong response</div>“<b>Alignment</b> — the random indents break the shared left edge, so the eye can't scan down a clean line and the screen feels disordered. <b>Text formatting</b> — headings the same size as body text remove the reading hierarchy, so users can't tell section titles from content at a glance. <b>Space</b> — squashed cards with no gaps remove proximity grouping and make tap targets crowd together, so users struggle to tell items apart and mis-tap.”
+          <div class="note">Three principles, each with a distinct, specific effect tied to the described screen. 3/3.</div></div>
+        <div class="marking"><b>Marking guide (3)</b><ul><li>1 — alignment identified + effect (no shared edge / hard to scan)</li><li>1 — text formatting identified + effect (no hierarchy / headings not distinct)</li><li>1 — space/proximity identified + effect (no grouping / crowded tap targets)</li></ul><span class="muted">Accept contrast for the headings point if argued via size/weight.</span></div>
+        <div class="selfmark"><span class="lbl">Self-mark:</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q" data-max="2">
+    <div class="q-head"><span class="q-num">Q3</span><div class="q-text"><div class="qmark">2 marks</div>
+      <div class="qbody"><span class="q-cmd">Distinguish</span>Distinguish between the design principles of <b>alignment</b> and <b>space</b>.</div></div></div>
+    <div class="q-body">
+      <div class="btnrow"><button class="btn sm primary" onclick="rev(this)">Reveal sample responses</button></div>
+      <div class="reveal">
+        <div class="ans weak"><div class="alab">✗ Weak response</div>“Alignment lines things up and space is the empty parts of the screen.”
+          <div class="note">Two half-definitions sitting side by side. A “distinguish” needs the contrast made explicit. 1/2.</div></div>
+        <div class="ans strong"><div class="alab">✓ Strong response</div>“Alignment arranges elements along a shared edge or axis so the layout reads as ordered, <em>whereas</em> space uses deliberate gaps (proximity) to group related items and separate unrelated ones. Alignment is about <b>where elements line up</b>; space is about <b>how close or far apart</b> they sit.”
+          <div class="note">Both defined and the difference stated explicitly (“whereas… is about… whereas… is about”). 2/2.</div></div>
+        <div class="marking"><b>Marking guide (2)</b><ul><li>1 — correct meaning of each principle</li><li>1 — the distinction made explicit (shared axis vs grouping/proximity)</li></ul></div>
+        <div class="selfmark"><span class="lbl">Self-mark:</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q" data-max="4">
+    <div class="q-head"><span class="q-num">Q4</span><div class="q-text"><div class="qmark">4 marks</div>
+      <div class="qbody"><span class="q-cmd">Justify</span>NoteNest's bottom navigation bar currently shows four identical grey icons with no labels and no indication of the current screen. Recommend <b>two</b> changes using design principles, and justify how each improves the interface.</div></div></div>
+    <div class="q-body">
+      <div class="btnrow"><button class="btn sm primary" onclick="rev(this)">Reveal sample responses</button></div>
+      <div class="reveal">
+        <div class="ans weak"><div class="alab">✗ Weak response</div>“Add labels and colours so it looks better and people can navigate. This improves navigation and usability.”
+          <div class="note">Right direction but vague: no principle clearly named per change, and “looks better” isn't a justification. 1–2/4.</div></div>
+        <div class="ans strong"><div class="alab">✓ Strong response</div>“<b>Change 1 — apply contrast to mark the current screen.</b> Highlight the active tab in violet while the others stay grey. This creates a hierarchy that answers ‘where am I?', so users keep their bearings as they move through the app (navigation). <b>Change 2 — add a text label under each icon.</b> Text formatting turns ambiguous icons into self-explanatory destinations, improving usability because new users can identify Decks/Study/Stats/Profile without guessing or tapping to find out.”
+          <div class="note">Two changes, each tied to a named principle + justified by user benefit, and it correctly links appearance principles (contrast, text formatting) to the functionality goals (navigation, usability). 4/4.</div></div>
+        <div class="marking"><b>Marking guide (4)</b><ul><li>1 — change 1 stated with a relevant principle (e.g. contrast for the active tab)</li><li>1 — justification of change 1 (wayfinding / knows current screen)</li><li>1 — change 2 stated with a relevant principle (e.g. text formatting / labels)</li><li>1 — justification of change 2 (icons become identifiable / easier to use)</li></ul></div>
+        <div class="selfmark"><span class="lbl">Self-mark:</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q" data-max="3">
+    <div class="q-head"><span class="q-num">Q5</span><div class="q-text"><div class="qmark">3 marks</div>
+      <div class="qbody"><span class="q-cmd">Explain</span><b>Usability</b> appears both as a user-experience characteristic and as a UI design principle. Explain what usability means as a <b>design principle</b>, and give one example of how applying another principle on the NoteNest screen would improve it.</div></div></div>
+    <div class="q-body">
+      <div class="btnrow"><button class="btn sm primary" onclick="rev(this)">Reveal sample responses</button></div>
+      <div class="reveal">
+        <div class="ans weak"><div class="alab">✗ Weak response</div>“Usability means the app is easy to use and people like using it. It's part of UX. Good design makes it usable.”
+          <div class="note">Doesn't separate the design-principle meaning from UX, and gives no concrete example of another principle improving usability. 1/3.</div></div>
+        <div class="ans strong"><div class="alab">✓ Strong response</div>“As a design principle, usability means structuring the interface so it is easy to learn and efficient to operate — clear labels, adequate tap-target sizes and immediate feedback when a control is used. For example, applying <b>space</b> by increasing the gaps between the Flip/Hard/Easy buttons enlarges each tap target, so a student rating a card is far less likely to mis-tap, directly improving usability.”
+          <div class="note">Defines usability as a design principle (operational, task-focused), then shows another principle (space) improving it with a concrete screen example. 3/3.</div></div>
+        <div class="marking"><b>Marking guide (3)</b><ul><li>1 — usability defined as a design principle (easy to learn / efficient to operate, not just “nice”)</li><li>1 — a second principle correctly named and applied to the screen</li><li>1 — explains how that change improves usability (concrete user benefit)</li></ul></div>
+        <div class="selfmark"><span class="lbl">Self-mark:</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q" data-max="2">
+    <div class="q-head"><span class="q-num">Q6</span><div class="q-text"><div class="qmark">2 marks</div>
+      <div class="qbody"><span class="q-cmd">Explain</span>Explain how the principle of <b>text formatting</b> can be used to establish a visual hierarchy on the NoteNest study screen.</div></div></div>
+    <div class="q-body">
+      <div class="btnrow"><button class="btn sm primary" onclick="rev(this)">Reveal sample responses</button></div>
+      <div class="reveal">
+        <div class="ans weak"><div class="alab">✗ Weak response</div>“Use a nice big font for the title so it looks good and is easy to read.”
+          <div class="note">Touches size but frames it as “looks good”, not as ranking information. No clear hierarchy explained. 1/2.</div></div>
+        <div class="ans strong"><div class="alab">✓ Strong response</div>“Setting the deck title in a large bold weight, the subtitle in a smaller muted style, and the card question at a medium size creates three distinct typographic levels. The differences in size and weight rank the information, so the user's eye lands on the title first, then the question, then the supporting detail — reading the screen in the intended order.”
+          <div class="note">Uses size/weight differences to build a ranked hierarchy and explains the resulting reading order. 2/2.</div></div>
+        <div class="marking"><b>Marking guide (2)</b><ul><li>1 — names text-formatting levers (size / weight / colour) applied to distinct elements</li><li>1 — explains the hierarchy effect (eye guided / information ranked / read in order)</li></ul></div>
+        <div class="selfmark"><span class="lbl">Self-mark:</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 10 CHEAT SHEET ===================== -->
+<section id="s-recap">
+  <div class="eyebrow"><span class="sn">10</span> Recap · one-screen cheat sheet</div>
+  <h2 class="sh">The whole dot point, <b>compressed</b></h2>
+  <div class="cheat">
+    <div class="cc" style="--ctc:var(--p-align)"><h5>Alignment</h5><p>Shared edge/axis → ordered, scannable layout.</p></div>
+    <div class="cc" style="--ctc:var(--p-bal)"><h5>Balance</h5><p>Even visual weight → stable feel. Symmetrical or asymmetrical.</p></div>
+    <div class="cc" style="--ctc:var(--p-con)"><h5>Contrast</h5><p>Colour/size/weight differences → hierarchy &amp; emphasis.</p></div>
+    <div class="cc" style="--ctc:var(--p-space)"><h5>Space</h5><p>Deliberate gaps → grouping (proximity) &amp; breathing room.</p></div>
+    <div class="cc" style="--ctc:var(--p-text)"><h5>Text formatting</h5><p>Size/weight/case/spacing → legibility &amp; reading hierarchy.</p></div>
+    <div class="cc" style="--ctc:var(--p-use)"><h5>Usability</h5><p>Easy to learn, efficient to operate, clear feedback. Three headings: ease of use · flexibility &amp; robustness · accessibility (incl. error tolerance).</p></div>
+    <div class="cc" style="--ctc:var(--p-nav)"><h5>Navigation</h5><p>Find features, know where you are, always a way back.</p></div>
+    <div class="cc" style="--ctc:var(--cc)"><h5>Golden rule</h5><p>Every answer = <b>Principle → Effect → Link</b> to this user/screen.</p></div>
+  </div>
+
+  <div class="footer-note">
+    <span>Digital Vector · VCE Software Development · U3·O2 Analysis &amp; Design · KK16</span>
+    <span>Scenario: <b>NoteNest</b> · Aligned to VCAA Applied Computing 2025–2028</span>
+  </div>
+</section>
+
+    </div><!-- /.wrap -->
   </main>
-</div>
-
-<footer>
-  <div class="wrap">
-    <b>Digital Vector</b> — VCE Software Development courseware · The <b>Design</b> stage of the problem-solving methodology.<br>
-    Aligned to the VCE Applied Computing Study Design (2025–2028), Units 3 &amp; 4. Single-file, offline, Australian English. For classroom use.
-  </div>
-</footer>
+</div><!-- /#shell -->
 
 <script>/**
  * @license
@@ -734,482 +886,340 @@ footer b{color:#C9D4E2}
 </script>
 <script>
 "use strict";
+/* ============ nav + scroll-spy ============ */
+const NAV = [
+  ['s-intro','01','Same content, two screens'],
+  ['s-what','02','Principles are grammar'],
+  ['s-bench','03','★ The Redesign Bench'],
+  ['s-appear','04','Appearance · 5 principles'],
+  ['s-function','05','Functionality · 2 principles'],
+  ['s-sorter','06','Classify the principle'],
+  ['s-traps','07','The seven exam traps'],
+  ['s-write','08','P–E–L writing'],
+  ['s-exam','09','Practice · 16 marks'],
+  ['s-recap','10','Cheat sheet'],
+];
+const railNav = document.getElementById('railNav');
+NAV.forEach(([id,n,label])=>{
+  const a = document.createElement('div');
+  a.className='nav-item'; a.dataset.target=id;
+  a.innerHTML = `<span class="n">${n}</span><span>${label}</span>`;
+  a.onclick = ()=> document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  railNav.appendChild(a);
+});
+const navItems = [...document.querySelectorAll('.nav-item')];
+const main = document.getElementById('main');
+const spy = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){
+    navItems.forEach(n=>n.classList.toggle('active', n.dataset.target===e.target.id));
+  }});
+},{root:main, rootMargin:'-30% 0px -60% 0px', threshold:0});
+document.querySelectorAll('section').forEach(s=>spy.observe(s));
 
-/* ============ THEME + FONT + PROGRESS ============ */
+/* ============ theme / font / persistence ============ */
+const KEY='ad_kk16_';
+function saveLS(k,v){ try{ localStorage.setItem(KEY+k, JSON.stringify(v)); }catch(e){} }
+function loadLS(k,d){ try{ const v=localStorage.getItem(KEY+k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+
+let theme = loadLS('theme','dark');
+function applyTheme(){ document.documentElement.setAttribute('data-theme',theme);
+  document.getElementById('themeBtn').textContent = theme==='dark'?'🌙 Dark':'☀️ Light';
+  if(window.heroScene) heroScene.refresh(); if(window.beam) beam.refresh(); }
+function toggleTheme(){ theme = theme==='dark'?'light':'dark'; saveLS('theme',theme); applyTheme(); }
+applyTheme();
+
+let fs = loadLS('fs',100);
+function applyFont(){ document.documentElement.style.setProperty('--fs',(15*fs/100)+'px'); document.getElementById('fsLbl').textContent=fs+'%'; }
+function chFont(d){ fs=Math.max(80,Math.min(140,fs+d*10)); saveLS('fs',fs); applyFont(); }
+applyFont();
+
+function toggleRail(){ document.getElementById('rail').classList.toggle('collapsed'); setTimeout(()=>{ if(window.heroScene)heroScene.onResize(); if(window.beam)beam.onResize(); },220); }
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ============ REDESIGN BENCH ============ */
+const TOGGLES = [
+  ['align','Alignment','Shared edges &amp; axes','var(--p-align)'],
+  ['balance','Balance','Even visual weight','var(--p-bal)'],
+  ['contrast','Contrast','Emphasis &amp; hierarchy','var(--p-con)'],
+  ['space','Space','Grouping &amp; breathing room','var(--p-space)'],
+  ['text','Text formatting','Legible reading hierarchy','var(--p-text)'],
+  ['use','Usability','Easy, efficient, clear','var(--p-use)'],
+  ['nav','Navigation','Find features, know where','var(--p-nav)'],
+];
+const benchState = {};
+TOGGLES.forEach(t=>benchState[t[0]]=true);
+const screen = document.getElementById('screen');
+const benchControls = document.getElementById('benchControls');
+const summaryNode = benchControls.querySelector('.bench-summary');
+TOGGLES.forEach(([key,name,desc,col])=>{
+  const el = document.createElement('div');
+  el.className='tg on'; el.style.setProperty('--tgc',col); el.dataset.key=key;
+  el.innerHTML = `<span class="sw"></span><div><div class="tgname">${name}</div><div class="tgdesc">${desc}</div></div><span class="tgstate">On</span>`;
+  el.onclick = ()=> setBench(key, !benchState[key]);
+  benchControls.insertBefore(el, summaryNode);
+});
+const VAGUE = {flip:'OK', hard:'?', easy:'✓'};
+const CLEAR = {flip:'Flip card', hard:'Hard', easy:'Easy'};
+function setBench(key,val){
+  benchState[key]=val;
+  screen.classList.toggle('v-'+key, !val);
+  const tg = benchControls.querySelector(`.tg[data-key="${key}"]`);
+  tg.classList.toggle('on',val);
+  tg.querySelector('.tgstate').textContent = val?'On':'Off';
+  if(key==='use'){
+    document.getElementById('bFlip').textContent = val?CLEAR.flip:VAGUE.flip;
+    document.getElementById('bHard').textContent = val?CLEAR.hard:VAGUE.hard;
+    document.getElementById('bEasy').textContent = val?CLEAR.easy:VAGUE.easy;
+  }
+  updateBenchSummary();
+}
+function benchAll(val){ TOGGLES.forEach(t=>setBench(t[0],val)); }
+function updateBenchSummary(){
+  const n = TOGGLES.filter(t=>benchState[t[0]]).length;
+  document.getElementById('benchNum').textContent=n;
+  const v=document.getElementById('benchVerdict'), h=document.getElementById('benchHint');
+  if(n===7){ v.textContent='Polished.'; h.textContent='All seven principles applied. This is what “good” looks like.'; }
+  else if(n>=5){ v.textContent='Mostly fine.'; h.textContent='A couple of principles off — small cracks are already showing.'; }
+  else if(n>=3){ v.textContent='Rough.'; h.textContent='Several principles missing. Same content, much harder to use.'; }
+  else if(n>=1){ v.textContent='Broken.'; h.textContent='Almost nothing applied. The screen actively fights the user.'; }
+  else { v.textContent='Wreckage.'; h.textContent='Every principle off. The content is identical — only the design changed.'; }
+}
+updateBenchSummary();
+document.getElementById('bFlip').onclick = ()=>{
+  const c = screen.querySelector('.scr-card .cardq');
+  c.textContent = c.dataset.flipped ? 'Which organelle is the “powerhouse of the cell”?' : 'Mitochondria — they produce ATP via respiration.';
+  c.dataset.flipped = c.dataset.flipped ? '' : '1';
+};
+
+/* ============ SORTER ============ */
+let dragTok=null, selTok=null;
+function bindSorter(){
+  document.querySelectorAll('#tokenPool .token').forEach(tok=>{
+    tok.addEventListener('dragstart',e=>{ dragTok=tok; e.dataTransfer.setData('text',''); });
+    tok.addEventListener('click',()=>{ if(tok.classList.contains('placed'))return;
+      document.querySelectorAll('.token').forEach(t=>t.style.outline=''); selTok = (selTok===tok)?null:tok;
+      if(selTok) selTok.style.outline='2px solid var(--cc)'; });
+  });
+  document.querySelectorAll('.bin').forEach(bin=>{
+    bin.addEventListener('dragover',e=>{ e.preventDefault(); bin.classList.add('hot'); });
+    bin.addEventListener('dragleave',()=>bin.classList.remove('hot'));
+    bin.addEventListener('drop',e=>{ e.preventDefault(); bin.classList.remove('hot'); if(dragTok) tryPlace(dragTok,bin); dragTok=null; });
+    bin.addEventListener('click',()=>{ if(selTok){ const t=selTok; selTok.style.outline=''; selTok=null; tryPlace(t,bin); } });
+  });
+}
+function tryPlace(tok,bin){
+  if(tok.classList.contains('placed'))return;
+  if(tok.dataset.key===bin.dataset.key){
+    tok.classList.add('placed','right'); tok.draggable=false;
+    bin.querySelector('.drop').appendChild(tok);
+    if(![...document.querySelectorAll('#tokenPool .token')].length) document.getElementById('sorterDone').style.display='';
+  } else { tok.classList.add('wrong'); setTimeout(()=>tok.classList.remove('wrong'),350); }
+}
+function resetSorter(){
+  const pool=document.getElementById('tokenPool');
+  document.querySelectorAll('.token').forEach(t=>{ t.classList.remove('placed','right','wrong'); t.draggable=true; t.style.outline=''; pool.appendChild(t); });
+  document.getElementById('sorterDone').style.display='none'; selTok=null;
+}
+bindSorter();
+
+/* ============ P-E-L cycle ============ */
+const PELS = [
+  ['Applying <b>space</b> by adding gaps between the three rating buttons','enlarges each tap target and groups them as one action set','so a student rating a card on a phone is far less likely to mis-tap.'],
+  ['Applying <b>alignment</b> by sharing a single left edge for the title, subtitle and progress bar','lets the eye scan straight down a clean axis','so the user takes in the screen state at a glance instead of hunting.'],
+  ['Applying <b>navigation</b> by highlighting the active “Decks” tab','signals the current location in the app','so users keep their bearings and always know how to get back.'],
+  ['Applying <b>text formatting</b> with a bold large title over muted subtitle text','creates a clear reading hierarchy','so the most important label is read first, then the supporting detail.'],
+];
+let pelIdx=0;
+function cyclePEL(){
+  const box=document.getElementById('pelDyn'); box.style.display='';
+  const [p,e,l]=PELS[pelIdx%PELS.length]; pelIdx++;
+  box.innerHTML = `<div class="muted" style="font-size:.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px">Worked example ${((pelIdx-1)%PELS.length)+1} / ${PELS.length}</div>
+    <p><span class="frag p">${p}</span> <span class="frag e">${e}</span> <span class="frag l">${l}</span></p>`;
+}
+
+/* ============ practice reveal + self-mark + radial ============ */
+const marks = loadLS('marks',{});
+function rev(btn){
+  const r = btn.closest('.q-body').querySelector('.reveal');
+  r.classList.toggle('show');
+  btn.textContent = r.classList.contains('show') ? 'Hide sample responses' : 'Reveal sample responses';
+  const sm = r.querySelector('.selfmark');
+  if(sm && !sm.dataset.built){ buildSelfMark(sm); sm.dataset.built='1'; }
+}
+let qCounter=0;
+function buildSelfMark(sm){
+  const q = sm.closest('.q'); const max=+q.dataset.max; const qid='q'+(++qCounter); q.dataset.qid=qid;
+  for(let i=0;i<=max;i++){
+    const b=document.createElement('button'); b.className='mk'; b.textContent=i;
+    if(marks[qid]===i) b.classList.add('sel');
+    b.onclick=()=>{ marks[qid]=i; saveLS('marks',marks);
+      sm.querySelectorAll('.mk').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); updateScore(); };
+    sm.appendChild(b);
+  }
+}
+function updateScore(){
+  let totalMax=0; document.querySelectorAll('.q').forEach(q=>totalMax+=+q.dataset.max);
+  let earned=0; Object.values(marks).forEach(v=>earned+=v);
+  earned=Math.min(earned,totalMax);
+  const pct = totalMax? Math.round(earned/totalMax*100):0;
+  document.getElementById('radial').style.setProperty('--pct',pct);
+  document.getElementById('radialPct').textContent=pct+'%';
+  document.getElementById('scoreTxt').textContent=`${earned} / ${totalMax} marks`;
+}
+document.getElementById('radial').style.position='relative';
+updateScore();
+</script>
+<script>
+/* ============ THREE.JS SCENES ============ */
+function cssCol(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||'#c084fc'; }
+
+/* ---------- HERO: principle panels drift → snap to aligned grid ---------- */
 (function(){
-  var root=document.documentElement;
+  const canvas=document.getElementById('heroCanvas'); if(!window.THREE||!canvas) return;
   try{
-    var t=localStorage.getItem('dv-design-theme'); if(t) root.setAttribute('data-theme',t);
-    var f=localStorage.getItem('dv-design-fs'); if(f) root.style.setProperty('--fs',f);
-  }catch(e){}
-  function setTheme(v){root.setAttribute('data-theme',v); try{localStorage.setItem('dv-design-theme',v);}catch(e){}}
-  document.getElementById('themeBtn').onclick=function(){
-    setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
-  };
-  function clampFs(v){return Math.max(0.85,Math.min(1.4,v));}
-  function getFs(){return parseFloat(getComputedStyle(root).getPropertyValue('--fs'))||1;}
-  function setFs(v){v=clampFs(v); root.style.setProperty('--fs',v); try{localStorage.setItem('dv-design-fs',v);}catch(e){}}
-  document.getElementById('fsUp').onclick=function(){setFs(getFs()+0.08);};
-  document.getElementById('fsDn').onclick=function(){setFs(getFs()-0.08);};
-  var prog=document.getElementById('prog');
-  function onScroll(){
-    var h=document.documentElement, max=h.scrollHeight-h.clientHeight;
-    prog.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(45,2,0.1,100); cam.position.set(0,0,14);
+  scene.add(new THREE.AmbientLight(0xffffff,0.8));
+  const key=new THREE.DirectionalLight(0xffffff,0.7); key.position.set(4,6,8); scene.add(key);
+  const COLS=['--p-align','--p-bal','--p-con','--p-space','--p-text','--p-use','--p-nav'];
+  const panels=[]; const grid=[]; const scat=[];
+  // aligned grid targets (clean 4x2-ish layout, centred)
+  const cols=4, gx=2.7, gy=2.5;
+  for(let i=0;i<7;i++){
+    const c=i%cols, r=Math.floor(i/cols);
+    const rowCount = r===0?4:3;
+    const xOff = (rowCount-1)/2;
+    grid.push(new THREE.Vector3((c-xOff)*gx, (0.5-r)*gy, 0));
+    scat.push(new THREE.Vector3((Math.random()-0.5)*12,(Math.random()-0.5)*7,(Math.random()-0.5)*5));
   }
-  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
-})();
-
-/* ============ generic tap-sorter ============ */
-function makeSorter(opts){
-  var pool=document.getElementById(opts.pool);
-  var scoreEl=document.getElementById(opts.score);
-  var sel=null, placed=0, total=opts.items.length;
-  function render(){
-    pool.innerHTML='';
-    opts.items.forEach(function(it){
-      if(it._done) return;
-      var t=document.createElement('span');
-      t.className='tok'; t.textContent=it.label;
-      t.onclick=function(){
-        if(sel===t){sel=null; t.classList.remove('sel'); return;}
-        if(sel) sel.classList.remove('sel');
-        sel=t; t.classList.add('sel');
-      };
-      t._it=it; pool.appendChild(t);
-    });
+  for(let i=0;i<7;i++){
+    const col=new THREE.Color(cssCol(COLS[i]));
+    const geo=new THREE.BoxGeometry(2.1,1.4,0.16);
+    const mat=new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:0.35,metalness:0.3,roughness:0.4,transparent:true,opacity:0.92});
+    const m=new THREE.Mesh(geo,mat);
+    // little "header bar" on each panel for UI feel
+    const bar=new THREE.Mesh(new THREE.BoxGeometry(2.1,0.28,0.17), new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:0.25}));
+    bar.position.y=0.5; m.add(bar);
+    m.position.copy(scat[i]); m.userData={spin:(Math.random()-0.5)*0.01, ph:Math.random()*6.28};
+    scene.add(m); panels.push(m);
   }
-  opts.buckets.forEach(function(bid){
-    var b=document.getElementById(bid);
-    var cat=b.parentElement.getAttribute('data-cat');
-    b.parentElement.onclick=function(){
-      if(!sel) return;
-      var it=sel._it;
-      var ok=(it.cat===cat);
-      var chip=document.createElement('span');
-      chip.className='tok '+(ok?'good':'bad'); chip.textContent=it.label+(ok?' ✓':' ✗');
-      b.appendChild(chip);
-      if(ok){ it._done=true; placed++; }
-      else { setTimeout(function(){ b.removeChild(chip); }, 700); }
-      sel.classList.remove('sel'); sel=null; render(); update();
-    };
-  });
-  function update(){ scoreEl.innerHTML=placed+' / '+total+' placed'+(placed===total?' &nbsp;✓ done':''); if(placed===total) scoreEl.querySelector?scoreEl.style.color='var(--pass)':0; }
-  document.getElementById(opts.reset).onclick=function(){
-    opts.items.forEach(function(it){it._done=false;}); placed=0; sel=null;
-    opts.buckets.forEach(function(bid){document.getElementById(bid).innerHTML='';});
-    render(); update();
-  };
-  render(); update();
-}
-
-/* appearance vs functionality */
-makeSorter({
-  pool:'afPool', score:'afScore', reset:'afReset',
-  buckets:['af-app','af-func'],
-  items:[
-    {label:'Button colour & placement', cat:'app'},
-    {label:'Screen layout', cat:'app'},
-    {label:'Font and navigation', cat:'app'},
-    {label:'Which fields appear', cat:'app'},
-    {label:'How total is calculated', cat:'func'},
-    {label:'Variables & data types', cat:'func'},
-    {label:'An object\u2019s methods', cat:'func'},
-    {label:'Input \u2192 output flow', cat:'func'}
-  ]
-});
-
-/* logical vs physical */
-makeSorter({
-  pool:'lpPool', score:'lpScore', reset:'lpReset',
-  buckets:['lp-logical','lp-physical'],
-  items:[
-    {label:'Context diagram', cat:'logical'},
-    {label:'Use case diagram', cat:'logical'},
-    {label:'Decision tree', cat:'logical'},
-    {label:'Hierarchy chart', cat:'logical'},
-    {label:'Flowchart', cat:'physical'},
-    {label:'Pseudocode', cat:'physical'},
-    {label:'Storyboard', cat:'physical'},
-    {label:'IPO chart', cat:'physical'}
-  ]
-});
-
-/* ============ sequence widget ============ */
-(function(){
-  var steps=[
-    {n:1,t:'Generate 2\u20133 design ideas'},
-    {n:2,t:'Develop evaluation criteria'},
-    {n:3,t:'Apply criteria \u2192 pick preferred design'},
-    {n:4,t:'Fully detail the chosen design'}
-  ];
-  var order=steps.slice().sort(function(){return Math.random()-0.5;});
-  var pool=document.getElementById('seqPool'), slots=document.getElementById('seqSlots'),
-      sc=document.getElementById('seqScore'); var next=1;
-  function render(){
-    pool.innerHTML='';
-    order.forEach(function(s){
-      if(s._done)return;
-      var t=document.createElement('span'); t.className='tok'; t.textContent=s.t;
-      t.onclick=function(){
-        if(s.n===next){
-          s._done=true;
-          var c=document.createElement('span'); c.className='tok good'; c.textContent=next+'. '+s.t+' ✓';
-          slots.appendChild(c); next++; render();
-          sc.textContent = next>4 ? 'Correct sequence ✓' : 'good — now step '+next;
-          sc.style.color = next>4 ? 'var(--pass)':'';
-        } else {
-          t.classList.add('bad'); sc.textContent='not yet — that\u2019s step '+s.n; sc.style.color='var(--trap)';
-          setTimeout(function(){t.classList.remove('bad');},600);
-        }
-      };
-      pool.appendChild(t);
-    });
-  }
-  document.getElementById('seqReset').onclick=function(){
-    steps.forEach(function(s){s._done=false;}); next=1; slots.innerHTML='';
-    order=steps.slice().sort(function(){return Math.random()-0.5;});
-    sc.textContent='tap the steps in order'; sc.style.color=''; render();
-  };
-  render();
-})();
-
-/* ============ which-tool MCQ ============ */
-(function(){
-  var qs=[
-    {q:'A client says the buttons are in the wrong place and the colours clash.', a:'Mock-up', opts:['Mock-up','Pseudocode','Data dictionary']},
-    {q:'You need to list every variable and its data type.', a:'Data dictionary', opts:['IPO chart','Data dictionary','Object description']},
-    {q:'You want to plan the logic of a search algorithm before coding.', a:'Pseudocode', opts:['Mock-up','Pseudocode','Object description']},
-    {q:'You must show what data goes in, what is done, and what comes out.', a:'IPO chart', opts:['IPO chart','Mock-up','Data dictionary']},
-    {q:'Describe an object\u2019s properties and methods.', a:'Object description', opts:['Object description','Pseudocode','IPO chart']},
-    {q:'Decide screen layout and name each on-screen object.', a:'Mock-up', opts:['Data dictionary','Mock-up','IPO chart']}
-  ];
-  var box=document.getElementById('whichBox'), sc=document.getElementById('whichScore'); var got=0, done=0;
-  qs.forEach(function(item,i){
-    var d=document.createElement('div'); d.style.margin='12px 0';
-    var p=document.createElement('p'); p.style.fontWeight='600'; p.style.margin='0 0 6px'; p.textContent=(i+1)+'. '+item.q; d.appendChild(p);
-    var row=document.createElement('div'); row.style.display='flex'; row.style.flexWrap='wrap'; row.style.gap='7px';
-    var answered=false;
-    item.opts.forEach(function(o){
-      var b=document.createElement('button'); b.className='btn sm'; b.textContent=o;
-      b.onclick=function(){
-        if(answered)return; answered=true; done++;
-        if(o===item.a){b.style.background='var(--pass)';b.style.color='#fff';b.style.borderColor='var(--pass)';got++;}
-        else{b.style.background='var(--trap)';b.style.color='#fff';b.style.borderColor='var(--trap)';
-          Array.from(row.children).forEach(function(x){if(x.textContent===item.a){x.style.background='var(--pass)';x.style.color='#fff';x.style.borderColor='var(--pass)';}});
-        }
-        sc.textContent=got+' / '+qs.length; if(done===qs.length&&got===qs.length)sc.style.color='var(--pass)';
-      };
-      row.appendChild(b);
-    });
-    d.appendChild(row); box.appendChild(d);
-  });
-})();
-
-/* ============ measurable-or-not ============ */
-(function(){
-  var items=[
-    {t:'A booking completes in under 3 steps', m:true},
-    {t:'The app is user-friendly', m:false},
-    {t:'Search returns results in under 2 seconds', m:true},
-    {t:'It looks professional', m:false},
-    {t:'Processes 100 records with zero crashes', m:true},
-    {t:'The interface is nice and clean', m:false}
-  ];
-  var box=document.getElementById('critBox'), sc=document.getElementById('critScore'); var got=0,done=0;
-  items.forEach(function(it){
-    var d=document.createElement('div'); d.style.cssText='display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:9px 0;border:1px solid var(--hair);border-radius:9px;padding:8px 10px;background:var(--paper)';
-    var s=document.createElement('span'); s.textContent=it.t; s.style.flex='1'; s.style.minWidth='180px'; s.style.fontSize='.92rem';
-    var done2=false;
-    function mk(label,val){
-      var b=document.createElement('button'); b.className='btn sm'; b.textContent=label;
-      b.onclick=function(){ if(done2)return; done2=true; done++;
-        var right=(val===it.m);
-        if(right){b.style.background='var(--pass)';b.style.color='#fff';b.style.borderColor='var(--pass)';got++;}
-        else{b.style.background='var(--trap)';b.style.color='#fff';b.style.borderColor='var(--trap)';}
-        sc.textContent=got+' / '+items.length; if(done===items.length&&got===items.length)sc.style.color='var(--pass)';
-      };
-      return b;
-    }
-    d.appendChild(s); d.appendChild(mk('Measurable',true)); d.appendChild(mk('Too vague',false));
-    box.appendChild(d);
-  });
-})();
-
-/* ============ mock-up hotspots ============ */
-(function(){
-  var board=document.getElementById('mockBoard'), note=document.getElementById('mockNote'), sc=document.getElementById('mockScore');
-  var found=0;
-  function el(html,css){var d=document.createElement('div');d.style.cssText=css;d.innerHTML=html;board.appendChild(d);return d;}
-  // faux login UI
-  el('Member Login','position:absolute;left:50%;top:18px;transform:translateX(-50%);font-weight:700;color:var(--ink)');
-  el('','position:absolute;left:50%;top:58px;transform:translateX(-50%);width:62%;height:30px;background:var(--card);border:1px solid var(--hair);border-radius:7px');
-  el('','position:absolute;left:50%;top:98px;transform:translateX(-50%);width:62%;height:30px;background:var(--card);border:1px solid var(--hair);border-radius:7px');
-  el('Log in','position:absolute;left:50%;top:140px;transform:translateX(-50%);width:62%;height:32px;background:var(--alpha);color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.85rem');
-  el('Forgot password?','position:absolute;left:50%;top:182px;transform:translateX(-50%);font-size:.8rem;color:var(--alpha)');
-  var spots=[
-    {x:'19%',y:58,n:1,txt:'#1 txtUser \u2014 Text box. Object name: txtUser, type: text input, max 20 chars. Appearance only; validation lives in the data dictionary.'},
-    {x:'19%',y:98,n:2,txt:'#2 txtPass \u2014 Text box (masked). Shows dots as the user types. The mock-up names it; how it checks the password is a method, described elsewhere.'},
-    {x:'50%',y:140,n:3,txt:'#3 btnLogin \u2014 Button. Caption "Log in". High-contrast primary colour so it stands out (Contrast principle).'},
-    {x:'50%',y:182,n:4,txt:'#4 lnkForgot \u2014 Link/label. Placed apart from the login group (Proximity). Navigates to recovery screen.'}
-  ];
-  spots.forEach(function(s){
-    var m=document.createElement('button');
-    m.textContent=s.n;
-    m.style.cssText='position:absolute;left:'+s.x+';top:'+(s.y-2)+'px;transform:translate(-150%,-50%);width:22px;height:22px;border-radius:99px;border:2px solid #fff;background:var(--beta);color:#fff;font-weight:700;font-size:11px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.3);z-index:3';
-    var hit=false;
-    m.onclick=function(){ note.textContent=s.txt; if(!hit){hit=true;found++; m.style.background='var(--pass)'; sc.textContent=found+' / 4 found'; if(found===4)sc.style.color='var(--pass)';} };
-    board.appendChild(m);
-  });
-})();
-
-/* ============ before/after principles ============ */
-(function(){
-  var board=document.getElementById('baBoard');
-  function card(title,fixed,cls){
-    var d=document.createElement('div'); d.style.cssText='border:1px solid var(--hair);border-radius:11px;padding:12px;background:var(--paper);cursor:pointer';
-    var flipped=false;
-    function paint(){
-      if(!flipped){
-        d.innerHTML='<div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--trap);font-weight:600;margin-bottom:8px">Before</div>'+
-        '<div style="font-size:.82rem;line-height:1.5;color:var(--muted)">A cramped form: random fonts, fields scattered, the submit button the same grey as everything else, labels floating far from their fields. Tap to fix it.</div>';
-      } else {
-        d.innerHTML='<div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--pass);font-weight:600;margin-bottom:8px">After</div>'+
-        '<div style="font-size:.82rem;line-height:1.5">'+fixed+'</div>';
-      }
-    }
-    d.onclick=function(){flipped=!flipped;paint();};
-    paint(); return d;
-  }
-  board.appendChild(card('a','<b>Contrast:</b> the submit button is now bold indigo.<br><b>Alignment:</b> all fields share a left edge.<br><b>Repetition:</b> one heading font throughout.<br><b>Proximity:</b> labels sit right above their fields.'));
-  board.appendChild(card('b','<b>Navigation:</b> a clear back link added.<br><b>Consistency:</b> buttons behave the same everywhere.<br><b>Error tolerance:</b> inline "required" hints.<br><b>Accessibility:</b> larger text, stronger colour contrast.'));
-})();
-
-/* ============ quiz ============ */
-(function(){
-  var quiz=[
-    {q:'State the two main steps of the Design stage of the PSM.',
-     marks:'2 marks',
-     pts:['1 mark: generate two or three design ideas.','1 mark: develop and apply evaluation criteria to select (and then fully detail) the preferred design.']},
-    {q:'Distinguish between a mock-up and an object description as design tools.',
-     marks:'3 marks',
-     pts:['Mock-up represents the appearance / user interface — screen layout with objects named.','Object description represents functionality — a table of each object\u2019s properties and methods.','Clear contrast drawn between appearance vs logic/structure.']},
-    {q:'A pay program reads hours worked and an hourly rate, then displays net pay after 30% tax. Name the most suitable tool to plan this calculation, and justify your choice.',
-     marks:'3 marks',
-     pts:['Names IPO chart (or pseudocode).','States what it shows: inputs (hours, rate), process (gross = hours×rate, tax = 30%, net), outputs (net pay).','Justifies: it organises the calculation before coding, ensuring all inputs/outputs are identified.']},
-    {q:'Explain why evaluation criteria are written during Design rather than at Evaluation.',
-     marks:'2 marks',
-     pts:['Criteria are written at Design so the solution is built toward an agreed measure of success.','They are reused unchanged in Unit 4 to judge effectiveness and efficiency — writing them after the build would bias the evaluation.']},
-    {q:'Rewrite this weak evaluation criterion to be measurable: "The app should be easy to use."',
-     marks:'2 marks',
-     pts:['Any specific, testable rewrite, e.g. "A first-time user can complete a booking in under 3 steps without assistance."','Includes a number / count / clear pass-fail condition.']},
-    {q:'Identify whether a flowchart is a logical or physical design tool, and give one reason.',
-     marks:'2 marks',
-     pts:['Physical.','It gives step-by-step instructions on how the process is carried out (the "how to build" booklet), not just the overall structure.']},
-    {q:'Why is no programming code written during the Design stage?',
-     marks:'2 marks',
-     pts:['Writing actual code belongs to the Development stage.','Design plans appearance and logic (using tools like pseudocode) so changes are cheap on paper before building begins.']}
-  ];
-  var box=document.getElementById('quiz');
-  quiz.forEach(function(item,i){
-    var d=document.createElement('div'); d.className='q';
-    d.innerHTML='<div class="qh"><span class="qn">Q'+(i+1)+'</span><p class="qbody">'+item.q+' <span class="small">('+item.marks+')</span></p></div>'+
-      '<textarea placeholder="Write your answer here\u2026"></textarea>'+
-      '<div style="margin-top:8px"><button class="btn sm reveal-btn">Show marking guide</button></div>'+
-      '<div class="marking"><b>Marking guide</b><ul>'+item.pts.map(function(p){return '<li>'+p+'</li>';}).join('')+'</ul></div>';
-    d.querySelector('.reveal-btn').onclick=function(){ d.classList.toggle('open'); this.textContent=d.classList.contains('open')?'Hide marking guide':'Show marking guide'; };
-    box.appendChild(d);
-  });
-})();
-
-/* ============ 3D helpers ============ */
-function hasWebGL(){ try{var c=document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;} }
-function fallback(stage,msg){
-  var d=document.createElement('div');
-  d.style.cssText='display:flex;align-items:center;justify-content:center;text-align:center;color:#9fb0c4;font-family:var(--mono);font-size:13px;height:340px;padding:20px';
-  d.textContent=msg||'3D needs WebGL — enable it to see this scene.';
-  stage.appendChild(d);
-}
-
-/* ============ SCENE A — ideation bench ============ */
-(function(){
-  var stage=document.getElementById('benchStage');
-  if(typeof THREE==='undefined'||!hasWebGL()){ fallback(stage,'Ideation bench needs WebGL.'); return; }
-  var W=stage.clientWidth||820, H=360;
-  var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(W,H); stage.insertBefore(renderer.domElement, stage.firstChild);
-  var scene=new THREE.Scene();
-  var cam=new THREE.PerspectiveCamera(46,W/H,0.1,100); cam.position.set(0,3.4,9.4); cam.lookAt(0,0.6,0);
-  scene.add(new THREE.AmbientLight(0xffffff,0.72));
-  var key=new THREE.DirectionalLight(0xffffff,0.85); key.position.set(4,8,6); scene.add(key);
-  // bench top
-  var bench=new THREE.Mesh(new THREE.BoxGeometry(11,0.4,5),new THREE.MeshStandardMaterial({color:0x223043,roughness:0.9}));
-  bench.position.y=-0.4; scene.add(bench);
-
-  var COL_WIRE=0x6b7a8d, COL_WIN=0x2D4ED8;
-  var boards=[]; var scores=[0.62,0.91,0.74]; // middle wins
-  var xs=[-3.5,0,3.5];
-  for(var i=0;i<3;i++){
-    var g=new THREE.Group();
-    // board panel
-    var panel=new THREE.Mesh(new THREE.BoxGeometry(2.4,3.0,0.18),
-      new THREE.MeshStandardMaterial({color:0x33414f,roughness:0.8,emissive:0x000000}));
-    g.add(panel);
-    // "wireframe" UI lines
-    var lineMat=new THREE.LineBasicMaterial({color:COL_WIRE});
-    function rect(w,h,y){
-      var pts=[new THREE.Vector3(-w,y+h,0.11),new THREE.Vector3(w,y+h,0.11),new THREE.Vector3(w,y-h,0.11),new THREE.Vector3(-w,y-h,0.11),new THREE.Vector3(-w,y+h,0.11)];
-      return new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),lineMat);
-    }
-    var ui=new THREE.Group();
-    ui.add(rect(0.85,0.18,0.95)); ui.add(rect(0.85,0.18,0.45)); ui.add(rect(0.85,0.18,-0.05));
-    ui.add(rect(0.5,0.2,-0.7));
-    g.add(ui); g._ui=ui; g._panel=panel;
-    // criteria bar (above board)
-    var barBg=new THREE.Mesh(new THREE.BoxGeometry(2.0,0.22,0.1),new THREE.MeshStandardMaterial({color:0x1b2533}));
-    barBg.position.set(0,1.95,0.15); g.add(barBg);
-    var barFill=new THREE.Mesh(new THREE.BoxGeometry(0.001,0.16,0.12),new THREE.MeshStandardMaterial({color:0x2bd07a,emissive:0x0a5a32}));
-    barFill.position.set(-1.0,1.95,0.2); g.add(barFill); g._bar=barFill;
-    g.position.set(xs[i],0.9,0); g._x=xs[i]; g._score=scores[i];
-    scene.add(g); boards.push(g);
-  }
-
-  var dragging=false,lastX=0,rotY=0;
-  renderer.domElement.addEventListener('pointerdown',function(e){dragging=true;lastX=e.clientX;});
-  window.addEventListener('pointerup',function(){dragging=false;});
-  window.addEventListener('pointermove',function(e){ if(!dragging)return; rotY+=(e.clientX-lastX)*0.005; lastX=e.clientX;});
-
-  var state='idle', t0=0, winner=1, caption=document.getElementById('benchCaption');
-  function scoreAndChoose(){
-    if(state!=='idle')return; state='scoring'; t0=performance.now();
-    caption.textContent='Applying evaluation criteria… the bars fill to each idea\u2019s score.';
-  }
-  document.getElementById('benchScore').onclick=scoreAndChoose;
-  document.getElementById('benchReset').onclick=function(){
-    state='idle';
-    boards.forEach(function(g,i){
-      g._bar.scale.x=0.001; g._bar.position.x=-1.0;
-      g.position.z=0; g.position.y=0.9; g._panel.material.color.setHex(0x33414f);
-      g._panel.material.emissive.setHex(0x000000);
-      g._ui.children.forEach(function(l){l.material.color.setHex(COL_WIRE);});
-    });
-    caption.textContent='Three candidate mock-ups — none chosen yet. The bars above each board are empty evaluation-criteria scores.';
-  };
-
-  function animate(){
-    requestAnimationFrame(animate);
-    var now=performance.now();
-    boards.forEach(function(g,i){
-      g.rotation.y = rotY*0.4 + Math.sin(now/2600 + i)*0.04;
-      if(state==='scoring'){
-        var p=Math.min(1,(now-t0)/1400);
-        var target=g._score* (2.0); // bar full width 2.0
-        g._bar.scale.x = Math.max(0.001, target*p / 1);
-        g._bar.position.x = -1.0 + (target*p)/2;
-        if(p>=1){ state='choose'; t0=now; }
-      } else if(state==='choose'){
-        var p2=Math.min(1,(now-t0)/1200);
-        if(i===winner){
-          g.position.z = 1.6*p2;
-          g.position.y = 0.9 + 0.25*Math.sin(p2*Math.PI);
-          // render: wireframe -> coloured detail
-          g._panel.material.color.setHex(0x21407a + 0);
-          g._panel.material.color.lerpColors(new THREE.Color(0x33414f), new THREE.Color(0x1f3e86), p2);
-          g._panel.material.emissive.setHex(0x0b1c40);
-          g._ui.children.forEach(function(l){ l.material.color.lerpColors(new THREE.Color(0x6b7a8d), new THREE.Color(0x8fb4ff), p2); });
-        } else {
-          g.position.z = -0.6*p2;
-          g._panel.material.opacity=1; 
-        }
-        if(p2>=1 && state==='choose'){ state='done';
-          caption.textContent='Idea 2 scored highest → it becomes the preferred design and renders into a finished, coloured interface. Ideas 1 & 3 stay as evaluated alternatives.';
-        }
-      }
+  let t=0;
+  function resize(){ const w=canvas.clientWidth||canvas.parentElement.clientWidth, h=canvas.clientHeight||380;
+    renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); }
+  function frame(){
+    t+=0.006;
+    // phase 0..1 toward grid then back, slow cycle
+    const cyc=(Math.sin(t*0.6)+1)/2;             // 0=scatter,1=grid
+    const ease=cyc*cyc*(3-2*cyc);
+    panels.forEach((m,i)=>{
+      const tgt=new THREE.Vector3().lerpVectors(scat[i],grid[i],ease);
+      // gentle float on top of target
+      tgt.y += Math.sin(t*1.3+m.userData.ph)*0.12*(1-ease);
+      m.position.lerp(tgt,0.05);
+      const restRot = ease>0.85 ? 0 : null;
+      if(restRot!==null){ m.rotation.x+= (0-m.rotation.x)*0.08; m.rotation.y+=(0-m.rotation.y)*0.08; }
+      else { m.rotation.x+=m.userData.spin*0.4; m.rotation.y+=m.userData.spin; }
     });
     renderer.render(scene,cam);
+    requestAnimationFrame(frame);
   }
-  animate();
-  window.addEventListener('resize',function(){
-    var w=stage.clientWidth||W; renderer.setSize(w,H); cam.aspect=w/H; cam.updateProjectionMatrix();
-  });
+  window.heroScene={ onResize:resize, refresh:()=>{ panels.forEach((m,i)=>{ const col=new THREE.Color(cssCol(COLS[i])); m.material.color.copy(col); m.material.emissive.copy(col); }); } };
+  new ResizeObserver(resize).observe(canvas.parentElement);
+  resize();
+  if(reduceMotion){ panels.forEach((m,i)=>m.position.copy(grid[i])); renderer.render(scene,cam); }
+  else frame();
+  }catch(e){ if(typeof console!=='undefined'&&console.warn) console.warn('hero scene skipped:', e&&e.message); }
 })();
 
-/* ============ SCENE B — IPO machine ============ */
+/* ---------- BALANCE BEAM lab ---------- */
 (function(){
-  var stage=document.getElementById('ipoStage');
-  if(typeof THREE==='undefined'||!hasWebGL()){ fallback(stage,'IPO machine needs WebGL.'); return; }
-  var W=stage.clientWidth||820, H=360;
-  var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(W,H); stage.insertBefore(renderer.domElement, stage.firstChild);
-  var scene=new THREE.Scene();
-  var cam=new THREE.PerspectiveCamera(46,W/H,0.1,100); cam.position.set(0,3.0,10); cam.lookAt(0,0.2,0);
-  scene.add(new THREE.AmbientLight(0xffffff,0.75));
-  var key=new THREE.DirectionalLight(0xffffff,0.8); key.position.set(3,7,6); scene.add(key);
+  const canvas=document.getElementById('beamCanvas'); if(!window.THREE||!canvas) return;
+  try{
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(42,2,0.1,100); cam.position.set(0,2.4,12);
+  cam.lookAt(0,0.4,0);
+  scene.add(new THREE.AmbientLight(0xffffff,0.85));
+  const dl=new THREE.DirectionalLight(0xffffff,0.7); dl.position.set(5,8,6); scene.add(dl);
 
-  function label3d(text,color,x,y){
-    var c=document.createElement('canvas'); c.width=256;c.height=64; var ctx=c.getContext('2d');
-    ctx.fillStyle=color; ctx.font='bold 34px monospace'; ctx.textAlign='center'; ctx.fillText(text,128,44);
-    var tex=new THREE.CanvasTexture(c); var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true}));
-    sp.scale.set(2.6,0.65,1); sp.position.set(x,y,0.6); return sp;
+  const beamCol=new THREE.Color(cssCol('--p-bal'));
+  const pivot=new THREE.Group(); scene.add(pivot);            // rotates
+  const BEAM_LEN=9, BEAM_TH=0.34;
+  const beamMesh=new THREE.Mesh(new THREE.BoxGeometry(BEAM_LEN,BEAM_TH,0.9),
+    new THREE.MeshStandardMaterial({color:beamCol,emissive:beamCol,emissiveIntensity:0.18,metalness:0.4,roughness:0.45}));
+  pivot.add(beamMesh);
+  // fulcrum
+  const ful=new THREE.Mesh(new THREE.ConeGeometry(0.9,1.7,4),
+    new THREE.MeshStandardMaterial({color:0x6b7280,metalness:0.3,roughness:0.6}));
+  ful.position.y=-1.55; ful.rotation.y=Math.PI/4; scene.add(ful);
+  // centre marker
+  const mark=new THREE.Mesh(new THREE.BoxGeometry(0.05,0.6,1.0), new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.25}));
+  mark.position.y=0.4; scene.add(mark);
+
+  let blocks=[];
+  const palette=['--p-align','--p-con','--p-space','--p-text','--p-use','--p-nav'];
+  let pi=0;
+  function addBlock(localX,weight){
+    const s=0.55+weight*0.42;
+    const col=new THREE.Color(cssCol(palette[pi++%palette.length]));
+    const m=new THREE.Mesh(new THREE.BoxGeometry(s,s,s),
+      new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:0.25,metalness:0.3,roughness:0.4}));
+    m.userData={w:weight,s:s};
+    m.position.set(localX, BEAM_TH/2+s/2, 0);
+    pivot.add(m); blocks.push(m); return m;
   }
-  // hopper (input) left, drum (process) centre, tray (output) right
-  var hopper=new THREE.Mesh(new THREE.CylinderGeometry(0.9,0.4,1.4,4),new THREE.MeshStandardMaterial({color:0x2D4ED8,roughness:.5,metalness:.2}));
-  hopper.position.set(-4,1.4,0); hopper.rotation.y=Math.PI/4; scene.add(hopper);
-  var drum=new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.1,1.6,24),new THREE.MeshStandardMaterial({color:0x9aa6b4,roughness:.45,metalness:.4}));
-  drum.position.set(0,1.2,0); drum.rotation.z=Math.PI/2; scene.add(drum);
-  var tray=new THREE.Mesh(new THREE.BoxGeometry(1.8,0.3,1.4),new THREE.MeshStandardMaterial({color:0xC97312,roughness:.6}));
-  tray.position.set(4,0.4,0); scene.add(tray);
-  // chute lines
-  var baseMat=new THREE.MeshStandardMaterial({color:0x33414f,roughness:.9});
-  var base=new THREE.Mesh(new THREE.BoxGeometry(11,0.3,3),baseMat); base.position.y=-0.2; scene.add(base);
-
-  var labels=[label3d('INPUT','#7E97FF',-4,3.1),label3d('PROCESS','#cfd8e3',0,3.1),label3d('OUTPUT','#F0B25E',4,3.1)];
-  labels.forEach(function(l){scene.add(l);});
-  var labelsOn=true;
-
-  var balls=[]; var inputNames=['hours','rate']; var idx=0;
-  function drop(){
-    var name=inputNames[idx%2]; idx++;
-    var geo=new THREE.SphereGeometry(0.28,16,16);
-    var m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0x2D4ED8,emissive:0x0a1838,roughness:.4}));
-    m.position.set(-4,3.0,0); m._phase='in'; m._t=performance.now(); scene.add(m); balls.push(m);
-    document.getElementById('ipoCaption').innerHTML='Dropped <b>'+name+'</b> into the hopper → through the process drum → out as <b>net pay</b>.';
+  function clearBlocks(){ blocks.forEach(b=>pivot.remove(b)); blocks=[]; pi=0; }
+  function torque(){ let tq=0; blocks.forEach(b=>tq+=b.userData.w*b.position.x); return tq; }
+  let targetAngle=0;
+  function recompute(){
+    const tq=torque();
+    targetAngle=Math.max(-0.34,Math.min(0.34,-tq*0.05));
+    const read=document.getElementById('beamRead');
+    const a=Math.abs(tq);
+    let verdict = a<0.25 ? '<b>Balanced.</b> Visual weight is evenly distributed — the layout feels stable.'
+      : (tq>0 ? 'Tips <b>right</b>. The right side is visually heavier — shift weight or move a block toward the centre.'
+              : 'Tips <b>left</b>. The left side is visually heavier — shift weight or move a block toward the centre.');
+    read.innerHTML = `Net turning effect: <b>${tq.toFixed(1)}</b> &nbsp;·&nbsp; ${verdict}`;
   }
-  document.getElementById('ipoFeed').onclick=drop;
-  document.getElementById('ipoReset').onclick=function(){ balls.forEach(function(b){scene.remove(b);}); balls.length=0; idx=0;
-    document.getElementById('ipoCaption').innerHTML='Job: <b>pay calculator</b> — Input: hours &amp; rate · Process: multiply &amp; deduct tax · Output: net pay.'; };
-  document.getElementById('ipoLabels').onclick=function(){ labelsOn=!labelsOn; this.classList.toggle('on',labelsOn); labels.forEach(function(l){l.visible=labelsOn;}); };
+  const api={
+    preset(kind){ clearBlocks();
+      if(kind==='sym'){ addBlock(-3,2); addBlock(3,2); }
+      else if(kind==='asym'){ addBlock(-1.2,3); addBlock(3.6,1); }
+      else if(kind==='heavy'){ addBlock(2.6,3); addBlock(3.8,2); }
+      recompute(); },
+    reset(){ this.preset('sym'); },
+    onResize:resize, refresh(){ beamMesh.material.color.copy(new THREE.Color(cssCol('--p-bal'))); }
+  };
+  window.beam=api;
 
-  var dragging=false,lastX=0,rotY=0;
-  renderer.domElement.addEventListener('pointerdown',function(e){dragging=true;lastX=e.clientX;});
-  window.addEventListener('pointerup',function(){dragging=false;});
-  window.addEventListener('pointermove',function(e){ if(!dragging)return; rotY+=(e.clientX-lastX)*0.005; lastX=e.clientX;});
+  // drag along beam
+  const ray=new THREE.Raycaster(), ptr=new THREE.Vector2(); let dragB=null;
+  const plane=new THREE.Plane(new THREE.Vector3(0,0,1),0); const hit=new THREE.Vector3();
+  function setPtr(e){ const r=canvas.getBoundingClientRect(); const cx=(e.touches?e.touches[0].clientX:e.clientX);
+    const cy=(e.touches?e.touches[0].clientY:e.clientY); ptr.x=((cx-r.left)/r.width)*2-1; ptr.y=-((cy-r.top)/r.height)*2+1; }
+  function down(e){ setPtr(e); ray.setFromCamera(ptr,cam); const hits=ray.intersectObjects(blocks);
+    if(hits.length){ dragB=hits[0].object; canvas.style.cursor='grabbing'; e.preventDefault(); } }
+  function move(e){ if(!dragB)return; setPtr(e); ray.setFromCamera(ptr,cam); ray.ray.intersectPlane(plane,hit);
+    let lx=Math.max(-BEAM_LEN/2+0.4,Math.min(BEAM_LEN/2-0.4,hit.x));
+    dragB.position.x=lx; recompute(); e.preventDefault(); }
+  function up(){ dragB=null; canvas.style.cursor='grab'; }
+  canvas.addEventListener('mousedown',down); window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
+  canvas.addEventListener('touchstart',down,{passive:false}); canvas.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',up);
+  canvas.style.cursor='grab';
 
-  function animate(){
-    requestAnimationFrame(animate);
-    var now=performance.now();
-    drum.rotation.x += 0.03;
-    scene.rotation.y = rotY;
-    for(var i=balls.length-1;i>=0;i--){
-      var b=balls[i]; var dt=(now-b._t)/1000;
-      if(b._phase==='in'){ b.position.x += 0.045; b.position.y = 3.0 - Math.min(1.6, dt*2.2);
-        if(b.position.x>=0){ b._phase='proc'; b._t=now; }
-      } else if(b._phase==='proc'){ var a=(now-b._t)/700; b.position.x=Math.sin(a*6.28)*0.3; b.position.y=1.2+Math.cos(a*6.28)*0.3;
-        b.material.color.lerpColors(new THREE.Color(0x2D4ED8),new THREE.Color(0xC97312),Math.min(1,a));
-        if(a>=1){ b._phase='out'; b._t=now; }
-      } else if(b._phase==='out'){ b.position.x += 0.05; b.position.y = 1.2 - Math.min(0.8,(now-b._t)/700*0.8);
-        if(b.position.x>=4){ scene.remove(b); balls.splice(i,1); }
-      }
-    }
-    renderer.render(scene,cam);
-  }
-  animate();
-  window.addEventListener('resize',function(){
-    var w=stage.clientWidth||W; renderer.setSize(w,H); cam.aspect=w/H; cam.updateProjectionMatrix();
-  });
+  function resize(){ const w=canvas.clientWidth||canvas.parentElement.clientWidth, h=330;
+    renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); }
+  new ResizeObserver(resize).observe(canvas);
+  resize(); api.preset('sym');
+  function frame(){ pivot.rotation.z += (targetAngle-pivot.rotation.z)*0.1; renderer.render(scene,cam); requestAnimationFrame(frame); }
+  if(reduceMotion){ pivot.rotation.z=targetAngle; renderer.render(scene,cam); } else frame();
+  }catch(e){ if(typeof console!=='undefined'&&console.warn) console.warn('beam scene skipped:', e&&e.message); }
 })();
 </script>
-<script defer src="assets/chatbot.js"></script><!--dv-chatbot-->
+<script defer src="../assets/chatbot.js"></script><!--dv-chatbot-->
 </body>
 </html>
