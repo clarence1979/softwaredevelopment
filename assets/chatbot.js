@@ -129,14 +129,14 @@
   }
   function ollamaCmd() {
     var os = osType();
-    if (os === "win") return "winget install --id Ollama.Ollama -e --accept-source-agreements; $env:OLLAMA_ORIGINS='*'; ollama pull llama3.2; ollama serve";
+    if (os === "win") return "winget install --id Ollama.Ollama -e --accept-source-agreements; $env:Path=[Environment]::GetEnvironmentVariable('Path','Machine')+';'+[Environment]::GetEnvironmentVariable('Path','User'); [Environment]::SetEnvironmentVariable('OLLAMA_ORIGINS','*','User'); $env:OLLAMA_ORIGINS='*'; ollama pull llama3.2; Get-Process '*ollama*' -EA SilentlyContinue | Stop-Process -Force; ollama serve";
     if (os === "mac") return "brew install ollama; OLLAMA_ORIGINS='*' ollama serve & sleep 4; ollama pull llama3.2";
     return "curl -fsSL https://ollama.com/install.sh | sh && ollama pull llama3.2 && OLLAMA_ORIGINS='*' ollama serve";
   }
   function ollamaScript() {
     var os = osType();
     if (os === "win") return { name: "setup-ollama.ps1", mime: "text/plain",
-      body: "# Clarence's Solutions - local AI setup\nwinget install --id Ollama.Ollama -e --accept-source-agreements\n$env:OLLAMA_ORIGINS='*'\nollama pull llama3.2\nWrite-Host 'Starting Ollama - keep this window open.'\nollama serve\n" };
+      body: "# Clarence's Solutions - local AI setup\nwinget install --id Ollama.Ollama -e --accept-source-agreements\n# Refresh PATH so this session can see the freshly-installed 'ollama'\n$env:Path=[Environment]::GetEnvironmentVariable('Path','Machine')+';'+[Environment]::GetEnvironmentVariable('Path','User')\n# Allow the study-guide page to reach Ollama (persists for future restarts)\n[Environment]::SetEnvironmentVariable('OLLAMA_ORIGINS','*','User')\n$env:OLLAMA_ORIGINS='*'\nollama pull llama3.2\n# Restart the server so it serves with the new setting, then keep it running\nGet-Process '*ollama*' -EA SilentlyContinue | Stop-Process -Force\nWrite-Host 'Starting Ollama - keep this window open.'\nollama serve\n" };
     if (os === "mac") return { name: "setup-ollama.command", mime: "text/x-shellscript",
       body: "#!/bin/bash\n# Clarence's Solutions - local AI setup\nif ! command -v ollama >/dev/null 2>&1; then\n  if command -v brew >/dev/null 2>&1; then brew install ollama; else open https://ollama.com/download; fi\nfi\nexport OLLAMA_ORIGINS='*'\n(ollama serve &)\nsleep 4\nollama pull llama3.2\necho 'Ollama is running - keep this window open.'\n" };
     return { name: "setup-ollama.sh", mime: "text/x-shellscript",
