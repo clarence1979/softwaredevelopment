@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VCE Software Development — Exam Key-Knowledge Heatmap · Digital Vector</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#2b3340;
+    --ink:#e6edf3; --dim:#9aa7b4; --faint:#5b6673;
+    --u3o1:#4fc1ff; --u3o2:#a78bfa; --u4o1:#34d399; --u4o2:#fb7185;
+    --accent:#ff8c1a;
+    --cell0:#19202b;
+  }
+  [data-theme="light"]{
+    --bg:#f4f6fa; --panel:#ffffff; --panel2:#eef2f8; --line:#dbe1ea;
+    --ink:#1b2430; --dim:#55606e; --faint:#94a0af;
+    --cell0:#eef1f6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--u3o1)}
+  .wrap{max-width:1240px;margin:0 auto;padding:26px 22px 80px}
+  header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .brand{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  h1{font-size:26px;margin:2px 0 4px;font-weight:700;letter-spacing:-.01em}
+  .sub{color:var(--dim);font-size:14px;max-width:730px}
+  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  select,button{
+    background:var(--panel2);color:var(--ink);border:1px solid var(--line);
+    border-radius:8px;padding:7px 12px;font:inherit;cursor:pointer;
+  }
+  button:hover,select:hover{border-color:var(--faint)}
+  button.on{border-color:var(--accent);color:var(--accent)}
+
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 6px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;position:relative;overflow:hidden}
+  .card .bar{position:absolute;left:0;top:0;bottom:0;width:4px}
+  .card .nm{font-size:12px;color:var(--dim);font-weight:600;letter-spacing:.02em}
+  .card .mk{font-size:30px;font-weight:800;margin-top:6px;letter-spacing:-.02em}
+  .card .pct{font-size:12px;color:var(--dim)}
+  .card .kkc{font-size:11px;color:var(--faint);margin-top:6px}
+  .card .ach{font-size:11px;margin-top:6px;font-weight:600}
+
+  h2.sec{font-size:13px;text-transform:uppercase;letter-spacing:.13em;color:var(--dim);
+    margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  h2.sec .tag{font-size:10px;letter-spacing:.04em;padding:2px 8px;border-radius:6px;border:1px solid var(--line);color:var(--faint)}
+
+  .matwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+  table.heat{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+  .heat thead th{position:sticky;top:0;background:var(--panel);color:var(--dim);font-weight:600;
+    font-size:12px;text-align:center;padding:11px 8px;border-bottom:1px solid var(--line);z-index:2}
+  .heat thead th.kkcol{text-align:left;left:0;position:sticky;z-index:3;min-width:330px}
+  .heat thead th.totcol{color:#7cc6ff}
+  .grp td{background:var(--panel2);font-weight:700;font-size:11.5px;letter-spacing:.05em;
+    text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--line)}
+  .grp .gdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:9px;vertical-align:middle}
+  .grp .gmk{float:right;color:var(--faint);font-weight:600;letter-spacing:.02em;text-transform:none}
+  .heat td.kkname{position:sticky;left:0;background:var(--panel);z-index:1;padding:8px 12px;
+    border-bottom:1px solid var(--line);border-left:3px solid transparent;min-width:330px;max-width:430px}
+  .heat tr:hover td.kkname{background:var(--panel2)}
+  .kkcode{font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em;margin-right:9px}
+  .kkdesc{color:var(--dim);font-size:12px}
+  .untested .kkcode,.untested .kkdesc{color:var(--faint)}
+  .heat td.cell{text-align:center;padding:4px;border-bottom:1px solid var(--line);border-left:1px solid var(--line)}
+  .heat td.cell .v{display:block;border-radius:7px;padding:10px 4px;font-weight:800;
+    font-variant-numeric:tabular-nums;min-width:52px;line-height:1.1;font-size:14px}
+  .heat td.cell.zero .v{color:var(--faint);font-weight:400;background:var(--cell0)}
+  .heat td.cell.nodata .v{color:var(--faint);font-weight:400;background:var(--cell0);opacity:.55}
+  .heat td.tot .v{font-weight:800}
+  .pulse{box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+
+  .legend{display:flex;align-items:center;gap:14px;margin:14px 2px 0;font-size:12px;color:var(--dim);flex-wrap:wrap}
+  .legblock{display:flex;align-items:center;gap:8px}
+  .scale{display:flex;height:12px;border-radius:6px;overflow:hidden;width:150px;border:1px solid var(--line)}
+  .scale i{flex:1}
+  .peakkey{display:inline-block;width:13px;height:13px;border-radius:4px;background:#2b8fd6;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6);vertical-align:middle}
+
+  .predbadge{display:inline-block;margin-left:8px;font-size:10px;font-weight:700;letter-spacing:.02em;
+    padding:1px 7px;border-radius:6px;color:#fff;vertical-align:middle;white-space:nowrap}
+  .predlegend{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:14px 2px 0;font-size:12px;color:var(--dim)}
+  .predlegend[hidden]{display:none}
+  .predlegend .pk{display:inline-flex;align-items:center;gap:7px}
+  .predlegend .sw{width:14px;height:14px;border-radius:4px}
+  .predlegend .hd{font-weight:700;color:var(--ink);letter-spacing:.04em;text-transform:uppercase;font-size:11px}
+  .prednote ul{columns:2;column-gap:26px}
+  @media(max-width:760px){.prednote ul{columns:1}}
+
+  .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:10px;padding:14px 16px;margin-top:16px;font-size:13.5px;color:var(--dim)}
+  .note b{color:var(--ink)}
+  .note ul{margin:8px 0 0;padding-left:18px}
+  .note li{margin:5px 0}
+  .note code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12px}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:12px;white-space:nowrap}
+  .pill .d{width:8px;height:8px;border-radius:50%}
+
+  .filterbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;align-items:center}
+  .chip{font-size:12px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;cursor:pointer;color:var(--dim)}
+  .chip.on{color:var(--ink)}
+  table.map{width:100%;border-collapse:collapse;font-size:13.5px}
+  .map th{position:sticky;top:0;background:var(--panel);color:var(--dim);text-align:left;
+    font-weight:600;font-size:12px;padding:9px 10px;border-bottom:1px solid var(--line);z-index:1}
+  .map td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  .map tr:hover td{background:var(--panel2)}
+  .sm{color:var(--dim);font-size:12px}
+  .secbadge{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;
+    font-weight:700;font-size:12px;background:var(--panel2);border:1px solid var(--line)}
+  .ansb{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;padding:1px 5px;border-radius:5px;
+    background:rgba(52,211,153,.14);color:#34d399;border:1px solid rgba(52,211,153,.3)}
+  .mkn{font-variant-numeric:tabular-nums;font-weight:700;text-align:center}
+  .ach{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+
+  .foot{margin-top:34px;color:var(--faint);font-size:12px;text-align:center;line-height:1.7}
+  @media(max-width:760px){.cards{grid-template-columns:repeat(2,1fr)} .hidemob{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="brand">Digital Vector · Exam Intelligence</div>
+      <h1>Software Development — Key-Knowledge Exam Heatmap</h1>
+      <div class="sub">Every question of each VCAA written exam mapped to its study-design key knowledge, colour-coded by marks. Switch to <b>difficulty</b> to see where the cohort actually lost marks (from the examiner's report). Read across the years to spot what's overdue — and what to drill — for 2026.</div>
+    </div>
+    <div class="controls">
+      <button id="metric" class="on" title="Cycle heat metric">Heat: marks</button>
+      <button id="predict" title="Highlight each KK by how likely it is to appear in 2026">🔮 2026 outlook</button>
+      <button id="theme">☀ Light</button>
+    </div>
+  </header>
+
+  <div class="cards" id="cards"></div>
+
+  <h2 class="sec">Key-knowledge × year heatmap <span class="tag" id="yrspan"></span> <span class="tag" id="metrictag"></span></h2>
+  <div class="matwrap">
+    <table class="heat">
+      <thead><tr id="headrow"></tr></thead>
+      <tbody id="matrix"></tbody>
+    </table>
+  </div>
+  <div class="legend">
+    <div class="legblock"><span>Low</span><div class="scale" id="scaleHot"></div><span>High</span></div>
+    <span style="margin-left:auto" id="legnote"></span>
+  </div>
+
+  <div class="predlegend" id="predLegend" hidden></div>
+  <div class="note prednote" id="predNote" hidden></div>
+
+  <div class="note" id="signal"></div>
+
+  <h2 class="sec">Full question map <span class="tag" id="maptag"></span></h2>
+  <div class="filterbar">
+    <select id="year"></select>
+    <span id="filters" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+  </div>
+  <table class="map">
+    <thead>
+      <tr>
+        <th>Sec</th><th>Q</th><th>Mk</th>
+        <th>Primary key knowledge</th>
+        <th class="hidemob">Also touches</th>
+        <th>Student avg</th>
+        <th>What it asked</th>
+      </tr>
+    </thead>
+    <tbody id="maprows"></tbody>
+  </table>
+
+  <div class="foot">
+    Mappings are Digital Vector's reading of the VCE Applied Computing: Software Development study design (2025–2028); KK codes follow the conventional ordering of each outcome, not official VCAA numbering. Verify against the current study design before publishing.<br>
+    Cohort averages and Section A answers are drawn from the VCAA examiner's reports for 2020–2025. Section A "avg" is the proportion answering correctly. Each paper = 100 marks (A 20 · B 20 · C 60). 2020, 2021, 2022 and 2023 sat under the previous (2020–2023) study design; their questions are mapped to the nearest current key knowledge, so treat those years as indicative rather than exact. Note the 2020 paper ran under the COVID adjusted study design and used a different section split (B = 4 questions, C = 14 questions). Where VCAA accepted multiple Section A options (2022 Q2, Q14), the proportion correct is the combined figure.
+  </div>
+</div>
+
+<script>
+/* ===================== study design ===================== */
+const OC = {
+  u3o1:{name:"U3·O1 Programming", short:"Programming", color:"#4fc1ff", code:"U3O1", total:14, kks:{
+    KK01:"Emerging trends in programming using AI",
+    KK02:"Functional & non-functional requirements",
+    KK03:"Design tools for representing modules (IPO, pseudocode, object descriptions)",
+    KK04:"Characteristics of data types",
+    KK05:"Characteristics of data structures",
+    KK06:"Characteristics of data sources (files, XML)",
+    KK07:"Principles of object-oriented programming",
+    KK08:"Features of a programming language (control structures, variables, scope)",
+    KK09:"Naming conventions",
+    KK10:"Validation techniques",
+    KK11:"Internal documentation",
+    KK12:"Algorithms for sorting & searching",
+    KK13:"Types of errors",
+    KK14:"Debugging & testing techniques"
+  }},
+  u3o2:{name:"U3·O2 Analysis & Design", short:"Analysis & Design", color:"#a78bfa", code:"U3O2", total:16, kks:{
+    KK01:"Why organisations develop software",
+    KK02:"Brief to document a problem or need",
+    KK03:"Project management — Gantt charts, dependencies, critical path, milestones",
+    KK04:"Techniques for collecting data",
+    KK05:"Functional & non-functional requirements",
+    KK06:"Constraints that influence solution development",
+    KK07:"Characteristics of solution scope (incl. scope creep)",
+    KK08:"Depicting relationships between users, data & systems (context, DFD, use case)",
+    KK09:"Software requirements specification",
+    KK10:"Key legal requirements",
+    KK11:"File management techniques",
+    KK12:"Generating design ideas",
+    KK13:"Efficiency & effectiveness of solutions",
+    KK14:"Tools for generating solution designs (object descriptions, data dictionaries)",
+    KK15:"Characteristics of user experiences (UX)",
+    KK16:"Design principles influencing appearance & functionality"
+  }},
+  u4o1:{name:"U4·O1 Development & Evaluation", short:"Development & Evaluation", color:"#34d399", code:"U4O1", total:12, kks:{
+    KK01:"Efficient & effective solutions",
+    KK02:"Data types, structures & sources for input, storage & output",
+    KK03:"Features of a programming language",
+    KK04:"Innovative approaches to software development",
+    KK05:"Validation techniques",
+    KK06:"Debugging & alpha testing techniques",
+    KK07:"Conducting beta testing",
+    KK08:"Features of evaluation strategies",
+    KK09:"Techniques for applying evaluation criteria",
+    KK10:"Factors influencing effectiveness of project plans",
+    KK11:"Recording progress of projects",
+    KK12:"Assessing effectiveness of a project plan"
+  }},
+  u4o2:{name:"U4·O2 Cybersecurity", short:"Cybersecurity", color:"#fb7185", code:"U4O2", total:10, kks:{
+    KK01:"Goals & objectives of large organisations",
+    KK02:"Advantages & disadvantages of developing software in-house",
+    KK03:"Vulnerabilities within insecure development environments",
+    KK04:"Security controls to protect practices & data",
+    KK05:"Threat modelling principles",
+    KK06:"Evaluating the security of software development practices",
+    KK07:"Key legislation affecting organisations & data",
+    KK08:"Ethical issues arising when developing software",
+    KK09:"Measures to reduce or eliminate threats & risk",
+    KK10:"Improving security of software development practices"
+  }}
+};
+const OCORDER = ["u3o1","u3o2","u4o1","u4o2"];
+
+/* ===================== 2026 likelihood model =====================
+   Digital Vector's read of the VCAA exam-panel session notes (predicted
+   focus areas + where the 2025 cohort underperformed → "tested until
+   mastered"). Tier: 4 very likely · 3 likely · 2 possible · 1 quiet.
+   This is an informed projection for revision targeting, NOT VCAA fact. */
+const PRED = {
+ u3o1:{
+  KK01:[4,"AI ethics & emerging trends named as a leading 2026 emphasis."],
+  KK02:[2,"Requirements recur but rarely a standalone focus in Programming."],
+  KK03:[4,"Pseudocode is ~10–15% of every paper — effectively guaranteed."],
+  KK04:[3,"Character-vs-string confused 72% in 2025; data types get retested."],
+  KK05:[3,"Data structures recur yearly; associative arrays still weak."],
+  KK06:[4,"CSV/XML named for 2026; XML caused 58% zero in 2025."],
+  KK07:[4,"OOP = 8 marks, avg only 3.5/8 — flagged the top priority."],
+  KK08:[3,"Constants (esp. Python) & variable scope flagged; control structures recur."],
+  KK09:[2,"Naming conventions appear regularly in small parts."],
+  KK10:[3,"Validation checks named for practical revision focus."],
+  KK11:[3,"Code repositories / internal documentation flagged for 2026."],
+  KK12:[3,"Searching & sorting traced in most papers."],
+  KK13:[3,"Pseudocode logic / error reasoning was widely misunderstood."],
+  KK14:[4,"Testing tables explicitly named as a 2026 revisit."]
+ },
+ u3o2:{
+  KK01:[2,"'Why organisations develop software' — minor recurring role."],
+  KK02:[3,"Design briefs named as a possible 2026 reappearance."],
+  KK03:[4,"Gantt / critical-path annotations recur; ~40% scored zero in 2025."],
+  KK04:[4,"Data-collection staple named for 2026; polarised 2025 results."],
+  KK05:[3,"Functional vs non-functional requirements recur."],
+  KK06:[3,"Constraints classified in most papers."],
+  KK07:[3,"Scope creep named as a possible 2026 reappearance."],
+  KK08:[4,"DFD/use-case core but brutal — 81% zero on DFD, 52% on includes/extends."],
+  KK09:[3,"SRS purpose & sections recur."],
+  KK10:[4,"Copyright & privacy legislation named for 2026."],
+  KK11:[2,"File-management techniques appear in small parts."],
+  KK12:[2,"Mind maps flagged low-value / inconsistent — may still appear."],
+  KK13:[3,"Efficiency vs effectiveness recurs."],
+  KK14:[3,"Data dictionaries & object descriptions recur."],
+  KK15:[4,"UX & affordance named for 2026; up to 62% scored zero."],
+  KK16:[4,"Design principles / user-centred design flagged to be revisited."]
+ },
+ u4o1:{
+  KK01:[2,"Efficiency/effectiveness overlaps other outcomes."],
+  KK02:[2,"Data types/structures/sources overlaps U3·O1."],
+  KK03:[2,"Language features overlaps U3·O1."],
+  KK04:[4,"Innovative development methods named as a 2026 emphasis."],
+  KK05:[3,"Validation overlaps U3·O1·KK10 — named for revision."],
+  KK06:[3,"Alpha/debugging recurs; testing tables flagged."],
+  KK07:[3,"Beta-vs-alpha confusion explicitly flagged for clarification."],
+  KK08:[2,"Evaluation strategies recur in moderate parts."],
+  KK09:[2,"Applying evaluation criteria — moderate recurring role."],
+  KK10:[3,"Project-plan effectiveness ties to the Gantt focus."],
+  KK11:[3,"Recording progress / project logs flagged."],
+  KK12:[2,"Assessing plan effectiveness — moderate recurring role."]
+ },
+ u4o2:{
+  KK01:[2,"Org goals/objectives — minor recurring role."],
+  KK02:[4,"In-house vs external dev — only 1% scored full; due for retest."],
+  KK03:[4,"Combined dev environments named core; only 9% full marks."],
+  KK04:[4,"Security controls named as a 2026 revisit."],
+  KK05:[4,"Threat modelling named as a 2026 revisit."],
+  KK06:[3,"Evaluating dev-practice security — 55% couldn't describe a strategy."],
+  KK07:[4,"Privacy / copyright legislation named for 2026."],
+  KK08:[4,"AI ethics named as a leading 2026 emphasis."],
+  KK09:[3,"Risk-reduction strategies underperformed and recur."],
+  KK10:[3,"Improving dev-practice security — ~55% scored zero in 2025."]
+ }
+};
+const TIER = {
+  4:{label:"Very likely", c:"#e0443e", t:"rgba(224,68,62,.16)"},
+  3:{label:"Likely",      c:"#ef8a1f", t:"rgba(239,138,31,.15)"},
+  2:{label:"Possible",    c:"#cfa42f", t:"rgba(207,164,47,.14)"},
+  1:{label:"Quiet",       c:"#5b9bd5", t:"rgba(91,155,213,.12)"}
+};
+function predOf(oc,kk){ return (PRED[oc]&&PRED[oc][kk]) ? PRED[oc][kk] : [1,"No specific signal in the 2026 notes — a quiet rotation candidate."]; }
+
+/* ===================== exam datasets =====================
+   one entry per question-part. avg = cohort average mark (VCAA report);
+   ans = correct Section A option. 2025 has no report → no avg. */
+const DATA = {
+ "2020":[
+  /* ---- Section A (20 x 1 mark) — avg = proportion correct (2020 report).
+     2020 sat under the previous (2020–2023) study design; KKs map to the
+     nearest current (2025–2028) key knowledge for trend continuity. ---- */
+  {sec:"A",q:"1",marks:1,ans:"B",avg:0.48,oc:"u3o1",kk:"KK04",desc:"Length in millimetres → integer is the most appropriate data type"},
+  {sec:"A",q:"2",marks:1,ans:"D",avg:0.51,oc:"u3o2",kk:"KK02",desc:"Documenting a need/opportunity → an SRS (problem statement comes first)"},
+  {sec:"A",q:"3",marks:1,ans:"D",avg:0.43,oc:"u3o2",kk:"KK06",desc:"Determine constraints = check product list vs 'healthy eating' policy"},
+  {sec:"A",q:"4",marks:1,ans:"B",avg:0.45,oc:"u3o1",kk:"KK12",desc:"Fastest search on an unsorted list = linear search (no 'quick search')"},
+  {sec:"A",q:"5",marks:1,ans:"C",avg:0.96,oc:"u3o1",kk:"KK10",s2oc:"u3o1",s2kk:"KK14",desc:"Test data for a 50c–$8.00 range rule (boundary values 0.49/0.50/8.00/8.01)"},
+  {sec:"A",q:"6",marks:1,ans:"D",avg:0.28,oc:"u3o2",kk:"KK04",desc:"Detailed authentic data on an existing system (no time limit) = observations"},
+  {sec:"A",q:"7",marks:1,ans:"B",avg:0.61,oc:"u3o2",kk:"KK06",desc:"Limited time to complete a solution = an economic constraint"},
+  {sec:"A",q:"8",marks:1,ans:"C",avg:0.64,oc:"u3o2",kk:"KK08",desc:"Missing use-case stereotype on dashed arrows = <<includes>>"},
+  {sec:"A",q:"9",marks:1,ans:"C",avg:0.48,oc:"u3o2",kk:"KK12",desc:"Generate design ideas = brainstorming and mind maps"},
+  {sec:"A",q:"10",marks:1,ans:"B",avg:0.75,oc:"u3o2",kk:"KK16",s2oc:"u3o2",s2kk:"KK15",desc:"Key design factors = usability and interoperability"},
+  {sec:"A",q:"11",marks:1,ans:"A",avg:0.50,oc:"u3o2",kk:"KK11",desc:"Disposed files cannot be recovered (incl. archives & backups)"},
+  {sec:"A",q:"12",marks:1,ans:"C",avg:0.56,oc:"u3o2",kk:"KK13",desc:"Upload 5 MB at 20 Mbps ≈ 2.0 seconds"},
+  {sec:"A",q:"13",marks:1,ans:"A",avg:0.75,oc:"u3o1",kk:"KK05",desc:"Single named/typed entry of mixed fields = a record"},
+  {sec:"A",q:"14",marks:1,ans:"D",avg:0.50,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK14",desc:"Trace the Repeat…Until loop: output C = 16"},
+  {sec:"A",q:"15",marks:1,ans:"C",avg:0.76,oc:"u3o1",kk:"KK10",desc:"Checking input is a positive number = a range check"},
+  {sec:"A",q:"16",marks:1,ans:"A",avg:0.92,oc:"u3o1",kk:"KK14",s2oc:"u3o1",s2kk:"KK10",desc:"Validation test data must include correct and incorrect data"},
+  {sec:"A",q:"17",marks:1,ans:"C",avg:0.52,oc:"u4o2",kk:"KK04",desc:"Prevent third-party apps sharing data = install & run antivirus"},
+  {sec:"A",q:"18",marks:1,ans:"D",avg:0.82,oc:"u3o2",kk:"KK13",s2oc:"u4o1",s2kk:"KK01",desc:"Criterion for efficiency = solution requires fewer steps"},
+  {sec:"A",q:"19",marks:1,ans:"D",avg:0.73,oc:"u4o2",kk:"KK04",s2oc:"u3o1",s2kk:"KK11",desc:"Version control = preserve older versions for later reference"},
+  {sec:"A",q:"20",marks:1,ans:"C",avg:0.60,oc:"u4o2",kk:"KK03",desc:"Cross-site scripting = web app delivers malicious script to the browser"},
+
+  /* ---- Section B (4 questions, 20 marks) ---- */
+  {sec:"B",q:"1a",marks:2,avg:1.1,oc:"u3o1",kk:"KK09",s2oc:"u3o1",s2kk:"KK11",desc:"Purpose of a naming convention & how it improves the data dictionary"},
+  {sec:"B",q:"1b",marks:2,avg:0.5,oc:"u3o1",kk:"KK09",s2oc:"u3o2",s2kk:"KK14",desc:"Suggest changes (rename Var1→inputName, Var2→lenName)"},
+  {sec:"B",q:"2a",marks:2,avg:0.9,oc:"u3o1",kk:"KK03",s2oc:"u3o1",s2kk:"KK13",desc:"Why write an algorithm in pseudocode before coding"},
+  {sec:"B",q:"2b",marks:7,avg:3.4,oc:"u3o1",kk:"KK03",s2oc:"u3o1",s2kk:"KK08",desc:"Complete the 'Guess the secret number' pseudocode (loop, selection, output)"},
+  {sec:"B",q:"3",marks:2,avg:0.4,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK07",desc:"Why use a function (returns a value) over a procedure for a calculation"},
+  {sec:"B",q:"4a",marks:2,avg:0.7,oc:"u3o2",kk:"KK11",desc:"List two file/data management procedures (backup, archive, naming)"},
+  {sec:"B",q:"4b",marks:3,avg:0.9,oc:"u3o2",kk:"KK11",desc:"Explain how the chosen procedure (e.g. archival) manages data & files"},
+
+  /* ---- Section C (14 questions, 60 marks) — FRIDGESMART / HOMEMADE fridge app ---- */
+  {sec:"C",q:"1",marks:1,avg:0.4,oc:"u4o2",kk:"KK01",desc:"Identify an information-system goal of the FRIDGESMART app"},
+  {sec:"C",q:"2",marks:4,avg:1.5,oc:"u4o1",kk:"KK04",desc:"Justify the agile development model over waterfall"},
+  {sec:"C",q:"3a",marks:1,avg:0.2,oc:"u3o2",kk:"KK03",desc:"Identify the tasks on the critical path of the Gantt extract"},
+  {sec:"C",q:"3b",marks:2,avg:0.6,oc:"u3o2",kk:"KK03",s2oc:"u4o1",s2kk:"KK10",desc:"Impact of a one-day interview delay (interview is off the critical path)"},
+  {sec:"C",q:"4a",marks:2,avg:0.4,oc:"u3o2",kk:"KK09",desc:"Outline the purpose of the SRS (document stakeholder needs)"},
+  {sec:"C",q:"4b",marks:2,avg:0.7,oc:"u3o2",kk:"KK09",s2oc:"u3o2",s2kk:"KK07",desc:"Two other SRS sections (scope, constraints, system/technical reqs)"},
+  {sec:"C",q:"5",marks:4,avg:2.7,oc:"u3o2",kk:"KK08",desc:"Label the DFD: A=Customer, B=order confirmation, C=customer order, D=HOMEMADE store"},
+  {sec:"C",q:"6",marks:4,avg:1.8,oc:"u4o1",kk:"KK07",desc:"Two reasons to collect UX feedback from different types of customers"},
+  {sec:"C",q:"7",marks:4,avg:2.8,oc:"u3o2",kk:"KK16",s2oc:"u3o2",s2kk:"KK13",desc:"Select & justify Modified design 2 (size, button clarity, balance)"},
+  {sec:"C",q:"8a",marks:2,avg:0.9,oc:"u3o2",kk:"KK14",s2oc:"u3o1",s2kk:"KK04",desc:"Data dictionary types: Barcode=string, TimeOut=floating point"},
+  {sec:"C",q:"8b",marks:4,avg:1.1,oc:"u3o1",kk:"KK06",desc:"Justify XML over CSV for data transfer (extensible, hierarchical)"},
+  {sec:"C",q:"9a",marks:4,avg:1.1,oc:"u3o1",kk:"KK14",s2oc:"u3o1",s2kk:"KK13",desc:"Complete the test table (boundary testing TimeOut & Boolean Returned)"},
+  {sec:"C",q:"9b",marks:1,avg:0.3,oc:"u3o1",kk:"KK13",desc:"Identify the error line (If…Returned=FALSE Or Ordered=FALSE)"},
+  {sec:"C",q:"9c",marks:1,avg:0.3,oc:"u3o1",kk:"KK13",s2oc:"u3o1",s2kk:"KK08",desc:"Rewrite the line (change Or to And) for correct output"},
+  {sec:"C",q:"9d",marks:1,avg:0.1,oc:"u3o1",kk:"KK05",desc:"'Orders' data structure = associative array (hash table / dictionary)"},
+  {sec:"C",q:"10a",marks:1,avg:0.6,oc:"u3o1",kk:"KK12",desc:"Binary search for 1050: barcode found in the first iteration = 1234"},
+  {sec:"C",q:"10b",marks:1,avg:0.4,oc:"u3o1",kk:"KK12",desc:"Second iteration of the binary search = 1005"},
+  {sec:"C",q:"10c",marks:1,avg:0.3,oc:"u3o1",kk:"KK12",desc:"Iterations to confirm 1050 is absent = 4"},
+  {sec:"C",q:"11",marks:3,avg:0.7,oc:"u3o1",kk:"KK12",desc:"Why selection sort is preferred over quick sort (small, near-sorted list)"},
+  {sec:"C",q:"12a",marks:1,avg:0.4,oc:"u4o2",kk:"KK07",desc:"Legislation for constant voice monitoring = Privacy Act 1988"},
+  {sec:"C",q:"12b",marks:3,avg:0.9,oc:"u4o2",kk:"KK07",desc:"How constant voice monitoring could breach the Privacy Act"},
+  {sec:"C",q:"12c",marks:2,avg:0.2,oc:"u4o2",kk:"KK08",desc:"Ethical concern: code deciding what a customer may not purchase"},
+  {sec:"C",q:"13a",marks:3,avg:1.1,oc:"u4o2",kk:"KK03",desc:"Describe a man-in-the-middle attack & its effect on FRIDGESMART"},
+  {sec:"C",q:"13b",marks:2,avg:1.2,oc:"u4o2",kk:"KK03",s2oc:"u4o2",s2kk:"KK09",desc:"Two risks if the MITM vulnerability is not fixed (data theft, reputation)"},
+  {sec:"C",q:"13c",marks:2,avg:1.0,oc:"u4o2",kk:"KK04",desc:"How to ensure customers apply appropriate software security controls"},
+  {sec:"C",q:"14",marks:4,avg:1.4,oc:"u4o2",kk:"KK09",s2oc:"u4o2",s2kk:"KK10",desc:"Two risk-management strategies + how each reduces security vulnerabilities"}
+ ],
+
+ "2021":[
+  /* ---- Section A (20 x 1 mark) — avg = proportion correct (2021 report).
+     2021 sat under the previous (2020–2023) study design; KKs map to the
+     nearest current (2025–2028) key knowledge for trend continuity. ---- */
+  {sec:"A",q:"1",marks:1,ans:"A",avg:0.97,oc:"u3o1",kk:"KK04",desc:"door_closed=Boolean, accessed=integer (data dictionary)"},
+  {sec:"A",q:"2",marks:1,ans:"C",avg:0.61,oc:"u3o1",kk:"KK05",desc:"Associative array characteristic = key-value pairs"},
+  {sec:"A",q:"3",marks:1,ans:"A",avg:0.81,oc:"u3o2",kk:"KK05",desc:"Functional requirement = saving customer data to a file"},
+  {sec:"A",q:"4",marks:1,ans:"D",avg:0.48,oc:"u4o2",kk:"KK01",desc:"Information-system goal supports an overall org goal"},
+  {sec:"A",q:"5",marks:1,ans:"D",avg:0.79,oc:"u3o1",kk:"KK10",desc:"Best validation sequence = existence, type, then range"},
+  {sec:"A",q:"6",marks:1,ans:"B",avg:0.77,oc:"u3o2",kk:"KK13",s2oc:"u4o1",s2kk:"KK01",desc:"Characteristic of an efficient solution = speed of processing"},
+  {sec:"A",q:"7",marks:1,ans:"A",avg:0.35,oc:"u4o1",kk:"KK12",desc:"Assess project-plan effectiveness vs scope & timeline"},
+  {sec:"A",q:"8",marks:1,ans:"D",avg:0.64,oc:"u4o2",kk:"KK03",desc:"Public wifi card theft = man-in-the-middle attack"},
+  {sec:"A",q:"9",marks:1,ans:"A",avg:0.19,oc:"u3o2",kk:"KK08",desc:"Show data in/out of a system = context diagram"},
+  {sec:"A",q:"10",marks:1,ans:"D",avg:0.27,oc:"u3o2",kk:"KK15",desc:"NOT an affordance consideration = offsetting dev costs"},
+  {sec:"A",q:"11",marks:1,ans:"C",avg:0.86,oc:"u4o1",kk:"KK09",s2oc:"u3o2",s2kk:"KK13",desc:"Evaluation criteria must check SRS requirements/constraints met"},
+  {sec:"A",q:"12",marks:1,ans:"C",avg:0.86,oc:"u4o2",kk:"KK04",desc:"PIN + code + fingerprint = multi-factor authentication"},
+  {sec:"A",q:"13",marks:1,ans:"A",avg:0.78,oc:"u3o2",kk:"KK13",desc:"Cable vs wifi 4 GB transfer-time difference"},
+  {sec:"A",q:"14",marks:1,ans:"D",avg:0.42,oc:"u4o2",kk:"KK04",s2oc:"u3o1",s2kk:"KK10",desc:"Data integrity = accuracy, reasonableness, relevance"},
+  {sec:"A",q:"15",marks:1,ans:"C",avg:0.83,oc:"u4o2",kk:"KK04",desc:"Test data mixed with real data undermines authenticity"},
+  {sec:"A",q:"16",marks:1,ans:"B",avg:0.74,oc:"u4o2",kk:"KK08",desc:"Ethical-not-legal issue = addictive design in a kids' app"},
+  {sec:"A",q:"17",marks:1,ans:"C",avg:0.36,oc:"u3o1",kk:"KK12",s2oc:"u3o1",s2kk:"KK13",desc:"First error in selection-sort trace = min ← j"},
+  {sec:"A",q:"18",marks:1,ans:"B",avg:0.48,oc:"u3o1",kk:"KK12",desc:"Selection sort on a 7-element array = 5 swaps"},
+  {sec:"A",q:"19",marks:1,ans:"C",avg:0.59,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK07",desc:"Named Encrypt block that returns text = a function"},
+  {sec:"A",q:"20",marks:1,ans:"A",avg:0.64,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK12",desc:"Trace Caesar (−2) cipher: 'alley' → 'yjjcw'"},
+
+  /* ---- Section B (5 questions, 20 marks) ---- */
+  {sec:"B",q:"1",marks:4,avg:1.8,oc:"u3o1",kk:"KK11",s2oc:"u3o1",s2kk:"KK09",desc:"Two purposes of internal documentation + how naming conventions help"},
+  {sec:"B",q:"2",marks:3,avg:2.3,oc:"u3o2",kk:"KK06",desc:"Classify three constraints (technical/economic/legal)"},
+  {sec:"B",q:"3",marks:3,avg:1.4,oc:"u4o2",kk:"KK07",desc:"Legal consequences re Privacy Act 1988 & Health Records Act 2001"},
+  {sec:"B",q:"4a",marks:2,avg:0.1,oc:"u3o2",kk:"KK08",desc:"DFD mistake = missing outgoing data flow (5.0 Prepare packets)"},
+  {sec:"B",q:"4b",marks:2,avg:0.7,oc:"u3o1",kk:"KK12",desc:"Quick sort over selection sort (limited battery → fewer comparisons)"},
+  {sec:"B",q:"5a",marks:2,avg:1.4,oc:"u4o1",kk:"KK07",s2oc:"u4o1",s2kk:"KK06",desc:"Purpose of usability testing vs functional testing"},
+  {sec:"B",q:"5b",marks:2,avg:1.5,oc:"u4o1",kk:"KK07",desc:"Why not use own employees for usability testing (bias)"},
+  {sec:"B",q:"5c",marks:2,avg:0.9,oc:"u4o1",kk:"KK07",s2oc:"u3o2",s2kk:"KK04",desc:"Qualitative vs quantitative data-collection methods"},
+
+  /* ---- Section C (13 questions, 60 marks) — sports-medicine web solution ---- */
+  {sec:"C",q:"1",marks:3,avg:1.0,oc:"u4o1",kk:"KK04",desc:"Justify the waterfall model (requirements clearly defined)"},
+  {sec:"C",q:"2a",marks:3,avg:1.4,oc:"u3o2",kk:"KK03",desc:"Complete the Gantt chart (durations, shapes, dependencies)"},
+  {sec:"C",q:"2b",marks:2,avg:1.2,oc:"u3o2",kk:"KK03",s2oc:"u4o1",s2kk:"KK10",desc:"Is the DB team right to worry? (Task 8 → Task 12 slack)"},
+  {sec:"C",q:"2c",marks:1,avg:0.3,oc:"u3o2",kk:"KK03",desc:"Calculate the critical path = 13 weeks"},
+  {sec:"C",q:"3a",marks:2,avg:0.9,oc:"u3o2",kk:"KK07",desc:"Two items within project scope"},
+  {sec:"C",q:"3b",marks:1,avg:0.3,oc:"u3o2",kk:"KK07",desc:"One item outside scope (the video-conferencing app)"},
+  {sec:"C",q:"4",marks:4,avg:2.2,oc:"u3o2",kk:"KK08",desc:"Complete use-case diagram: <<includes>> & <<extends>>"},
+  {sec:"C",q:"5",marks:6,avg:3.8,oc:"u3o1",kk:"KK10",desc:"Existence / range / type checking with controls & examples"},
+  {sec:"C",q:"6",marks:6,avg:1.1,oc:"u3o1",kk:"KK12",s2oc:"u3o1",s2kk:"KK03",desc:"Fill in the binary-search pseudocode"},
+  {sec:"C",q:"7a",marks:5,avg:1.8,oc:"u3o1",kk:"KK14",s2oc:"u3o1",s2kk:"KK13",desc:"Complete the boundary test table (Create_Appointment)"},
+  {sec:"C",q:"7b",marks:1,avg:0.5,oc:"u3o1",kk:"KK13",desc:"Identify the error line (Current_Time > Appointment.Time)"},
+  {sec:"C",q:"7c",marks:1,avg:0.6,oc:"u3o1",kk:"KK13",s2oc:"u3o1",s2kk:"KK08",desc:"Rewrite the line (> to <) for correct output"},
+  {sec:"C",q:"7d",marks:1,avg:0.2,oc:"u3o1",kk:"KK08",desc:"Modify logic to block bookings within one hour"},
+  {sec:"C",q:"8",marks:2,avg:0.6,oc:"u4o2",kk:"KK06",desc:"Why audit the login module (security beyond functionality)"},
+  {sec:"C",q:"9a",marks:1,avg:0.1,oc:"u3o1",kk:"KK06",desc:"XML element types = attribute & root element/tag"},
+  {sec:"C",q:"9b",marks:3,avg:0.6,oc:"u3o1",kk:"KK06",desc:"Justify XML over CSV (self-describing tags, hierarchy)"},
+  {sec:"C",q:"10",marks:3,avg:0.6,oc:"u4o2",kk:"KK04",s2oc:"u3o1",s2kk:"KK11",desc:"Version control to stop out-of-date DB files"},
+  {sec:"C",q:"11a",marks:1,avg:0.5,oc:"u4o2",kk:"KK03",desc:"Identify the web risk = SQL injection"},
+  {sec:"C",q:"11b",marks:2,avg:0.7,oc:"u4o2",kk:"KK03",desc:"Describe SQL injection"},
+  {sec:"C",q:"11c",marks:3,avg:0.7,oc:"u4o2",kk:"KK09",s2oc:"u3o1",s2kk:"KK10",desc:"How data validation minimises SQL injection"},
+  {sec:"C",q:"12",marks:2,avg:0.6,oc:"u3o1",kk:"KK05",desc:"Modify data structure to find five most-frequent users"},
+  {sec:"C",q:"13a",marks:2,avg:0.8,oc:"u4o2",kk:"KK04",desc:"Two actions when decommissioning the old database"},
+  {sec:"C",q:"13b",marks:3,avg:1.5,oc:"u4o2",kk:"KK04",desc:"Three considerations for a backup scheme"},
+  {sec:"C",q:"13c",marks:2,avg:0.8,oc:"u4o2",kk:"KK04",desc:"Two benefits of storing archived data separately"}
+ ],
+
+ "2022":[
+  /* ---- Section A (20 x 1 mark) — avg = proportion correct (2022 report).
+     2022 sat under the previous (2020–2023) study design; KKs map to the
+     nearest current (2025–2028) key knowledge for trend continuity.
+     Q2 accepted A & C, Q14 accepted all four → avg = combined proportion. ---- */
+  {sec:"A",q:"1",marks:1,ans:"D",avg:0.40,oc:"u3o1",kk:"KK07",s2oc:"u3o1",s2kk:"KK08",desc:"Function vs method: a method is called from its object"},
+  {sec:"A",q:"2",marks:1,ans:"A/C",avg:0.69,oc:"u3o2",kk:"KK16",s2oc:"u3o2",s2kk:"KK06",desc:"Factors influencing solution design (both A & C accepted)"},
+  {sec:"A",q:"3",marks:1,ans:"C",avg:0.68,oc:"u3o2",kk:"KK05",desc:"Functional requirement NOT relevant to the loyalty goal"},
+  {sec:"A",q:"4",marks:1,ans:"A",avg:0.58,oc:"u4o2",kk:"KK03",s2oc:"u4o2",s2kk:"KK09",desc:"Reduce risk of open-source modules = update antivirus"},
+  {sec:"A",q:"5",marks:1,ans:"A",avg:0.45,oc:"u4o2",kk:"KK04",desc:"Copying old files to a folder = archiving (not backup)"},
+  {sec:"A",q:"6",marks:1,ans:"A",avg:0.68,oc:"u3o2",kk:"KK09",desc:"Why an SRS matters = states all detailed requirements"},
+  {sec:"A",q:"7",marks:1,ans:"B",avg:0.63,oc:"u4o2",kk:"KK07",desc:"Sharing a colleague's code = Copyright Act 1968"},
+  {sec:"A",q:"8",marks:1,ans:"A",avg:0.84,oc:"u3o1",kk:"KK04",desc:"Letters + random digits code = string data type"},
+  {sec:"A",q:"9",marks:1,ans:"C",avg:0.86,oc:"u3o2",kk:"KK13",s2oc:"u4o1",s2kk:"KK01",desc:"Assess efficiency = measure speed of execution"},
+  {sec:"A",q:"10",marks:1,ans:"C",avg:0.60,oc:"u3o2",kk:"KK04",desc:"Determine operators' needs = individually interview them"},
+  {sec:"A",q:"11",marks:1,ans:"D",avg:0.50,oc:"u4o2",kk:"KK06",desc:"Software-auditing strategy = a penetration test"},
+  {sec:"A",q:"12",marks:1,ans:"C",avg:0.88,oc:"u3o1",kk:"KK10",desc:"Type checking is a method of validation"},
+  {sec:"A",q:"13",marks:1,ans:"B",avg:0.92,oc:"u3o2",kk:"KK12",desc:"5-minute idea generation = brainstorming"},
+  {sec:"A",q:"14",marks:1,ans:"All",avg:1.00,oc:"u4o2",kk:"KK01",desc:"App tagline classified (all four options accepted)"},
+  {sec:"A",q:"15",marks:1,ans:"D",avg:0.59,oc:"u4o1",kk:"KK04",desc:"Agile effectiveness factor = scrum-master/PM communication"},
+  {sec:"A",q:"16",marks:1,ans:"C",avg:0.70,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK14",desc:"Choose the correct trace table for the For loop"},
+  {sec:"A",q:"17",marks:1,ans:"C",avg:0.91,oc:"u3o1",kk:"KK10",desc:"Validation in the age algorithm = a range check"},
+  {sec:"A",q:"18",marks:1,ans:"D",avg:0.49,oc:"u3o1",kk:"KK08",desc:"Algorithm uses selection statements and instructions"},
+  {sec:"A",q:"19",marks:1,ans:"B",avg:0.34,oc:"u4o1",kk:"KK04",desc:"Unclear reqs + early version needed = spiral model"},
+  {sec:"A",q:"20",marks:1,ans:"B",avg:0.52,oc:"u3o1",kk:"KK05",s2oc:"u3o1",s2kk:"KK12",desc:"Hash-table indexes for two new (key,value) pairs"},
+
+  /* ---- Section B (6 questions, 20 marks) ---- */
+  {sec:"B",q:"1",marks:3,avg:2.1,oc:"u3o1",kk:"KK06",desc:"Circle best file type (XML / TXT / CSV) per statement"},
+  {sec:"B",q:"2a",marks:4,avg:1.7,oc:"u4o1",kk:"KK04",desc:"One advantage each of Agile and Waterfall models"},
+  {sec:"B",q:"2b",marks:2,avg:0.8,oc:"u4o1",kk:"KK04",s2oc:"u4o1",s2kk:"KK10",desc:"Two extra pieces of info to choose the better model"},
+  {sec:"B",q:"3",marks:2,avg:1.3,oc:"u4o2",kk:"KK04",desc:"Explain how user authentication is achieved"},
+  {sec:"B",q:"4a",marks:2,avg:1.0,oc:"u3o1",kk:"KK14",s2oc:"u3o1",s2kk:"KK13",desc:"Complete the test table (race algorithm)"},
+  {sec:"B",q:"4b",marks:1,avg:0.4,oc:"u3o1",kk:"KK13",desc:"Cause of error = Repeat…Until runs at least once"},
+  {sec:"B",q:"4c",marks:1,avg:0.2,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK13",desc:"Fix: change Repeat…Until to a While loop"},
+  {sec:"B",q:"5",marks:2,avg:0.7,oc:"u4o2",kk:"KK03",desc:"How an SQL injection risks a secure web app"},
+  {sec:"B",q:"6",marks:3,avg:1.5,oc:"u4o2",kk:"KK09",desc:"Pick a vulnerability + a multi-step mitigation strategy"},
+
+  /* ---- Section C (16 questions, 60 marks) — IszCool Canteen ordering app ---- */
+  {sec:"C",q:"1a",marks:2,avg:1.5,oc:"u3o2",kk:"KK04",desc:"Two data-collection methods for student expectations"},
+  {sec:"C",q:"1b",marks:3,avg:1.4,oc:"u3o2",kk:"KK06",desc:"Impact of economic, technical & legal constraints"},
+  {sec:"C",q:"2",marks:4,avg:2.0,oc:"u3o2",kk:"KK08",desc:"Mark four DFD features as errors (yes/no)"},
+  {sec:"C",q:"3a",marks:2,avg:0.6,oc:"u3o2",kk:"KK08",desc:"Use-case error = canteen-staff actor inside the boundary"},
+  {sec:"C",q:"3b",marks:1,avg:0.2,oc:"u3o2",kk:"KK08",desc:"Actor initiating 'remove order' on collection = student"},
+  {sec:"C",q:"3c",marks:2,avg:1.1,oc:"u3o2",kk:"KK08",desc:"Complete the <<includes>>/<<extends>> link + arrow"},
+  {sec:"C",q:"4",marks:2,avg:1.6,oc:"u3o2",kk:"KK14",s2oc:"u3o1",s2kk:"KK04",desc:"Data-dictionary data types (integer/Boolean/string)"},
+  {sec:"C",q:"5a",marks:1,avg:0.2,oc:"u3o2",kk:"KK15",desc:"Define affordance"},
+  {sec:"C",q:"5b",marks:1,avg:0.3,oc:"u3o2",kk:"KK15",desc:"Example of poor affordance in Mock-up A"},
+  {sec:"C",q:"6a",marks:3,avg:2.7,oc:"u3o2",kk:"KK13",desc:"Classify criteria as efficiency or effectiveness"},
+  {sec:"C",q:"6b",marks:3,avg:1.6,oc:"u3o2",kk:"KK16",s2oc:"u3o2",s2kk:"KK13",desc:"Choose preferred mock-up & justify vs the criteria"},
+  {sec:"C",q:"7a",marks:1,avg:0.7,oc:"u3o1",kk:"KK10",s2oc:"u4o1",s2kk:"KK05",desc:"First validation on an order item = existence check"},
+  {sec:"C",q:"7b",marks:1,avg:0.6,oc:"u3o1",kk:"KK10",desc:"Validation on total cost = range check vs daily limit"},
+  {sec:"C",q:"8",marks:4,avg:2.2,oc:"u3o2",kk:"KK11",desc:"Two file-handling concerns + procedures (naming/version/access)"},
+  {sec:"C",q:"9a",marks:1,avg:0.4,oc:"u3o1",kk:"KK05",desc:"Best data structure = record (or class/object)"},
+  {sec:"C",q:"9b",marks:2,avg:0.5,oc:"u3o1",kk:"KK05",desc:"Why a record suits mixed-type fields"},
+  {sec:"C",q:"10a",marks:2,avg:0.8,oc:"u3o1",kk:"KK08",desc:"List the other two control structures (selection/iteration)"},
+  {sec:"C",q:"10b",marks:2,avg:0.6,oc:"u3o1",kk:"KK08",desc:"Pick a control structure for editing an order + why"},
+  {sec:"C",q:"11a",marks:2,avg:1.7,oc:"u3o1",kk:"KK11",desc:"Which programmer is right about internal documentation (Soula)"},
+  {sec:"C",q:"11b",marks:2,avg:1.0,oc:"u3o1",kk:"KK11",desc:"Two characteristics of internal documentation"},
+  {sec:"C",q:"12",marks:3,avg:1.6,oc:"u3o1",kk:"KK14",s2oc:"u3o1",s2kk:"KK13",desc:"Complete the test table (User purchase, nested If)"},
+  {sec:"C",q:"13a",marks:2,avg:1.2,oc:"u4o2",kk:"KK04",desc:"One physical + one software security control"},
+  {sec:"C",q:"13b",marks:2,avg:0.6,oc:"u4o2",kk:"KK04",s2oc:"u3o1",s2kk:"KK11",desc:"How a software control keeps a working version available"},
+  {sec:"C",q:"14a",marks:1,avg:0.8,oc:"u4o1",kk:"KK07",desc:"A feature to test with different users"},
+  {sec:"C",q:"14b",marks:3,avg:1.2,oc:"u4o1",kk:"KK07",desc:"Why run a variety of tests with different users"},
+  {sec:"C",q:"15a",marks:2,avg:1.2,oc:"u4o2",kk:"KK04",s2oc:"u3o1",s2kk:"KK10",desc:"Two characteristics of data that has integrity"},
+  {sec:"C",q:"15b",marks:2,avg:0.7,oc:"u4o2",kk:"KK04",desc:"Impact if that integrity characteristic isn't maintained"},
+  {sec:"C",q:"16a",marks:2,avg:0.8,oc:"u4o2",kk:"KK09",desc:"Two components of a security/risk-management strategy"},
+  {sec:"C",q:"16b",marks:2,avg:0.6,oc:"u4o2",kk:"KK09",desc:"How one component improves security"}
+ ],
+
+ "2023":[
+  /* ---- Section A (20 x 1 mark) — avg = proportion correct (2023 report) ----
+     2023 sat under the previous (2020–2023) study design; KKs map to the
+     nearest current (2025–2028) key knowledge for trend continuity. ---- */
+  {sec:"A",q:"1",marks:1,ans:"A",avg:0.73,oc:"u3o1",kk:"KK12",desc:"Identify the algorithm type = binary search"},
+  {sec:"A",q:"2",marks:1,ans:"D",avg:0.43,oc:"u3o1",kk:"KK12",desc:"Which ordered list could produce the binary-search trace"},
+  {sec:"A",q:"3",marks:1,ans:"B",avg:0.56,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK03",desc:"'Else' relates to selection control structure"},
+  {sec:"A",q:"4",marks:1,ans:"C",avg:0.96,oc:"u3o1",kk:"KK11",desc:"Comments commence with a symbol/character sequence"},
+  {sec:"A",q:"5",marks:1,ans:"D",avg:0.62,oc:"u3o1",kk:"KK05",desc:"Keyed data → associative array is most appropriate"},
+  {sec:"A",q:"6",marks:1,ans:"B",avg:0.78,oc:"u3o2",kk:"KK04",s2oc:"u3o2",s2kk:"KK05",desc:"Collecting data to determine requirements = analysis stage"},
+  {sec:"A",q:"7",marks:1,ans:"A",avg:0.47,oc:"u3o2",kk:"KK04",desc:"Data-collection technique = logs presented in a report"},
+  {sec:"A",q:"8",marks:1,ans:"B",avg:0.91,oc:"u3o2",kk:"KK06",desc:"Cultural-diversity need = social constraint"},
+  {sec:"A",q:"9",marks:1,ans:"C",avg:0.91,oc:"u3o2",kk:"KK03",desc:"Task that delays the project is on the critical path"},
+  {sec:"A",q:"10",marks:1,ans:"B",avg:0.66,oc:"u4o2",kk:"KK07",desc:"Privacy Act 1988 requires notifying reasons for collection"},
+  {sec:"A",q:"11",marks:1,ans:"C",avg:0.70,oc:"u3o2",kk:"KK13",desc:"Upgrade most likely to cut upload time (NBN upload plan)"},
+  {sec:"A",q:"12",marks:1,ans:"D",avg:0.47,oc:"u4o2",kk:"KK01",desc:"Measurable objective (reduce lost-order complaints by half)"},
+  {sec:"A",q:"13",marks:1,ans:"C",avg:0.65,oc:"u4o1",kk:"KK08",desc:"Strategy to test if requirements are met = evaluation stage"},
+  {sec:"A",q:"14",marks:1,ans:"C",avg:0.76,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK07",desc:"Reusable Boolean-returning block = a function"},
+  {sec:"A",q:"15",marks:1,ans:"A",avg:0.70,oc:"u3o1",kk:"KK05",desc:"Integer-indexed single-type structure = array"},
+  {sec:"A",q:"16",marks:1,ans:"B",avg:0.66,oc:"u3o2",kk:"KK13",desc:"Characteristic of an effective solution = completeness"},
+  {sec:"A",q:"17",marks:1,ans:"D",avg:0.61,oc:"u4o2",kk:"KK03",desc:"Altered invoice banking details = man-in-the-middle attack"},
+  {sec:"A",q:"18",marks:1,ans:"C",avg:0.79,oc:"u4o2",kk:"KK04",s2oc:"u3o1",s2kk:"KK10",desc:"Reviews without login harm data-integrity authenticity"},
+  {sec:"A",q:"19",marks:1,ans:"B",avg:0.76,oc:"u3o2",kk:"KK08",desc:"Use-case diagrams show actor–system interaction"},
+  {sec:"A",q:"20",marks:1,ans:"A",avg:0.53,oc:"u4o2",kk:"KK07",desc:"Health Records Act 2001 applies in Victoria"},
+
+  /* ---- Section B (6 questions, 20 marks) ---- */
+  {sec:"B",q:"1",marks:2,avg:1.0,oc:"u3o2",kk:"KK09",desc:"Identify & describe a characteristic of a good SRS"},
+  {sec:"B",q:"2",marks:2,avg:1.0,oc:"u3o1",kk:"KK04",desc:"Why store numbers as a string + example (leading zeros)"},
+  {sec:"B",q:"3a",marks:1,avg:0.7,oc:"u3o2",kk:"KK14",s2oc:"u3o2",s2kk:"KK16",desc:"Identify the design tool used = a mock-up"},
+  {sec:"B",q:"3b",marks:3,avg:1.1,oc:"u3o2",kk:"KK14",s2oc:"u3o1",s2kk:"KK03",desc:"Compare object descriptions & pseudocode vs a mock-up"},
+  {sec:"B",q:"4a",marks:2,avg:1.3,oc:"u3o2",kk:"KK15",desc:"Who should run usability testing + why (the client's users)"},
+  {sec:"B",q:"4b",marks:3,avg:0.6,oc:"u3o2",kk:"KK15",s2oc:"u3o2",s2kk:"KK04",desc:"Justify recording (video) over direct observation (bias)"},
+  {sec:"B",q:"5a",marks:1,avg:0.1,oc:"u4o2",kk:"KK09",desc:"Why a risk-management strategy should be applied"},
+  {sec:"B",q:"5b",marks:3,avg:0.2,oc:"u4o2",kk:"KK09",s2oc:"u4o2",s2kk:"KK10",desc:"Propose strategy: technique, responsibility, timing"},
+  {sec:"B",q:"5c",marks:1,avg:0.1,oc:"u4o2",kk:"KK06",s2oc:"u4o2",s2kk:"KK09",desc:"One benefit of the proposed risk technique (e.g. audit)"},
+  {sec:"B",q:"6",marks:2,avg:1.2,oc:"u4o2",kk:"KK04",s2oc:"u3o1",s2kk:"KK11",desc:"Compare version control vs backing up a file"},
+
+  /* ---- Section C (17 questions, 60 marks) — Ness translation/transcription SaaS ---- */
+  {sec:"C",q:"1a",marks:1,avg:0.5,oc:"u4o1",kk:"KK04",desc:"Name the development model = spiral (iterative)"},
+  {sec:"C",q:"1b",marks:3,avg:1.0,oc:"u4o1",kk:"KK04",desc:"Draw the spiral model (Analysis→Design→Dev→Eval ×3)"},
+  {sec:"C",q:"2",marks:3,avg:0.9,oc:"u4o2",kk:"KK06",desc:"Three criteria to evaluate secure-dev-practice effectiveness"},
+  {sec:"C",q:"3",marks:2,avg:1.3,oc:"u3o1",kk:"KK09",desc:"A naming-convention characteristic + example"},
+  {sec:"C",q:"4a",marks:2,avg:0.8,oc:"u4o1",kk:"KK11",desc:"Technique to record project progress (project log)"},
+  {sec:"C",q:"4b",marks:2,avg:0.9,oc:"u3o2",kk:"KK03",desc:"Impact of a task delay on milestone (parallel Tasks 3 & 4)"},
+  {sec:"C",q:"5",marks:3,avg:1.7,oc:"u3o2",kk:"KK08",desc:"Label DFD A/B/C from the context diagram (user, login_details, login_status)"},
+  {sec:"C",q:"6",marks:1,avg:0.5,oc:"u3o2",kk:"KK16",s2oc:"u3o2",s2kk:"KK15",desc:"UI feature for efficient state entry (drop-down/combo)"},
+  {sec:"C",q:"7a",marks:2,avg:1.0,oc:"u4o2",kk:"KK08",desc:"Two consequences of the staffing-vs-test-data ethical issue"},
+  {sec:"C",q:"7b",marks:3,avg:0.2,oc:"u4o2",kk:"KK08",desc:"Method to resolve a consequence + advantage & disadvantage"},
+  {sec:"C",q:"8a",marks:1,avg:0.5,oc:"u4o2",kk:"KK03",desc:"Identify the risk = SQL injection"},
+  {sec:"C",q:"8b",marks:2,avg:0.6,oc:"u4o2",kk:"KK03",desc:"Two reasons a malicious user runs an SQL injection"},
+  {sec:"C",q:"8c",marks:1,avg:0.2,oc:"u4o2",kk:"KK09",s2oc:"u3o1",s2kk:"KK10",desc:"Mitigate SQL injection (input validation / parameterised)"},
+  {sec:"C",q:"9",marks:3,avg:1.6,oc:"u3o2",kk:"KK16",s2oc:"u3o2",s2kk:"KK13",desc:"Select preferred UI design vs the three criteria (Design B)"},
+  {sec:"C",q:"10",marks:2,avg:1.3,oc:"u4o1",kk:"KK06",s2oc:"u3o1",s2kk:"KK14",desc:"Construct tests for the file-extension check (valid/invalid)"},
+  {sec:"C",q:"10b",marks:2,avg:1.3,oc:"u3o2",kk:"KK15",s2oc:"u3o2",s2kk:"KK13",desc:"How an error message raises UI effectiveness"},
+  {sec:"C",q:"11a",marks:3,avg:0.8,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK07",desc:"Justify a function over a method (returns a value)"},
+  {sec:"C",q:"11b",marks:2,avg:0.3,oc:"u3o1",kk:"KK07",desc:"How a class could be used in the transcription module"},
+  {sec:"C",q:"12",marks:6,avg:2.5,oc:"u3o2",kk:"KK14",s2oc:"u3o1",s2kk:"KK04",desc:"Complete the data dictionary (names, data types/structures)"},
+  {sec:"C",q:"13",marks:3,avg:0.6,oc:"u4o2",kk:"KK09",s2oc:"u4o2",s2kk:"KK04",desc:"Manage three risks of a third-party AI translation service"},
+  {sec:"C",q:"14a",marks:3,avg:0.7,oc:"u3o1",kk:"KK06",desc:"Justify XML over CSV for the API (extensible tags)"},
+  {sec:"C",q:"14b",marks:1,avg:0.7,oc:"u3o1",kk:"KK06",desc:"Factor influencing XML choice = interoperability"},
+  {sec:"C",q:"15",marks:3,avg:1.4,oc:"u4o2",kk:"KK04",desc:"Describe a suitable backup procedure (type/when/where)"},
+  {sec:"C",q:"16",marks:2,avg:0.8,oc:"u4o2",kk:"KK06",s2oc:"u3o2",s2kk:"KK10",desc:"Two areas to review: maintainability, security, legal"},
+  {sec:"C",q:"17a",marks:2,avg:0.4,oc:"u4o1",kk:"KK12",desc:"Propose how to assess project-plan effectiveness"},
+  {sec:"C",q:"17b",marks:2,avg:0.8,oc:"u4o1",kk:"KK12",desc:"Why assess how the plan aided progress monitoring"}
+ ],
+
+ "2024":[
+  /* ---- Section A (20 x 1 mark) — avg = proportion correct ---- */
+  {sec:"A",q:"1",marks:1,ans:"D",avg:0.91,oc:"u3o1",kk:"KK10",s2oc:"u4o1",s2kk:"KK05",desc:"Type checking = validating data is of a particular type"},
+  {sec:"A",q:"2",marks:1,ans:"C",avg:0.47,oc:"u3o1",kk:"KK14",desc:"Usability testing occurs in the development stage of PSM"},
+  {sec:"A",q:"3",marks:1,ans:"C",avg:0.64,oc:"u3o1",kk:"KK12",desc:"Array contents after the first pass of a selection sort"},
+  {sec:"A",q:"4",marks:1,ans:"D",avg:0.65,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK12",desc:"Pseudocode that swaps the first two array values (temp var)"},
+  {sec:"A",q:"5",marks:1,ans:"A",avg:0.38,oc:"u3o2",kk:"KK07",desc:"Identify a factor that relates to solution scope"},
+  {sec:"A",q:"6",marks:1,ans:"C",avg:0.58,oc:"u3o1",kk:"KK12",desc:"Iterations a binary search needs to find a value"},
+  {sec:"A",q:"7",marks:1,ans:"A",avg:0.91,oc:"u4o2",kk:"KK04",desc:"Protection against data loss = offsite backups"},
+  {sec:"A",q:"8",marks:1,ans:"D",avg:0.87,oc:"u4o2",kk:"KK01",desc:"Key consideration when developing software = meeting org goals"},
+  {sec:"A",q:"9",marks:1,ans:"B",avg:0.68,oc:"u3o2",kk:"KK03",desc:"Task delayed → critical-path effect on Task 5 & 7 finish"},
+  {sec:"A",q:"10",marks:1,ans:"A",avg:0.61,oc:"u3o1",kk:"KK09",desc:"Best naming convention for a UI dropdown element"},
+  {sec:"A",q:"11",marks:1,ans:"B",avg:0.76,oc:"u3o2",kk:"KK05",s2oc:"u3o2",s2kk:"KK09",desc:"SRS feature for choosing a lane = functional requirement"},
+  {sec:"A",q:"12",marks:1,ans:"C",avg:0.70,oc:"u3o2",kk:"KK04",desc:"Data-collection technique to determine existing efficiency"},
+  {sec:"A",q:"13",marks:1,ans:"B",avg:0.61,oc:"u3o2",kk:"KK11",desc:"Which option is NOT a file-management technique"},
+  {sec:"A",q:"14",marks:1,ans:"D",avg:0.73,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK03",desc:"Trace a While loop to find the printed output"},
+  {sec:"A",q:"15",marks:1,ans:"D",avg:0.95,oc:"u4o2",kk:"KK03",desc:"Defining characteristic of a man-in-the-middle attack"},
+  {sec:"A",q:"16",marks:1,ans:"C",avg:0.70,oc:"u4o2",kk:"KK09",desc:"Technique that would NOT form part of risk management"},
+  {sec:"A",q:"17",marks:1,ans:"D",avg:0.96,oc:"u4o2",kk:"KK09",s2oc:"u4o2",s2kk:"KK06",desc:"Managing third-party software risk = security audits"},
+  {sec:"A",q:"18",marks:1,ans:"A",avg:0.55,oc:"u4o2",kk:"KK06",desc:"A criterion for evaluating security-strategy effectiveness"},
+  {sec:"A",q:"19",marks:1,ans:"B",avg:0.64,oc:"u4o1",kk:"KK01",desc:"5-second card validation is effective (validation is correct)"},
+  {sec:"A",q:"20",marks:1,ans:"B",avg:0.50,oc:"u3o1",kk:"KK08",desc:"Line 8 of nested-If discount = If Total >= 1000 Then"},
+
+  /* ---- Section B (6 questions, 20 marks) ---- */
+  {sec:"B",q:"1",marks:3,avg:2.9,oc:"u3o1",kk:"KK04",s2oc:"u3o2",s2kk:"KK14",desc:"Choose data types (string/integer/Boolean) for a data dictionary"},
+  {sec:"B",q:"2",marks:2,avg:1.3,oc:"u4o2",kk:"KK10",desc:"Two advantages of providing regular software updates"},
+  {sec:"B",q:"3a",marks:1,avg:0.7,oc:"u3o2",kk:"KK03",desc:"Name a tool to identify critical-path tasks (Gantt chart)"},
+  {sec:"B",q:"3b",marks:3,avg:1.2,oc:"u3o2",kk:"KK03",s2oc:"u4o1",s2kk:"KK11",desc:"How critical path + recording progress prevents overrun"},
+  {sec:"B",q:"4",marks:4,avg:2.9,oc:"u4o2",kk:"KK01",desc:"Categorise statements as goals/objectives × organisation/system"},
+  {sec:"B",q:"5a",marks:1,avg:0.8,oc:"u3o2",kk:"KK05",desc:"State one functional requirement of the imagery system"},
+  {sec:"B",q:"5b",marks:2,avg:0.5,oc:"u3o2",kk:"KK15",desc:"Compare two magnification tools by affordance"},
+  {sec:"B",q:"6a",marks:1,avg:0.4,oc:"u4o2",kk:"KK03",desc:"Describe cross-site scripting"},
+  {sec:"B",q:"6b",marks:1,avg:0.3,oc:"u4o2",kk:"KK04",s2oc:"u4o2",s2kk:"KK09",desc:"One technique to protect against cross-site scripting"},
+  {sec:"B",q:"6c",marks:2,avg:0.4,oc:"u4o2",kk:"KK03",s2oc:"u4o2",s2kk:"KK08",desc:"How XSS diminishes data integrity (authenticity/correctness) & impacts the owner"},
+
+  /* ---- Section C (19 questions, 60 marks) — Café SD rewards app ---- */
+  {sec:"C",q:"1a",marks:1,avg:0.2,oc:"u3o2",kk:"KK05",desc:"Why reliability (NFR — app must work 99.9%) matters"},
+  {sec:"C",q:"1b",marks:1,avg:0.5,oc:"u3o2",kk:"KK05",s2oc:"u4o1",s2kk:"KK01",desc:"Why the number of failures matters to reliability (uptime)"},
+  {sec:"C",q:"1c",marks:1,avg:0.1,oc:"u3o2",kk:"KK05",s2oc:"u4o1",s2kk:"KK08",desc:"When to evaluate reliability (3–6 months after implementation)"},
+  {sec:"C",q:"2",marks:2,avg:1.8,oc:"u3o2",kk:"KK06",desc:"Classify a technical vs a usability constraint"},
+  {sec:"C",q:"3a",marks:3,avg:1.9,oc:"u3o2",kk:"KK08",desc:"Complete use-case diagram: Customer actor, <<include>>, <<extend>>"},
+  {sec:"C",q:"3b",marks:1,avg:0.3,oc:"u3o2",kk:"KK08",desc:"Draw the association to the Use points use case"},
+  {sec:"C",q:"4a",marks:2,avg:0.7,oc:"u3o2",kk:"KK08",desc:"Complete DFD: Staff entity & Points Balance data flow"},
+  {sec:"C",q:"4b",marks:2,avg:0.7,oc:"u3o2",kk:"KK08",desc:"Level 1 DFD + reason (has data store / process is a verb)"},
+  {sec:"C",q:"5",marks:3,avg:1.1,oc:"u3o1",kk:"KK05",desc:"Justify a record over a 1D / associative array (mixed types)"},
+  {sec:"C",q:"6",marks:3,avg:1.0,oc:"u3o1",kk:"KK12",s2oc:"u3o1",s2kk:"KK05",desc:"Linear search: records sorted by Customer ID, not Phone Number"},
+  {sec:"C",q:"7",marks:2,avg:1.1,oc:"u3o2",kk:"KK10",s2oc:"u4o2",s2kk:"KK08",desc:"Why locking out beats deleting all customer data (retention)"},
+  {sec:"C",q:"8a",marks:1,avg:0.5,oc:"u3o2",kk:"KK16",s2oc:"u3o2",s2kk:"KK15",desc:"Write a measurable accessibility evaluation criterion"},
+  {sec:"C",q:"8b",marks:1,avg:1.0,oc:"u3o2",kk:"KK16",desc:"Select login design (Design A)"},
+  {sec:"C",q:"8c",marks:2,avg:1.4,oc:"u3o2",kk:"KK16",s2oc:"u3o2",s2kk:"KK13",desc:"Justify the design selection against ≥2 criteria"},
+  {sec:"C",q:"9",marks:2,avg:0.7,oc:"u3o1",kk:"KK06",desc:"One benefit each of a CSV vs an XML file format"},
+  {sec:"C",q:"10",marks:3,avg:1.4,oc:"u4o1",kk:"KK04",desc:"Justify agile vs waterfall after a scope change"},
+  {sec:"C",q:"11",marks:2,avg:0.5,oc:"u4o2",kk:"KK04",s2oc:"u3o1",s2kk:"KK10",desc:"Data-integrity characteristic (authenticity/timeliness) + reusable code impact"},
+  {sec:"C",q:"12a",marks:2,avg:1.5,oc:"u3o1",kk:"KK14",s2oc:"u3o1",s2kk:"KK13",desc:"Complete the test table for CheckPoints (boundary 5000)"},
+  {sec:"C",q:"12b",marks:1,avg:0.6,oc:"u3o1",kk:"KK13",desc:"Identify the error line (If points > amount Then)"},
+  {sec:"C",q:"12c",marks:1,avg:0.6,oc:"u3o1",kk:"KK13",s2oc:"u3o1",s2kk:"KK10",desc:"Rewrite line (> to >=) for correct output"},
+  {sec:"C",q:"13",marks:3,avg:0.9,oc:"u3o1",kk:"KK03",s2oc:"u3o1",s2kk:"KK08",desc:"Write CompletePayment pseudocode (selection, deduct/add points)"},
+  {sec:"C",q:"14a",marks:2,avg:1.0,oc:"u4o2",kk:"KK06",desc:"State two purposes of a software audit"},
+  {sec:"C",q:"14b",marks:2,avg:0.6,oc:"u4o2",kk:"KK06",s2oc:"u4o2",s2kk:"KK04",desc:"How an audit supports built-in payment integration"},
+  {sec:"C",q:"15a",marks:2,avg:1.1,oc:"u4o2",kk:"KK08",desc:"Ethical issue of Family sharing (location tracking) + impact"},
+  {sec:"C",q:"15b",marks:2,avg:1.0,oc:"u4o2",kk:"KK08",s2oc:"u4o2",s2kk:"KK09",desc:"Two design suggestions to avoid the ethical issue"},
+  {sec:"C",q:"16",marks:3,avg:1.5,oc:"u4o2",kk:"KK03",s2oc:"u4o2",s2kk:"KK04",desc:"Outdated code library: customer impact + fix (update + audit)"},
+  {sec:"C",q:"17a",marks:1,avg:0.7,oc:"u3o1",kk:"KK10",s2oc:"u4o1",s2kk:"KK05",desc:"Why an existence check is needed on every required field"},
+  {sec:"C",q:"17b",marks:1,avg:0.6,oc:"u3o1",kk:"KK10",desc:"How an existence check applies to the Name field"},
+  {sec:"C",q:"18a",marks:2,avg:1.1,oc:"u3o2",kk:"KK15",desc:"Two advantages of eye-tracking usability testing"},
+  {sec:"C",q:"18b",marks:2,avg:0.8,oc:"u3o2",kk:"KK15",desc:"Two advantages of observation-based usability testing"},
+  {sec:"C",q:"19a",marks:1,avg:0.7,oc:"u4o2",kk:"KK07",desc:"Identify legislation breached (Privacy Act 1988 / Copyright Act 1968)"},
+  {sec:"C",q:"19b",marks:1,avg:0.6,oc:"u4o2",kk:"KK07",desc:"State how the legislation was breached (APP 11 / work product)"},
+  {sec:"C",q:"19c",marks:2,avg:1.2,oc:"u4o2",kk:"KK07",s2oc:"u4o2",s2kk:"KK09",desc:"Two steps to prevent the data-theft breach"}
+ ],
+
+ "2025":[
+  {sec:"A",q:"1",marks:1,ans:"C",avg:0.83,oc:"u3o1",kk:"KK05",desc:"Identify a one-dimensional array from a visual"},
+  {sec:"A",q:"2",marks:1,ans:"B",avg:0.78,oc:"u3o1",kk:"KK09",desc:"street_number → snake_case naming convention"},
+  {sec:"A",q:"3",marks:1,ans:"C",avg:0.69,oc:"u3o1",kk:"KK13",desc:"Cause of a syntax error (missed symbol)"},
+  {sec:"A",q:"4",marks:1,ans:"B",avg:0.71,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK03",desc:"Control structure = selection"},
+  {sec:"A",q:"5",marks:1,ans:"C",avg:0.55,oc:"u3o1",kk:"KK08",s2oc:"u3o1",s2kk:"KK03",desc:"Trace pseudocode (cash-bonus tiers)"},
+  {sec:"A",q:"6",marks:1,ans:"C",avg:0.55,oc:"u3o2",kk:"KK15",desc:"UX characteristic to improve = affordance"},
+  {sec:"A",q:"7",marks:1,ans:"D",avg:0.80,oc:"u3o1",kk:"KK03",desc:"Best IPO chart for the calculator"},
+  {sec:"A",q:"8",marks:1,ans:"B",avg:0.95,oc:"u3o2",kk:"KK06",desc:"Constraint = hardware capability of devices"},
+  {sec:"A",q:"9",marks:1,ans:"A",avg:0.52,oc:"u3o2",kk:"KK08",desc:"Use case <<includes>> / <<extends>>"},
+  {sec:"A",q:"10",marks:1,ans:"B",avg:0.69,oc:"u3o2",kk:"KK08",desc:"Unlabelled use-case actor (parking officer)"},
+  {sec:"A",q:"11",marks:1,ans:"C",avg:0.79,oc:"u3o1",kk:"KK07",desc:"Access modifier private (encapsulation)"},
+  {sec:"A",q:"12",marks:1,ans:"D",avg:0.98,oc:"u3o1",kk:"KK14",s2oc:"u4o1",s2kk:"KK06",desc:"Commenting out code while debugging"},
+  {sec:"A",q:"13",marks:1,ans:"D",avg:0.85,oc:"u3o2",kk:"KK03",s2oc:"u4o1",s2kk:"KK10",desc:"Critical-path delay → reschedule dependents"},
+  {sec:"A",q:"14",marks:1,ans:"A",avg:0.76,oc:"u3o2",kk:"KK07",desc:"Long-term impact of scope creep"},
+  {sec:"A",q:"15",marks:1,ans:"C",avg:0.42,oc:"u3o1",kk:"KK08",desc:"Constant / global / local variable scope"},
+  {sec:"A",q:"16",marks:1,ans:"A",avg:0.86,oc:"u4o2",kk:"KK03",desc:"Example of an insider threat"},
+  {sec:"A",q:"17",marks:1,ans:"A",avg:0.75,oc:"u4o2",kk:"KK04",desc:"Most important security control = encryption"},
+  {sec:"A",q:"18",marks:1,ans:"D",avg:0.71,oc:"u4o2",kk:"KK07",desc:"Copyright Act 1968 breach"},
+  {sec:"A",q:"19",marks:1,ans:"B",avg:0.84,oc:"u4o2",kk:"KK09",s2oc:"u4o2",s2kk:"KK04",desc:"Essential Eight strategy = backups"},
+  {sec:"A",q:"20",marks:1,ans:"C",avg:0.65,oc:"u4o2",kk:"KK08",s2oc:"u3o1",s2kk:"KK01",desc:"AI ethical issue = over-reliance"},
+
+  {sec:"B",q:"1a",marks:1,avg:0.7,oc:"u3o2",kk:"KK03",desc:"How Gantt sequences tasks (dependencies)"},
+  {sec:"B",q:"1b",marks:2,avg:1.1,oc:"u3o2",kk:"KK03",desc:"Identify a milestone & its significance"},
+  {sec:"B",q:"1c",marks:2,avg:0.8,oc:"u3o2",kk:"KK03",s2oc:"u4o1",s2kk:"KK11",desc:"Gantt to monitor & document progress"},
+  {sec:"B",q:"2",marks:2,avg:0.8,oc:"u4o2",kk:"KK10",desc:"Strategy to improve dev-practice security"},
+  {sec:"B",q:"3",marks:4,avg:1.6,oc:"u4o2",kk:"KK03",desc:"Risks: update in combined dev/test/prod env"},
+  {sec:"B",q:"4",marks:4,avg:3.6,oc:"u3o1",kk:"KK13",desc:"Match four error types to descriptions"},
+  {sec:"B",q:"5a",marks:1,avg:0.8,oc:"u3o1",kk:"KK05",desc:"Best structure = two-dimensional array"},
+  {sec:"B",q:"5b",marks:2,avg:0.5,oc:"u3o1",kk:"KK04",desc:"Best data type for symbol = character"},
+  {sec:"B",q:"5c",marks:2,avg:0.6,oc:"u3o1",kk:"KK06",desc:"Two benefits of using XML"},
+
+  {sec:"C",q:"1",marks:3,avg:1.8,oc:"u3o2",kk:"KK01",desc:"Three reasons to develop the software"},
+  {sec:"C",q:"2",marks:4,avg:1.2,oc:"u4o2",kk:"KK02",desc:"Justify in-house vs external development"},
+  {sec:"C",q:"3",marks:4,avg:2.1,oc:"u3o2",kk:"KK04",desc:"Data-collection method per stakeholder"},
+  {sec:"C",q:"4a",marks:4,avg:3.1,oc:"u3o2",kk:"KK08",desc:"Label DFD A–D from context diagram"},
+  {sec:"C",q:"4b",marks:2,avg:0.4,oc:"u3o2",kk:"KK08",desc:"DFD error: entity → data store directly"},
+  {sec:"C",q:"5",marks:3,avg:2.4,oc:"u3o2",kk:"KK05",desc:"Classify functional / non-functional"},
+  {sec:"C",q:"6",marks:4,avg:2.0,oc:"u3o2",kk:"KK12",desc:"Complete mind map of design ideas"},
+  {sec:"C",q:"7a",marks:2,avg:0.8,oc:"u3o1",kk:"KK07",desc:"Benefit of inheritance + example"},
+  {sec:"C",q:"7b",marks:2,avg:0.8,oc:"u3o2",kk:"KK14",s2oc:"u3o1",s2kk:"KK03",desc:"Name object-description sections (name/methods)"},
+  {sec:"C",q:"7c",marks:4,avg:1.9,oc:"u3o2",kk:"KK14",s2oc:"u3o1",s2kk:"KK04",desc:"Missing properties + data types"},
+  {sec:"C",q:"8",marks:4,avg:0.7,oc:"u3o2",kk:"KK15",desc:"UX characteristic better in each sketch"},
+  {sec:"C",q:"9",marks:3,avg:0.5,oc:"u3o2",kk:"KK15",s2oc:"u3o2",s2kk:"KK16",desc:"User-centred design → efficient & effective"},
+  {sec:"C",q:"10a",marks:4,avg:1.2,oc:"u4o2",kk:"KK04",desc:"Explain IAM & version control as controls"},
+  {sec:"C",q:"10b",marks:1,avg:0.2,oc:"u4o2",kk:"KK05",desc:"State a threat-modelling principle"},
+  {sec:"C",q:"11a",marks:1,avg:0.7,oc:"u4o1",kk:"KK05",s2oc:"u3o1",s2kk:"KK10",desc:"Validation on line 2 = existence check"},
+  {sec:"C",q:"11b",marks:2,avg:1.1,oc:"u4o1",kk:"KK05",s2oc:"u3o1",s2kk:"KK10",desc:"Add a validation technique (type check)"},
+  {sec:"C",q:"11c",marks:6,avg:3.6,oc:"u4o1",kk:"KK06",s2oc:"u3o1",s2kk:"KK14",desc:"Complete the test table"},
+  {sec:"C",q:"12a",marks:1,avg:0.6,oc:"u4o1",kk:"KK07",desc:"Beta-test user group = property owners"},
+  {sec:"C",q:"12b",marks:3,avg:0.5,oc:"u4o1",kk:"KK07",desc:"Describe a beta-testing strategy"},
+  {sec:"C",q:"13",marks:3,avg:1.0,oc:"u4o1",kk:"KK11",desc:"Project-log recording issue + two fixes"}
+ ]
+};
+const YEARS = Object.keys(DATA).sort();
+function yearHasAvg(y){ return DATA[y].some(r=>r.avg!=null); }
+
+/* ===================== state ===================== */
+const METRICS = ["marks","items","difficulty"];
+let metric = "marks";
+let predictOn = false;
+let curYear = YEARS[YEARS.length-1];
+let activeOc = "all";
+
+/* ===================== helpers ===================== */
+// per-entry contribution to the active metric (null = no data)
+function val(r){
+  if(metric==="marks") return r.marks;
+  if(metric==="items") return 1;
+  return (r.avg==null) ? null : (r.marks - r.avg);   // difficulty = marks lost
+}
+// matrix[oc][kk][year]; rowTot; colTot; colData (does the year have metric data)
+function build(){
+  const m={}, rowTot={}, colTot={}, colData={};
+  OCORDER.forEach(oc=>{ m[oc]={}; Object.keys(OC[oc].kks).forEach(kk=>{ m[oc][kk]={}; rowTot[oc+kk]=0; YEARS.forEach(y=>m[oc][kk][y]=0); }); });
+  YEARS.forEach(y=>{
+    colTot[y]=0;
+    colData[y] = (metric==="difficulty") ? yearHasAvg(y) : true;
+    DATA[y].forEach(r=>{ const v=val(r); if(v==null) return;
+      m[r.oc][r.kk][y]+=v; rowTot[r.oc+r.kk]+=v; colTot[y]+=v; });
+  });
+  return {m,rowTot,colTot,colData};
+}
+function ocAllTotals(){
+  const t={}; OCORDER.forEach(oc=>t[oc]={marks:0,items:0,kks:new Set()});
+  YEARS.forEach(y=>DATA[y].forEach(r=>{ t[r.oc].marks+=r.marks; t[r.oc].items+=1; t[r.oc].kks.add(r.kk); }));
+  return t;
+}
+// outcome achievement % for a given report year
+function ocAchieve(oc,year){
+  let mk=0,got=0; DATA[year].forEach(r=>{ if(r.oc===oc && r.avg!=null){ mk+=r.marks; got+=r.avg; } });
+  return mk? got/mk : null;
+}
+const latestReport = [...YEARS].reverse().find(yearHasAvg);
+
+// colour ramps
+function ramp(t,stops){ t=Math.max(0,Math.min(1,t));
+  for(let i=1;i<stops.length;i++){ if(t<=stops[i][0]){
+    const [a,ca]=stops[i-1],[b,cb]=stops[i],f=(t-a)/(b-a||1);
+    const c=ca.map((v,k)=>Math.round(v+(cb[k]-v)*f)); return `rgb(${c[0]},${c[1]},${c[2]})`; } }
+  const c=stops[stops.length-1][1]; return `rgb(${c[0]},${c[1]},${c[2]})`; }
+// one unified scale: low = blue, high = red (matches the reference image — redder = more)
+const freqColor=t=>ramp(t,[[0,[14,72,112]],[.20,[22,112,168]],[.40,[44,152,204]],[.52,[130,186,216]],[.60,[232,174,114]],[.74,[233,121,38]],[.88,[214,74,28]],[1,[188,30,22]]]);
+function fgOn(bg){ const m=bg.match(/\d+/g).map(Number); return (0.2126*m[0]+0.7152*m[1]+0.0722*m[2])>150?"#0d1117":"#ffffff"; }
+function fmt(v){ return metric==="difficulty" ? (Math.round(v*10)/10).toString() : v.toString(); }
+
+/* ===================== cards ===================== */
+function renderCards(){
+  const t=ocAllTotals();
+  const grand=YEARS.reduce((s,y)=>s+DATA[y].reduce((a,r)=>a+r.marks,0),0);
+  document.getElementById("cards").innerHTML = OCORDER.map(oc=>{
+    const mk=t[oc].marks, pct=Math.round(mk/grand*100);
+    const a=latestReport?ocAchieve(oc,latestReport):null;
+    const achTxt = a==null ? "" :
+      `<div class="ach" style="color:${freqColor(1-a)}">${latestReport} cohort: ${Math.round(a*100)}% achieved</div>`;
+    return `<div class="card">
+      <div class="bar" style="background:${OC[oc].color}"></div>
+      <div class="nm" style="color:${OC[oc].color}">${OC[oc].name}</div>
+      <div class="mk">${mk}<span style="font-size:14px;color:var(--dim);font-weight:600"> mk</span></div>
+      <div class="pct">${pct}% of all marks · ${t[oc].items} items</div>
+      <div class="kkc">${t[oc].kks.size} of ${OC[oc].total} key knowledge tested</div>
+      ${achTxt}
+    </div>`;
+  }).join("");
+}
+
+/* ===================== heat matrix ===================== */
+function renderMatrix(){
+  const {m,rowTot,colData}=build();
+  let hotMax=0.0001, totMax=0.0001;
+  OCORDER.forEach(oc=>Object.keys(OC[oc].kks).forEach(kk=>{
+    YEARS.forEach(y=>{ if(m[oc][kk][y]>hotMax)hotMax=m[oc][kk][y]; });
+    if(rowTot[oc+kk]>totMax)totMax=rowTot[oc+kk];
+  }));
+
+  document.getElementById("headrow").innerHTML =
+    `<th class="kkcol">Key knowledge</th>`+
+    YEARS.map(y=>`<th>${y}</th>`).join("")+
+    `<th class="totcol">All<br>years</th>`;
+
+  let html="";
+  OCORDER.forEach(oc=>{
+    const col=OC[oc].color;
+    const ocMk=YEARS.reduce((s,y)=>s+DATA[y].reduce((a,r)=>a+(r.oc===oc?r.marks:0),0),0);
+    html+=`<tr class="grp"><td colspan="${YEARS.length+2}">
+        <span class="gdot" style="background:${col}"></span>${OC[oc].name}
+        <span class="gmk">${ocMk} marks total</span></td></tr>`;
+
+    Object.keys(OC[oc].kks).forEach(kk=>{
+      const tot=rowTot[oc+kk], tested=tot>0;
+
+      let cells="";
+      YEARS.forEach(y=>{
+        if(!colData[y]){ cells+=`<td class="cell nodata" title="No examiner's report"><span class="v">—</span></td>`; return; }
+        const v=m[oc][kk][y];
+        if(v<=0){ cells+=`<td class="cell zero"><span class="v">·</span></td>`; return; }
+        const bg=freqColor(.05+.95*(v/hotMax));
+        cells+=`<td class="cell"><span class="v" style="background:${bg};color:${fgOn(bg)}">${fmt(v)}</span></td>`;
+      });
+      let totCell;
+      if(tot<=0){ totCell=`<td class="cell tot zero"><span class="v">·</span></td>`; }
+      else{ const bg=freqColor(.08+.92*(tot/totMax)); totCell=`<td class="cell tot"><span class="v" style="background:${bg};color:${fgOn(bg)}">${fmt(tot)}</span></td>`; }
+
+      let kkBorder=`border-left-color:${col}`, predBadge="";
+      if(predictOn){
+        const [tier,why]=predOf(oc,kk), tm=TIER[tier];
+        kkBorder=`border-left:3px solid ${tm.c};background-color:var(--panel);background-image:linear-gradient(${tm.t},${tm.t})`;
+        predBadge=`<span class="predbadge" style="background:${tm.c}" title="${why}">${tm.label}</span>`;
+      }
+      html+=`<tr class="${tested?'':'untested'}">
+        <td class="kkname" style="${kkBorder}">
+          <span class="kkcode" style="color:${tested?col:'var(--faint)'}">${OC[oc].code}·${kk}</span>
+          <span class="kkdesc">${OC[oc].kks[kk]}</span>${predBadge}
+        </td>${cells}${totCell}
+      </tr>`;
+    });
+  });
+  document.getElementById("matrix").innerHTML=html;
+  document.getElementById("yrspan").textContent = YEARS[0]+" – "+YEARS[YEARS.length-1];
+}
+
+/* ===================== scales & labels ===================== */
+function renderScales(){
+  let h=""; for(let i=0;i<12;i++){ h+=`<i style="background:${freqColor(i/11)}"></i>`; }
+  document.getElementById("scaleHot").innerHTML=h;
+
+  const diff = metric==="difficulty";
+  document.getElementById("metrictag").textContent = diff?"difficulty = marks lost · redder = harder":("heat = "+metric+" · redder = more");
+  document.getElementById("legnote").innerHTML = diff
+    ? `Blue = few marks lost, red = many marks lost (max − average). <b>—</b> = no examiner's report that year.`
+    : `Blue = low ${metric}, red = high ${metric}. Empty cells were <b>not assessed</b> that year — prime rotation candidates.`;
+}
+
+/* ===================== 2026 prediction panel ===================== */
+function renderPredict(){
+  const leg=document.getElementById("predLegend"), note=document.getElementById("predNote");
+  leg.hidden = note.hidden = !predictOn;
+  if(!predictOn) return;
+
+  leg.innerHTML = `<span class="hd">2026 likelihood</span>` +
+    [4,3,2,1].map(t=>`<span class="pk"><span class="sw" style="background:${TIER[t].c}"></span>${TIER[t].label}</span>`).join("");
+
+  // group KKs by tier
+  const byTier={4:[],3:[],2:[],1:[]};
+  OCORDER.forEach(oc=>Object.keys(OC[oc].kks).forEach(kk=>{
+    const [tier,why]=predOf(oc,kk);
+    byTier[tier].push(`<li><b style="color:${OC[oc].color}">${OC[oc].code}·${kk}</b> ${OC[oc].kks[kk].split('(')[0].trim()} <span class="sm">— ${why}</span></li>`);
+  }));
+  const n4=byTier[4].length, n3=byTier[3].length;
+  note.innerHTML =
+    `<b>🔮 2026 outlook — Digital Vector's projection.</b> Built from the exam-panel session notes: the predicted 2026 focus areas, plus the "tested until mastered" rule applied to where the 2025 cohort lost the most marks. The left column above is now tinted by likelihood — <b style="color:${TIER[4].c}">very likely</b> down to <b style="color:${TIER[1].c}">quiet</b>. This is a teaching aid for prioritising revision, <b>not</b> a VCAA forecast.` +
+    `<ul>` +
+    `<li style="break-inside:avoid;color:${TIER[4].c};font-weight:700;list-style:none;margin-left:-18px">VERY LIKELY (${n4})</li>` + byTier[4].join("") +
+    `<li style="break-inside:avoid;color:${TIER[3].c};font-weight:700;list-style:none;margin-left:-18px;margin-top:6px">LIKELY (${n3})</li>` + byTier[3].join("") +
+    `</ul>` +
+    `<div class="sm" style="margin-top:8px">Possible (${byTier[2].length}) and Quiet (${byTier[1].length}) tiers are shown in the heatmap colours above. Quiet KKs carry low signal in the notes — but an untested KK can still rotate in, so don't drop them entirely.</div>`;
+}
+function renderSignal(){
+  const latest=YEARS[YEARS.length-1];
+  // cumulative marks per KK (for hottest)
+  const cum={}; OCORDER.forEach(oc=>Object.keys(OC[oc].kks).forEach(kk=>cum[oc+kk]=0));
+  YEARS.forEach(y=>DATA[y].forEach(r=>cum[r.oc+r.kk]+=r.marks));
+  const hotList=Object.keys(cum).filter(k=>cum[k]>0).sort((a,b)=>cum[b]-cum[a]).slice(0,5)
+    .map(k=>{const oc=k.slice(0,4),kk=k.slice(4);return `<b>${OC[oc].code}·${kk}</b> (${OC[oc].kks[kk].split('(')[0].trim()}, ${cum[k]})`;}).join(", ");
+  // never tested
+  const never=[]; OCORDER.forEach(oc=>Object.keys(OC[oc].kks).forEach(kk=>{ if(cum[oc+kk]===0) never.push(`${OC[oc].code}·${kk}`); }));
+
+  // 2024 difficulty: marks lost & % achieved per KK
+  let bled="";
+  if(latestReport){
+    const lost={},mks={};
+    DATA[latestReport].forEach(r=>{ if(r.avg==null) return; const k=r.oc+r.kk;
+      lost[k]=(lost[k]||0)+(r.marks-r.avg); mks[k]=(mks[k]||0)+r.marks; });
+    const top=Object.keys(lost).sort((a,b)=>lost[b]-lost[a]).slice(0,6)
+      .map(k=>{const oc=k.slice(0,4),kk=k.slice(4),pc=Math.round((1-lost[k]/mks[k])*100);
+        return `<b>${OC[oc].code}·${kk}</b> ${OC[oc].kks[kk].split('(')[0].trim()} <span class="sm">(${pc}% achieved, −${(Math.round(lost[k]*10)/10)} mk)</span>`;}).join(" · ");
+    bled=`<li><b>Where the ${latestReport} cohort bled the most marks</b> — drill these first: ${top}</li>`;
+  }
+
+  document.getElementById("signal").innerHTML=
+    `<b>Reading the heatmap (${YEARS.join(" + ")}).</b> Heaviest cumulative targets: ${hotList}.`+
+    `<ul>`+
+    bled+
+    (never.length?`<li><b>${never.length} key-knowledge points untested in any captured year</b> — strongest rotation candidates: <span class="sm">${never.join(" · ")}</span></li>`:"")+
+    `<li>Blue cells flag each KK's standout year for the current metric; <b>—</b> means no examiner's report exists yet.</li>`+
+    `<li>Switch the <b>Heat</b> button to <code>difficulty</code> to recolour by marks lost, then add the next paper to <code>DATA</code> and every panel recomputes.</li>`+
+    `</ul>`;
+}
+
+/* ===================== question map ===================== */
+function renderMap(){
+  const rows=DATA[curYear].filter(r=>activeOc==="all"||r.oc===activeOc);
+  const hasAvg=yearHasAvg(curYear);
+  document.getElementById("maptag").textContent = curYear + (hasAvg?" · with cohort data":" · no report yet");
+  document.getElementById("maprows").innerHTML=rows.map(r=>{
+    const col=OC[r.oc].color;
+    const s2 = r.s2oc ? `<span class="pill"><span class="d" style="background:${OC[r.s2oc].color}"></span>${OC[r.s2oc].code}·${r.s2kk}</span>` : '<span class="sm">—</span>';
+    const ans = r.ans ? `<span class="ansb" title="Correct option">${r.ans}</span>` : "";
+    let ach='<span class="sm">—</span>';
+    if(r.avg!=null){ const p=r.avg/r.marks; ach=`<span class="ach" style="color:${freqColor(1-p)}">${(Math.round(r.avg*10)/10)}/${r.marks} · ${Math.round(p*100)}%</span>`; }
+    return `<tr>
+      <td><span class="secbadge">${r.sec}</span></td>
+      <td class="sm"><b style="color:var(--ink)">${r.q}</b>${ans}</td>
+      <td class="mkn">${r.marks}</td>
+      <td><span class="pill"><span class="d" style="background:${col}"></span>${OC[r.oc].code}·${r.kk}</span>
+          <div class="sm">${OC[r.oc].kks[r.kk].split('(')[0].trim()}</div></td>
+      <td class="hidemob">${s2}</td>
+      <td>${ach}</td>
+      <td>${r.desc}</td>
+    </tr>`;
+  }).join("");
+}
+function renderFilters(){
+  const chips=[`<span class="chip ${activeOc==='all'?'on':''}" data-oc="all" style="${activeOc==='all'?'border-color:var(--faint)':''}">All outcomes</span>`]
+    .concat(OCORDER.map(oc=>`<span class="chip ${activeOc===oc?'on':''}" data-oc="${oc}" style="${activeOc===oc?'border-color:'+OC[oc].color+';color:'+OC[oc].color:''}">${OC[oc].name}</span>`));
+  document.getElementById("filters").innerHTML=chips.join("");
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{activeOc=c.dataset.oc;renderFilters();renderMap();});
+}
+
+/* ===================== boot ===================== */
+function renderAll(){ renderCards(); renderMatrix(); renderScales(); renderPredict(); renderSignal(); renderFilters(); renderMap(); }
+(function init(){
+  const ys=[...YEARS].reverse();
+  document.getElementById("year").innerHTML=ys.map(y=>`<option value="${y}">${y} question map</option>`).join("");
+  document.getElementById("year").value=curYear;
+  document.getElementById("year").onchange=e=>{curYear=e.target.value;renderMap();};
+  document.getElementById("metric").onclick=e=>{
+    metric=METRICS[(METRICS.indexOf(metric)+1)%METRICS.length];
+    e.target.textContent="Heat: "+metric;
+    e.target.classList.toggle("on", true);
+    renderAll();
+  };
+  document.getElementById("predict").onclick=e=>{
+    predictOn=!predictOn;
+    e.target.classList.toggle("on", predictOn);
+    renderMatrix(); renderPredict();
+  };
+  document.getElementById("theme").onclick=e=>{
+    const lt=document.documentElement.getAttribute("data-theme")==="light";
+    document.documentElement.setAttribute("data-theme",lt?"dark":"light");
+    e.target.textContent=lt?"☀ Light":"🌙 Dark";
+  };
+  renderAll();
+})();
+</script>
+</body>
+</html>

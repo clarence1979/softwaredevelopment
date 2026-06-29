@@ -172,6 +172,11 @@
   .map-table th{ font-size:.7rem; text-transform:uppercase; letter-spacing:.6px; color:var(--text-muted); }
   .map-table td:first-child{ font-family:'Cascadia Code','Consolas',monospace; color:var(--text-keyword); white-space:nowrap; }
 
+  /* exam intelligence panel */
+  #panel-exam{ padding:0; }
+  .exam-frame-wrap{ flex:1; position:relative; min-height:0; }
+  #panel-exam iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; background:var(--iframe-bg); }
+
   .h-splitter{ height:5px; background:transparent; cursor:row-resize; flex-shrink:0; z-index:10; margin-top:4px; }
   .h-splitter:hover,.h-splitter.dragging{ background:var(--dv-cyan); }
   #bottompanel{ height:150px; min-height:0; background:var(--bg-sidebar); border-top:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; overflow:hidden; transition:background .25s; }
@@ -284,7 +289,7 @@
 
   </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YzVjZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNWIzZmQxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHJ4PSIxNCIgZmlsbD0idXJsKCNnKSIvPgogIDwhLS0gbW9ydGFyYm9hcmQgKGdyYWR1YXRpb24gY2FwKSAtLT4KICA8cGF0aCBkPSJNMzIgMTUgTDU0IDI0IEwzMiAzMyBMMTAgMjQgWiIgZmlsbD0iI2ZmZmZmZiIvPgogIDwhLS0gY2FwIGJhc2UgLyBoZWFkIC0tPgogIDxwYXRoIGQ9Ik0yMCAyOC41IEwyMCAzOCBDMjAgNDEuNiAyNS40IDQ0LjUgMzIgNDQuNSBDMzguNiA0NC41IDQ0IDQxLjYgNDQgMzggTDQ0IDI4LjUgTDMyIDMzLjQgWiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC45MiIvPgogIDwhLS0gdGFzc2VsIC0tPgogIDxwYXRoIGQ9Ik01NCAyNCBMNTQgMzYiIHN0cm9rZT0iI2ZmZDM0ZCIgc3Ryb2tlLXdpZHRoPSIyLjQiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxjaXJjbGUgY3g9IjU0IiBjeT0iMzguNCIgcj0iMi43IiBmaWxsPSIjZmZkMzRkIi8+CiAgPCEtLSBleGFtIGNoZWNrbWFyayBiYWRnZSAtLT4KICA8Y2lyY2xlIGN4PSI0NS41IiBjeT0iNDcuNSIgcj0iOS41IiBmaWxsPSIjMjJjMDhiIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMi4yIi8+CiAgPHBhdGggZD0iTTQxLjMgNDcuNyBMNDQuMiA1MC42IEw1MCA0NC44IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg=="><!--dv-app-icon--></head>
-<body data-theme="dark">
+<body data-theme="light">
 
 <div id="titlebar">
   <div class="dots"><span class="close"></span><span class="min"></span><span class="max"></span></div>
@@ -292,7 +297,7 @@
   <div class="title">VCE Software Development — Units 3 &amp; 4 — Digital Vector</div>
   <div class="controls">
     <div class="ctrl-group" title="Adjust font size"><div class="ctrl-btn" onclick="changeFont(-1)">A−</div><div class="fs-label" id="fs-label">100%</div><div class="ctrl-btn" onclick="changeFont(1)">A+</div></div>
-    <div class="ctrl-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme"><svg id="theme-icon" viewBox="0 0 24 24"></svg><span id="theme-label">Dark</span></div>
+    <div class="ctrl-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme"><svg id="theme-icon" viewBox="0 0 24 24"></svg><span id="theme-label">Light</span></div>
     <div class="ctrl-btn" onclick="resetLayout()" title="Reset layout"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></div>
   </div>
 </div>
@@ -397,6 +402,7 @@
         <div class="sstab-tab" id="tab-ad" style="--tc:#c084fc" onclick="openTab('ad')"><span class="tab-num">U3·O2</span><span class="tab-cap">Analysis &amp; Design</span></div>
         <div class="sstab-tab" id="tab-de" style="--tc:#34d399" onclick="openTab('de')"><span class="tab-num">U4·O1</span><span class="tab-cap">Development &amp; Evaluation</span></div>
         <div class="sstab-tab" id="tab-cyber" style="--tc:#fb7185" onclick="openTab('cyber')"><span class="tab-num">U4·O2</span><span class="tab-cap">Cyber Security</span></div>
+        <div class="sstab-tab" id="tab-exam" style="--tc:#f59e0b" onclick="openTab('exam')"><span class="tab-num">EXAM</span><span class="tab-ico">🎯</span><span class="tab-cap">Exam Intelligence</span></div>
 
       </div>
       <div class="sstab-frame" id="sstab-frame">
@@ -1285,12 +1291,17 @@
               </div>
             </div>
           </div>
+          <div class="panel" id="panel-exam">
+            <div class="exam-frame-wrap">
+              <iframe id="exam-iframe" src="" title="Exam Intelligence — KK exam tracker" loading="lazy"></iframe>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="h-splitter" id="splitter-y"></div>
-    <div id="bottompanel">
+    <div class="h-splitter" id="splitter-y" style="display:none"></div>
+    <div id="bottompanel" class="collapsed">
       <div class="bp-tabs"><div class="bp-tab active">Study Design Notes</div><div class="bp-spacer"></div><div class="bp-x" onclick="toggleBottom()">×</div></div>
       <div class="bp-body">
         <div><span class="term-prompt">DV ➜</span> <span class="term-path">VCAA Applied Computing 2025–2028</span></div>
@@ -1302,7 +1313,7 @@
     <div id="statusbar">
       <div class="sb-item">⎇ main</div><div class="sb-item" id="status-kk">Units 3 &amp; 4</div>
       <div class="sb-item btn" onclick="toggleBottom()">▣ Panel</div>
-      <div class="sb-right"><div class="sb-item" id="status-lang">Overview</div><div class="sb-item btn" onclick="toggleTheme()" id="status-theme">🌙 Dark</div><div class="sb-item">VCAA VCE 🇦🇺</div></div>
+      <div class="sb-right"><div class="sb-item" id="status-lang">Overview</div><div class="sb-item btn" onclick="toggleTheme()" id="status-theme">☀️ Light</div><div class="sb-item">VCAA VCE 🇦🇺</div></div>
     </div>
   </div>
 </div>
@@ -1315,7 +1326,7 @@
   const COLORS = {"prog": "#4fc1ff", "ad": "#c084fc", "de": "#34d399", "cyber": "#fb7185"};
   const META   = {"prog": {"crumb": "Outcome 1 \u2014 Programming", "chip": "U3\u00b7O1"}, "ad": {"crumb": "Outcome 2 \u2014 Analysis and Design", "chip": "U3\u00b7O2"}, "de": {"crumb": "Outcome 1 \u2014 Development and Evaluation", "chip": "U4\u00b7O1"}, "cyber": {"crumb": "Outcome 2 \u2014 Cyber Security", "chip": "U4\u00b7O2"}};
   const UNITS  = {"analysis": "analysis.html", "design": "design.html", "development": "development.html", "testing": "chapter-1-programming/alpha-beta-testing.html", "evaluation": "evaluation.html", "prog-kk01": "chapter-1-programming/programming-kk01-ai.html", "prog-kk02": "chapter-1-programming/kk02-requirements-scope.html", "prog-kk03": "chapter-1-programming/kk03-design-tools.html", "prog-kk04": "chapter-1-programming/kk04-charactheristics-of-data-types.html", "prog-kk05": "chapter-1-programming/kk05-data-structures.html", "prog-kk06": "chapter-1-programming/kk06-data-sources.html", "prog-kk07": "chapter-1-programming/kk07-principles-of-oop.html", "prog-kk08": "chapter-1-programming/kk08-features-of-a-programming-language.html", "prog-kk09": "chapter-1-programming/kk09-namingconventions.html", "prog-kk10": "chapter-1-programming/kk10-validation.html", "prog-kk11": "chapter-1-programming/kk11-internal-documentation.html", "prog-kk12": "chapter-1-programming/kk12-sort-and-search.html", "prog-kk13": "chapter-1-programming/kk13-types-of-errors.html", "prog-kk14": "chapter-1-programming/kk14-debugging-and-testing.html", "ad-kk01": "chapter-2-analysis-and-design/analysis-design-kk01.html", "ad-kk02": "chapter-2-analysis-and-design/kk02-brief.html", "ad-kk03": "chapter-2-analysis-and-design/kk03-project-management-gantt.html", "ad-kk04": "chapter-2-analysis-and-design/kk04-methods.html", "ad-kk05": "chapter-2-analysis-and-design/kk05-requirements.html", "ad-kk06": "chapter-2-analysis-and-design/kk06-constraints.html", "ad-kk07": "chapter-2-analysis-and-design/kk07-scope.html", "ad-kk08": "chapter-2-analysis-and-design/kk08-analyticaltools.html", "ad-kk09": "chapter-2-analysis-and-design/kk09-srs.html", "ad-kk10": "chapter-2-analysis-and-design/kk10-legalrequirements.html", "ad-kk11": "chapter-2-analysis-and-design/kk11-file-management.html", "ad-kk12": "chapter-2-analysis-and-design/kk12-ideationtechniques.html", "ad-kk13": "chapter-2-analysis-and-design/kk13-evaluationcriteri.html", "ad-kk14": "chapter-2-analysis-and-design/kk14-designtools.html", "ad-kk15": "chapter-2-analysis-and-design/kk15-user-experience.html", "ad-kk16": "chapter-2-analysis-and-design/kk16-design-principles.html", "de-kk01": "chapter-3-development-and-evaluation/kk01-efficient-effective.html", "de-kk02": "chapter-3-development-and-evaluation/kk02-data-types-structures-sources.html", "de-kk03": "chapter-3-development-and-evaluation/kk03-development-evaluation.html", "de-kk04": "chapter-3-development-and-evaluation/kk04-established-innovative-approaches.html", "de-kk05": "chapter-3-development-and-evaluation/kk05-validation-techniques.html", "de-kk06": "chapter-3-development-and-evaluation/kk06-debugging-and-alpha-testing.html", "de-kk07": "chapter-3-development-and-evaluation/kk07-beta-testing.html", "de-kk08": "chapter-3-development-and-evaluation/kk08-evaluation-strategies.html", "de-kk09": "chapter-3-development-and-evaluation/kk09-applying-evaluation-criteria.html", "de-kk10": "chapter-3-development-and-evaluation/kk10-project-plan-effectiveness.html", "de-kk11": "chapter-3-development-and-evaluation/kk11-recording-progress.html", "de-kk12": "chapter-3-development-and-evaluation/kk12-assessing-project-plan-effectiveness.html", "cyber-kk01": "chapter-4-cyber-security/kk01-goals-and-objectives.html", "cyber-kk02": "chapter-4-cyber-security/kk02-inhouse-vs-external.html", "cyber-kk03": "chapter-4-cyber-security/kk03-vulnerabilities-risks.html", "cyber-kk04": "chapter-4-cyber-security/kk04-security-controls.html", "cyber-kk05": "chapter-4-cyber-security/kk05-threat-modelling.html", "cyber-kk06": "chapter-4-cyber-security/kk06-evaluating-security-of-dev-practices.html", "cyber-kk07": "chapter-4-cyber-security/kk07-legislation-and-frameworks.html", "cyber-kk08": "chapter-4-cyber-security/kk08-ethical-issues-in-software-development.html", "cyber-kk09": "chapter-4-cyber-security/kk09-mitigation-measures.html", "cyber-kk10": "chapter-4-cyber-security/kk10-strategies-improving-secure-development.html"};
-  const ORDER  = ['welcome', ...Object.keys(COLORS)];
+  const ORDER  = ['welcome', ...Object.keys(COLORS), 'exam'];
   let currentTab = 'welcome';
   const currentSub = {};                 // chapterId -> active sub id
   const resolved = {};                   // module id -> loaded
@@ -1353,6 +1364,13 @@
       document.getElementById('breadcrumb-file').textContent='Welcome';
       document.getElementById('breadcrumb-chip').textContent='VCAA 2025–2028';
       document.getElementById('status-lang').textContent='Overview';
+    } else if(id==='exam'){
+      document.getElementById('sstab').style.setProperty('--active-color', '#f59e0b');
+      document.getElementById('breadcrumb-file').textContent='Exam Intelligence';
+      document.getElementById('breadcrumb-chip').textContent='KK Exam Tracker';
+      document.getElementById('status-lang').textContent='Exam Intelligence';
+      const fr=document.getElementById('exam-iframe');
+      if(fr && !fr.dataset.loaded){ fr.src='sd-exam-kk-tracker.html'; fr.dataset.loaded='1'; }
     } else {
       document.getElementById('sstab').style.setProperty('--active-color', COLORS[id]);
       document.getElementById('breadcrumb-file').textContent=META[id].crumb;
@@ -1380,7 +1398,7 @@
 
   const SUN='<path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-13a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1zm0 14a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zM4 12a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm14 0a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2h-1a1 1 0 0 1-1-1zM6.34 6.34a1 1 0 0 1 1.42 0l.7.7A1 1 0 1 1 7.05 8.46l-.71-.7a1 1 0 0 1 0-1.42zm9.49 9.49a1 1 0 0 1 1.42 0l.7.7a1 1 0 1 1-1.41 1.42l-.71-.7a1 1 0 0 1 0-1.42zM6.34 17.66a1 1 0 0 1 0-1.42l.7-.7a1 1 0 1 1 1.42 1.41l-.7.71a1 1 0 0 1-1.42 0zm9.49-9.49a1 1 0 0 1 0-1.42l.7-.7a1 1 0 1 1 1.42 1.41l-.71.71a1 1 0 0 1-1.41 0z"/>';
   const MOON='<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-9.54-9.54c-.44-.06-.9-.1-1.36-.1z"/>';
-  let theme='dark';
+  let theme='light';
   function applyTheme(){ document.body.setAttribute('data-theme',theme); const d=theme==='dark'; document.getElementById('theme-icon').innerHTML=d?MOON:SUN; document.getElementById('theme-label').textContent=d?'Dark':'Light'; document.getElementById('status-theme').textContent=d?'🌙 Dark':'☀️ Light'; }
   function toggleTheme(){ theme=theme==='dark'?'light':'dark'; applyTheme(); }
   function resetLayout(){ const sb=document.getElementById('sidebar'); sb.style.width='240px'; sb.classList.remove('collapsed'); document.getElementById('splitter-x').classList.remove('hidden'); const bp=document.getElementById('bottompanel'); bp.style.height='150px'; bp.classList.remove('collapsed'); document.getElementById('splitter-y').style.display=''; document.querySelector('.activity-btn').classList.add('active'); fontSize=FS_BASE; applyFont(); }
