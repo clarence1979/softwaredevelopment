@@ -1,0 +1,2121 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exam Intelligence — “Very Likely” Question Bank — Digital Vector</title>
+<style>
+:root{
+  --accent:#d97706; --accent2:#b4740a;
+  --bg:#ffffff; --panel:#ffffff; --panel2:#f6f7fb; --line:#dfe3ec;
+  --text:#1c2230; --muted:#5a6273; --chip:#f3f5fa; --control-bg:rgba(255,255,255,.92);
+  --u3o1:#1f8fce; --u3o2:#7c5fe6; --u4o1:#1aa06a; --u4o2:#e0556b;
+  --secA:#1f8fce; --secB:#d97706; --secC:#d6448a;
+}
+@media (prefers-color-scheme: dark){
+ :root{
+  --accent:#f59e0b; --accent2:#fbbf24;
+  --bg:#0f1115; --panel:#161922; --panel2:#1b1f2a; --line:#2a3040;
+  --text:#e7ebf3; --muted:#9aa4b8; --chip:#222838; --control-bg:rgba(15,17,21,.86);
+  --u3o1:#4fc1ff; --u3o2:#a78bfa; --u4o1:#34d399; --u4o2:#fb7185;
+  --secA:#38bdf8; --secB:#f59e0b; --secC:#f472b6;
+ }
+}
+*{box-sizing:border-box}
+html{font-size:15px;background:var(--bg)}
+body{margin:0;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:30px 26px 80px}
+header.hero{border:1px solid var(--line);border-radius:18px;padding:30px 32px;background:
+  radial-gradient(120% 140% at 100% 0%, rgba(245,158,11,.16), transparent 60%),
+  linear-gradient(180deg,var(--panel),var(--panel2));position:relative;overflow:hidden}
+header.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(245,158,11,.5),transparent);height:2px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.3px}
+.brand .dot{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#1a1205;font-weight:900;box-shadow:0 6px 18px -6px var(--accent)}
+.brand .pill{margin-left:auto;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);border:1px solid var(--accent);background:rgba(245,158,11,.10);padding:4px 11px;border-radius:20px}
+h1{font-size:1.9rem;margin:16px 0 6px;font-weight:300;letter-spacing:-.4px}
+h1 b{font-weight:800;background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sub{color:var(--muted);font-size:.98rem;max-width:74ch}
+.meta{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+.meta span{font-size:.72rem;color:var(--muted);border:1px solid var(--line);background:var(--chip);padding:5px 10px;border-radius:8px}
+.note{margin-top:18px;font-size:.82rem;color:var(--muted);border-left:3px solid var(--accent);background:rgba(245,158,11,.06);padding:10px 14px;border-radius:0 8px 8px 0}
+
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:26px 0 8px}
+.legend .lg{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--panel)}
+.legend .lg b{display:block;font-size:.74rem;text-transform:uppercase;letter-spacing:.6px}
+.legend .lg span{font-size:.78rem;color:var(--muted)}
+
+.toc{margin:22px 0 8px;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow:hidden}
+.toc h2{margin:0;padding:12px 16px;font-size:.74rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);border-bottom:1px solid var(--line)}
+.toc ul{list-style:none;margin:0;padding:8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:4px}
+.toc li a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--text);padding:7px 10px;border-radius:8px;font-size:.86rem;border:1px solid transparent}
+.toc li a:hover{background:var(--panel2);border-color:var(--line)}
+.toc .code{font-family:'Cascadia Code',Consolas,monospace;font-size:.7rem;font-weight:800;padding:1px 0;min-width:74px}
+
+section.kk{margin-top:30px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel);break-inside:avoid}
+.kk-head{padding:16px 20px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel))}
+.kk-head .row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.kk-code{font-family:'Cascadia Code',Consolas,monospace;font-weight:800;font-size:.72rem;color:#0c0f16;padding:5px 9px;border-radius:7px}
+.kk-oc{font-size:.7rem;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.tier{margin-left:auto;font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#e0443e;border:1px solid #e0443e;background:rgba(224,68,62,.12);padding:4px 10px;border-radius:20px}
+.kk-title{font-size:1.18rem;font-weight:600;margin:10px 0 2px}
+.kk-why{font-size:.82rem;color:var(--muted);font-style:italic}
+.kk-why b{color:var(--accent2);font-style:normal}
+
+.q{padding:15px 20px;border-top:1px solid var(--line);break-inside:avoid}
+.q:first-child{border-top:none}
+.q-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.q-no{font-family:'Cascadia Code',Consolas,monospace;font-weight:800;color:var(--accent2);font-size:.82rem;min-width:30px}
+.tag{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:3px 8px;border-radius:6px;border:1px solid var(--line)}
+.tag.aw{color:#0c0f16;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none}
+.tag.sec{color:var(--muted)}
+.tag.secA{color:var(--secA);border-color:var(--secA)}
+.tag.secB{color:var(--secB);border-color:var(--secB)}
+.tag.secC{color:var(--secC);border-color:var(--secC)}
+.marks{margin-left:auto;font-size:.74rem;color:var(--muted);font-weight:700}
+.q-text{font-size:.96rem}
+.ans{margin-top:9px;font-size:.86rem;border-left:3px solid var(--accent);background:rgba(245,158,11,.06);padding:9px 12px;border-radius:0 8px 8px 0}
+.ans b{color:var(--accent2)}
+.ans .lbl{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:800;margin-bottom:3px}
+.toggle{cursor:pointer;user-select:none}
+footer{margin-top:40px;color:var(--muted);font-size:.78rem;text-align:center;border-top:1px solid var(--line);padding-top:18px}
+
+/* screen-only answer hide control */
+.controls{position:sticky;top:0;z-index:20;background:rgba(15,17,21,.86);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:22px 0 6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.controls .btn{font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;color:#0c0f16;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;padding:8px 14px;border-radius:8px}
+.controls .btn.alt{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.controls .cnote{font-size:.78rem;color:var(--muted)}
+body.hide-answers .ans{display:none}
+</style></head><body>
+<div class="wrap">
+<header class="hero">
+<div class="brand"><span class="dot">DV</span> Digital Vector<span class="pill">Exam Intelligence · 2026</span></div>
+<h1>“Very Likely” <b>Question Bank</b></h1>
+<div class="sub">180 VCAA-aligned practice questions across the 18 highest-probability key knowledge points for 2026. Ten VCAA-style questions for each of the 18 highest-probability key knowledge points, tagged by action word, exam section and marks, with indicative answers for marking.</div>
+<div class="meta"><span>VCAA VCE Applied Computing — Software Development (2025–2028 Study Design)</span><span>18 KKs × 10 questions = 180 items</span><span>Sections A / B / C</span><span>Compiled 29 June 2026</span></div>
+<div class="note"><b>How the tiers were derived:</b> the “Very likely” set is the Tier 4 layer of the Digital Vector exam tracker — built from the predicted 2026 focus areas plus the “tested until mastered” rule applied to where the 2025 cohort lost the most marks. This is a revision-prioritisation aid and Digital Vector’s projection, <b>not</b> a VCAA forecast. Always check wording against the official VCAA study design and examination reports.</div>
+</header>
+<div class="legend">
+<div class="lg"><b style="color:var(--secA)">Section A</b><span>Multiple choice · 1 mark</span></div>
+<div class="lg"><b style="color:var(--secB)">Section B</b><span>Short answer (20 marks total)</span></div>
+<div class="lg"><b style="color:var(--secC)">Section C</b><span>Case-study short & extended (60 marks)</span></div>
+<div class="lg"><b style="color:var(--accent)">Action words</b><span>State · Describe · Explain · Compare · Discuss · Justify…</span></div>
+</div>
+<div class="controls"><button class="btn" onclick="document.body.classList.toggle('hide-answers');this.textContent=document.body.classList.contains('hide-answers')?'Show answers':'Hide answers'">Hide answers</button><button class="btn alt" onclick="window.print()">Print / Save PDF</button><span class="cnote">Tip: hide answers to use as a student worksheet.</span></div>
+<div class="toc"><h2>The 18 “Very Likely” key knowledge points</h2><ul>
+<li><a href="#u3o1-kk01"><span class="code" style="color:var(--u3o1)">U3O1·KK01</span> Emerging trends in programming using AI</a></li>
+<li><a href="#u3o1-kk03"><span class="code" style="color:var(--u3o1)">U3O1·KK03</span> Design tools for representing modules — IPO charts, pseudocode, object descriptions</a></li>
+<li><a href="#u3o1-kk06"><span class="code" style="color:var(--u3o1)">U3O1·KK06</span> Characteristics of data sources — files, CSV and XML</a></li>
+<li><a href="#u3o1-kk07"><span class="code" style="color:var(--u3o1)">U3O1·KK07</span> Principles of object-oriented programming</a></li>
+<li><a href="#u3o1-kk14"><span class="code" style="color:var(--u3o1)">U3O1·KK14</span> Debugging and testing techniques</a></li>
+<li><a href="#u3o2-kk03"><span class="code" style="color:var(--u3o2)">U3O2·KK03</span> Project management — Gantt charts, dependencies, critical path, milestones</a></li>
+<li><a href="#u3o2-kk04"><span class="code" style="color:var(--u3o2)">U3O2·KK04</span> Techniques for collecting data</a></li>
+<li><a href="#u3o2-kk08"><span class="code" style="color:var(--u3o2)">U3O2·KK08</span> Depicting relationships — context diagrams, data flow diagrams, use case diagrams</a></li>
+<li><a href="#u3o2-kk10"><span class="code" style="color:var(--u3o2)">U3O2·KK10</span> Key legal requirements — privacy and copyright</a></li>
+<li><a href="#u3o2-kk15"><span class="code" style="color:var(--u3o2)">U3O2·KK15</span> Characteristics of user experiences (UX)</a></li>
+<li><a href="#u3o2-kk16"><span class="code" style="color:var(--u3o2)">U3O2·KK16</span> Design principles influencing appearance and functionality</a></li>
+<li><a href="#u4o1-kk04"><span class="code" style="color:var(--u4o1)">U4O1·KK04</span> Innovative approaches to software development</a></li>
+<li><a href="#u4o2-kk02"><span class="code" style="color:var(--u4o2)">U4O2·KK02</span> Advantages and disadvantages of developing software in-house vs externally</a></li>
+<li><a href="#u4o2-kk03"><span class="code" style="color:var(--u4o2)">U4O2·KK03</span> Vulnerabilities within insecure development environments (incl. combined dev/test/production)</a></li>
+<li><a href="#u4o2-kk04"><span class="code" style="color:var(--u4o2)">U4O2·KK04</span> Security controls to protect development practices and data</a></li>
+<li><a href="#u4o2-kk05"><span class="code" style="color:var(--u4o2)">U4O2·KK05</span> Threat modelling principles</a></li>
+<li><a href="#u4o2-kk07"><span class="code" style="color:var(--u4o2)">U4O2·KK07</span> Key legislation affecting organisations and data</a></li>
+<li><a href="#u4o2-kk08"><span class="code" style="color:var(--u4o2)">U4O2·KK08</span> Ethical issues arising when developing software</a></li>
+</ul></div>
+<section class="kk" id="u3o1-kk01">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#4fc1ff">U3O1·KK01</span>
+<span class="kk-oc">Unit 3 – Outcome 1 — Programming</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Emerging trends in programming using AI</div>
+<div class="kk-why"><b>2026 signal:</b> AI ethics &amp; emerging trends named as a leading 2026 emphasis.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">A developer uses an AI coding assistant to generate a function. The MOST significant reliability concern is that the generated code may<br>A. take longer to execute than hand-written code.<br>B. contain logic errors or insecure patterns the developer does not detect.<br>C. use a different naming convention to the rest of the project.<br>D. require an internet connection to run.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. AI-generated code can embed subtle logic/security flaws; over-trust without review is the key reliability risk (A/C/D are minor or not reliability).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the term ‘large language model’ in the context of AI-assisted programming.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>A model trained on large volumes of text/code that predicts likely next tokens to generate or complete code and explanations.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline two ways AI tools are changing how programmers develop software solutions.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: code generation/autocompletion; automated debugging or test generation; natural-language to code; rapid prototyping; documentation generation.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe one benefit and one risk of using an AI assistant to generate code for a commercial solution.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Benefit (1): speed/productivity, boilerplate reduction, learning support. Risk (1): incorrect/insecure code, IP/licensing issues, over-reliance reducing developer understanding.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A student submits AI-generated code without testing it. Explain why this is poor development practice, referring to reliability and accountability.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Reliability (1–2): AI output is probabilistic and may be wrong/insecure; untested code may fail on edge cases. Accountability (1): the developer remains responsible for correctness; lack of testing breaches professional practice.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss the ethical issues that arise when a developer uses AI to generate code that is then sold to a client.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Issues (any 4, 1 each): ownership/IP of generated code; potential plagiarism of training data; disclosure/transparency to the client; liability for defects; bias in output; data privacy of prompts. Reward balanced discussion of more than one viewpoint.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">An organisation plans to embed an AI feature that recommends products to customers. Identify and describe one bias-related risk of this feature.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Identify (1): algorithmic/training-data bias. Describe (1): model may systematically disadvantage a group (e.g. recommend poorly for under-represented customers) because training data was unrepresentative.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain how a development team could responsibly integrate an AI coding assistant into their workflow while managing reliability concerns.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: human code review of all AI output; comprehensive testing (unit/integration); use AI for drafts not final logic; verify against requirements; document AI use; security scanning.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Compare</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Compare AI-assisted development with traditional hand-coding in terms of speed, reliability, and developer skill.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Speed (1): AI faster for boilerplate. Reliability (1–2): hand-coding more predictable; AI needs verification. Skill (1): AI may erode/accelerate skill depending on use. Must explicitly compare, not list.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Ming asks an AI assistant to generate code for a payment module. Justify whether the organisation should deploy this code as-is.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Justification should conclude NO (or conditional): payment = high risk/security-sensitive; AI output unverified, possible vulnerabilities, compliance/PCI obligations, liability. Require review, testing, and audit before deployment. Reward a clear position supported by reasons.</div>
+</div>
+</section>
+<section class="kk" id="u3o1-kk03">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#4fc1ff">U3O1·KK03</span>
+<span class="kk-oc">Unit 3 – Outcome 1 — Programming</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Design tools for representing modules — IPO charts, pseudocode, object descriptions</div>
+<div class="kk-why"><b>2026 signal:</b> Pseudocode is ~10–15% of every paper — effectively guaranteed.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">In an IPO chart, a running total that is updated each loop iteration is best classified as<br>A. an input.<br>B. a process.<br>C. an output.<br>D. a constant.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. Accumulating a total is processing logic (input = raw values; output = displayed result).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">State</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">State the purpose of pseudocode in the design stage of software development.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>To represent the logic/steps of an algorithm in a language-independent, human-readable way before coding.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe what an IPO chart shows and one situation where it is useful.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Describe (1): maps the Inputs, Processing and Outputs of a module/solution. Use (1): clarifying data flow / requirements before designing the algorithm.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Write pseudocode that reads 10 integers and outputs the largest value.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Initialise largest to first/very small; loop 10 times reading n; IF n > largest THEN largest ← n; output largest. Reward correct initialisation, loop, comparison, output.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Trace the following pseudocode and state the final value of total. BEGIN total←0; FOR i←1 TO 4 DO total←total+i END FOR; PRINT total END</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>total = 1+2+3+4 = 10. (Award method marks for correct iteration values 1,3,6,10.)</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe the components you would include in an object description for a button object.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Object name/type; properties (e.g. caption, enabled, position); methods/events (e.g. onClick); behaviour/purpose. Any 2 components with detail.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Write pseudocode for an algorithm that validates a password is at least 8 characters and contains a digit, looping until valid.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>REPEAT input pwd; valid ← (length(pwd) ≥ 8) AND containsDigit(pwd); IF NOT valid THEN message UNTIL valid. Reward loop, both conditions, exit logic.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two advantages of producing pseudocode before writing program code.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: language-independent logic check; easier for others to follow/review; reduces coding errors; supports planning/communication.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A team's pseudocode uses an inclusive boundary (≤) where the requirement specifies ‘under 18’. Explain the impact of this error and how a design tool helps catch it.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Impact (1–2): off-by-one/boundary error includes 18-year-olds incorrectly — wrong results. Design tool (1): reviewing pseudocode against requirements (or desk-checking/trace) exposes the boundary before coding.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Compare</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Compare pseudocode and an object description as design tools, including what each best represents.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Pseudocode (1–2): represents procedural logic/algorithms; sequence/selection/iteration. Object description (1–2): represents an object's properties, methods and behaviour. Must compare scope/purpose, not just define each.</div>
+</div>
+</section>
+<section class="kk" id="u3o1-kk06">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#4fc1ff">U3O1·KK06</span>
+<span class="kk-oc">Unit 3 – Outcome 1 — Programming</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Characteristics of data sources — files, CSV and XML</div>
+<div class="kk-why"><b>2026 signal:</b> CSV/XML named for 2026; XML caused 58% zero in 2025.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Which statement best describes XML compared with CSV?<br>A. XML stores values separated by commas with no structure.<br>B. XML uses nested tags to give data a hierarchical, self-describing structure.<br>C. XML can only store numeric data.<br>D. XML files are always smaller than equivalent CSV files.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. XML is hierarchical and self-describing via tags (CSV is flat/delimited; D is false — XML is usually larger).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the term ‘delimiter’ as used in a CSV file.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>A character (e.g. a comma) that separates individual data values/fields within a record.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two characteristics of a CSV file.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: plain text; values separated by a delimiter (comma); one record per line; no inherent data types; flat/non-hierarchical; widely portable.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain why XML is described as ‘self-describing’.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Tags label the meaning of each element (e.g. <price>), so the structure and meaning of the data travel with the data, without a separate schema being required to interpret field names.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Compare</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Compare CSV and XML as data sources for transferring structured data between systems.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>CSV (1): compact, simple, flat, fast to parse, no hierarchy/types. XML (1): hierarchical, self-describing, supports nesting/attributes, larger/verbose. Comparison (1): choose CSV for simple tables, XML for nested/complex data. Must compare.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Write a small XML fragment that represents one student with a name and a year level.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span><student><name>...</name><yearLevel>11</yearLevel></student> — reward well-formed nesting and a root/parent element with matching open/close tags.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A solution imports a CSV where one row has a missing field. Explain why this can cause an error and how the program should handle it.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Cause (1–2): field count mismatch shifts/loses values, type conversion fails. Handling (1): validate field count, use existence/type checks, skip/flag malformed rows, error-handle the import.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe one advantage and one disadvantage of using XML over CSV for storing an organisation's product catalogue.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Advantage (1): supports nested/structured data (categories, variants) and validation. Disadvantage (1): more verbose, larger files, slower/more complex to parse.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A developer must exchange hierarchical configuration data between two systems. Justify whether CSV or XML is more appropriate.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Conclude XML: hierarchical/nested config needs structure CSV cannot represent; self-describing and validatable. Reward clear position + reasons tied to hierarchy.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain how the choice of data source (CSV vs XML) affects the validation a developer must perform on import.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>CSV (1–2): must check delimiter integrity, field count, types manually. XML (1–2): can validate well-formedness/schema, but must still check element presence and value ranges. Link choice to validation effort.</div>
+</div>
+</section>
+<section class="kk" id="u3o1-kk07">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#4fc1ff">U3O1·KK07</span>
+<span class="kk-oc">Unit 3 – Outcome 1 — Programming</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Principles of object-oriented programming</div>
+<div class="kk-why"><b>2026 signal:</b> OOP = 8 marks, avg only 3.5/8 — flagged the top priority.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Hiding an object's internal data and exposing only methods to access it is known as<br>A. inheritance.<br>B. polymorphism.<br>C. encapsulation.<br>D. abstraction.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>C. Encapsulation bundles data with methods and restricts direct access.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Define the terms ‘class’ and ‘object’ and state the relationship between them.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Class (1): a template/blueprint defining attributes and methods. Object (1): a specific instance of a class. Relationship: an object is created from a class.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe the principle of inheritance in object-oriented programming.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>A subclass/child class acquires (inherits) the attributes and methods of a parent/superclass, and may extend or override them, promoting reuse.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain one benefit of encapsulation in a large software project.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Protects internal state from invalid external changes / reduces coupling, so internal implementation can change without breaking other code; improves maintainability and reliability.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe what polymorphism allows a programmer to do, with an example.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Allows the same method name/interface to behave differently across classes (e.g. draw() on Circle vs Square). Reward definition + valid example.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Contrast</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Contrast a class and an object, and contrast an attribute and a method.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Class vs object (1–2): template vs instance. Attribute vs method (1): attribute = data/property of object; method = behaviour/operation. Must contrast each pair.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">An Account class has subclasses SavingsAccount and ChequeAccount. Outline how inheritance is used here.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Account holds shared attributes/methods (balance, deposit); the two subclasses inherit these and add/override specific behaviour (e.g. interest, overdraft).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain how encapsulation and inheritance together improve the maintainability of an object-oriented solution.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Encapsulation (1–2): localises change behind interfaces. Inheritance (1–2): centralises shared code so a fix in the parent propagates. Together reduce duplication and limit ripple effects.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">A team debates using OOP versus procedural code for a banking application with many account types. Justify which paradigm is more suitable.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Conclude OOP: many related entities (account types) benefit from classes/inheritance/encapsulation for reuse, data protection, scalability. Reward position + at least two OOP principles applied to the scenario.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe one disadvantage of using object-oriented programming for a very small, simple script.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Adds overhead/complexity (class structure) disproportionate to the task; can be slower to write/understand than a short procedural script.</div>
+</div>
+</section>
+<section class="kk" id="u3o1-kk14">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#4fc1ff">U3O1·KK14</span>
+<span class="kk-oc">Unit 3 – Outcome 1 — Programming</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Debugging and testing techniques</div>
+<div class="kk-why"><b>2026 signal:</b> Testing tables explicitly named as a 2026 revisit.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">A test case that uses a value exactly on the limit of an accepted range is testing<br>A. typical data.<br>B. boundary data.<br>C. invalid data.<br>D. erroneous logic.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. Boundary (edge) data tests the limits of valid ranges.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">State</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">State the three categories of test data commonly used to test a solution.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Valid/typical (normal), boundary (edge), and invalid/erroneous data.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe the columns you would include in a test table (test data plan).</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Test no./case; input/test data; data type (valid/boundary/invalid); expected result; actual result; pass/fail. Award for naming purposeful columns.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">A field accepts ages 18–65. Explain why both 17 and 18 should appear in the test table.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>17 (1): invalid/boundary-below should be rejected. 18 (1): valid boundary should be accepted; together they confirm the boundary is handled correctly (catches off-by-one).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline the difference between a syntax error and a logic error.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Syntax (1): breaks language rules; code won't compile/run. Logic (1): runs but produces wrong output; harder to detect.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two debugging techniques a programmer could use to locate a logic error.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: breakpoints/stepping; watch variables; print/trace statements; desk-checking; commenting out code; using a debugger to inspect state.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Compare</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Compare desk-checking and using a debugger as techniques for finding errors.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Desk-check (1): manual trace on paper, no execution, good early/conceptual. Debugger (1): runtime inspection, breakpoints, exact state. Comparison (1): desk-check catches logic in design; debugger catches runtime behaviour. Must compare.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">For a function that calculates a 10% discount on orders over $100, design three test cases (valid, boundary, invalid) and state the expected output of each.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>E.g. $150 → $15 discount (valid); $100 → $0 / boundary behaviour per spec; -$50 or text → rejected (invalid). Reward one of each category with correct expected result.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain why testing should use a documented test table rather than ad-hoc testing.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: repeatable/consistent; coverage of valid+boundary+invalid; evidence for evaluation/accountability; expected vs actual makes failures explicit; supports regression testing.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A developer says testing only valid data is sufficient. Justify why this is inadequate.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Inadequate: valid-only ignores boundary (off-by-one) and invalid input (crashes/security). Robust solutions must reject bad input and handle edges. Reward clear stance + boundary AND invalid reasoning.</div>
+</div>
+</section>
+<section class="kk" id="u3o2-kk03">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#a78bfa">U3O2·KK03</span>
+<span class="kk-oc">Unit 3 – Outcome 2 — Analysis & Design</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Project management — Gantt charts, dependencies, critical path, milestones</div>
+<div class="kk-why"><b>2026 signal:</b> Gantt / critical-path annotations recur; ~40% scored zero in 2025.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">On a Gantt chart, the longest sequence of dependent tasks that determines the minimum project duration is the<br>A. milestone.<br>B. slack time.<br>C. critical path.<br>D. dependency arrow.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>C. The critical path determines the minimum completion time.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the term ‘milestone’ in project management.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>A significant point/event marking the completion of a phase or key deliverable; has zero duration.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe what a dependency between two tasks means and how it is shown on a Gantt chart.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Dependency (1): one task cannot start (or finish) until another is complete. Shown (1): a linking arrow from predecessor to successor.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain the significance of the critical path to a project manager.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Tasks on it have no slack; any delay delays the whole project, so the manager monitors/protects these tasks and allocates resources to them first.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Tasks: A(2d)→C(3d); B(4d)→C. Identify the critical path and the project duration.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B→C = 7 days vs A→C = 5 days. Critical path = B→C; duration = 7 days.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline what ‘slack’ (float) is and why a non-critical task may have slack.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Slack (1): the time a task can be delayed without delaying the project. Reason (1): it runs in parallel with a longer dependent chain, so spare time exists.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A developer falls two days behind on a task that is on the critical path. Explain the impact on the project and one way to recover.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Impact (1–2): whole project end date slips by ~2 days (no slack). Recovery (1): crash the task (add resources), fast-track parallelisable work, or re-scope.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two benefits of using a Gantt chart to manage a software development project.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: visualises schedule/timeline; shows dependencies; identifies critical path; tracks progress vs plan; aids resource allocation/communication.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain how milestones and dependencies are used together to monitor whether a project is on track.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Dependencies (1–2): enforce task order and reveal flow-on delays. Milestones (1): checkpoints to compare planned vs actual completion, triggering corrective action if missed.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A manager wants to shorten the project. Justify why adding resources to a non-critical task will NOT help.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Non-critical tasks have slack and are not the limiting chain; only shortening critical-path tasks reduces total duration. Reward correct reasoning about the critical path being the constraint.</div>
+</div>
+</section>
+<section class="kk" id="u3o2-kk04">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#a78bfa">U3O2·KK04</span>
+<span class="kk-oc">Unit 3 – Outcome 2 — Analysis & Design</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Techniques for collecting data</div>
+<div class="kk-why"><b>2026 signal:</b> Data-collection staple named for 2026; polarised 2025 results.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Which data-collection technique is MOST suitable for gathering in-depth views from a single key stakeholder?<br>A. Survey.<br>B. Interview.<br>C. Observation.<br>D. System log analysis.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. Interviews suit deep, qualitative responses from individuals.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">State</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">State one advantage of using a survey to collect requirements from a large user base.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Reaches many people quickly/cheaply and yields quantifiable data.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe the difference between an interview and a survey as data-collection techniques.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Interview (1): one-on-one, in-depth, qualitative, fewer people. Survey (1): standardised questions to many, mostly quantitative, less depth.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain one reason observation may collect more accurate data than a survey.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Observation records actual behaviour directly, avoiding self-report bias/inaccuracy where users misremember or misstate what they do.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline two factors an analyst should consider when choosing a data-collection technique.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: number of participants; depth vs breadth needed; time/cost; nature of data (qual/quant); stakeholder availability; privacy.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Contrast</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Contrast qualitative and quantitative data collected during analysis.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Qualitative (1): descriptive opinions/themes (interviews). Quantitative (1): numeric/measurable (survey counts). Must contrast.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">An analyst will collect requirements from 300 staff and 3 managers. Describe a suitable technique for each group.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>300 staff (1): survey/questionnaire for breadth. 3 managers (1): interviews for depth/strategic needs. Reward technique matched to group size/purpose.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain how poorly designed survey questions could reduce the quality of collected requirements.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: leading/ambiguous questions bias answers; double-barrelled questions confuse; closed-only limits insight; poor sampling unrepresentative — leading to incorrect requirements.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Justify the use of observation in addition to interviews when analysing an existing manual process.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Interviews capture stated process; observation reveals actual/undocumented steps and workarounds, validating/triangulating requirements. Reward triangulation reasoning.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss the advantages and limitations of using two contrasting data-collection techniques when gathering requirements for a new app.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Pick two (e.g. survey + interview); give 2 strengths and 2 limitations across them and note how they complement each other (breadth + depth). Reward balanced discussion.</div>
+</div>
+</section>
+<section class="kk" id="u3o2-kk08">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#a78bfa">U3O2·KK08</span>
+<span class="kk-oc">Unit 3 – Outcome 2 — Analysis & Design</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Depicting relationships — context diagrams, data flow diagrams, use case diagrams</div>
+<div class="kk-why"><b>2026 signal:</b> DFD/use-case core but brutal — 81% zero on DFD, 52% on includes/extends.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">In a data flow diagram, an open-ended rectangle (or rounded store symbol) represents a<br>A. process.<br>B. external entity.<br>C. data store.<br>D. data flow.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>C. A data store holds data at rest.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the term ‘external entity’ in a context diagram.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>A person, organisation or system outside the solution boundary that supplies or receives data.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe the difference between a context diagram and a level-0 data flow diagram.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Context (1): one process (the whole system) with external entities and net data flows. DFD level-0 (1): decomposes that into multiple processes, data stores and internal flows.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">In a use case diagram, explain the difference between an ‘include’ and an ‘extend’ relationship.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Include (1): base use case always uses the included behaviour (mandatory sub-task). Extend (1): optional/conditional behaviour added under certain conditions.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">For a login feature, identify one actor and one use case, and state their relationship.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Actor (1): User/Member. Use case (1): ‘Log in’. Association: the actor initiates/participates in the use case (line connecting them).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline the four key symbols used in a data flow diagram.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Process; external entity; data store; data flow (arrow). Award per correct symbol/role up to 2.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A library system: members borrow and return books; staff add new titles. Describe the actors and two use cases, including one include relationship.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Actors (1): Member, Staff. Use cases (1): Borrow book, Return book, Add title. Include (1): ‘Borrow book’ includes ‘Verify membership’ (always required).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain why a context diagram is drawn before a detailed DFD, and what each contributes to analysis.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Context (1–2): fixes the system boundary and external interactions first, agreeing scope. DFD (1): then details internal processing/stores once the boundary is agreed; prevents scope confusion.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Contrast</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Contrast a use case diagram and a data flow diagram in terms of what each is designed to show.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Use case (1–2): functional requirements — who (actors) does what (use cases). DFD (1–2): how data moves/transforms between processes and stores. Must contrast purpose.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">An analyst omits data stores from a DFD. Justify why this is a significant error.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Data stores show where data persists; omitting them hides storage requirements, breaks data-flow balancing, and misrepresents the system, leading to design/build errors. Reward clear consequence reasoning.</div>
+</div>
+</section>
+<section class="kk" id="u3o2-kk10">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#a78bfa">U3O2·KK10</span>
+<span class="kk-oc">Unit 3 – Outcome 2 — Analysis & Design</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Key legal requirements — privacy and copyright</div>
+<div class="kk-why"><b>2026 signal:</b> Copyright &amp; privacy legislation named for 2026.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Which Act primarily governs how Australian organisations handle individuals' personal information?<br>A. Copyright Act 1968.<br>B. Privacy Act 1988.<br>C. Health Records Act 2001.<br>D. Spam Act 2003.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. The Privacy Act 1988 (and the Australian Privacy Principles) governs personal information handling.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">State</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">State what the Copyright Act 1968 protects in the context of software.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>The original expression of source code and related materials as a literary work, protecting against unauthorised copying/use.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two obligations the Privacy Act 1988 places on an organisation that collects personal data.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: collect only what's necessary/with consent; notify purpose; keep secure; allow access/correction; use only for stated purpose; limit disclosure.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain one way a software solution can be designed to comply with the Privacy Act 1988.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>E.g. encrypt stored personal data + access controls; collect minimum data; obtain consent; provide data access/correction features. Reward a concrete compliance measure tied to an obligation.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline the difference between privacy and security of data.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Privacy (1): who may access/use personal data and for what purpose (rights). Security (1): technical/physical protection of data from unauthorised access/loss.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">A developer copies a function from a tutorial website into a commercial product. Identify the legal issue and one way to address it.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Issue (1): potential copyright infringement of the author's code. Address (1): check/obtain a licence (e.g. permissive open-source) or write own implementation/attribute as required.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Identify and describe one technique a developer could use to reduce a privacy risk when storing customer records.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Identify (1): encryption / access control / de-identification. Describe (1): how it limits unauthorised access to personal information (e.g. encrypt at rest so stolen data is unreadable).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain the legal consequences for an organisation that fails to protect personal data it has collected.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: breach of Privacy Act/APPs; investigation/penalties by the regulator (OAIC); mandatory data-breach notification; reputational/financial damage; potential civil action.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss the privacy and copyright issues a startup must consider before releasing a mobile app that uses third-party libraries and collects user location.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Copyright (1–2): library licences/attribution/permitted use. Privacy (1–2): consent for location, secure storage, purpose limitation, APP compliance. Reward both areas with applied detail.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Justify why ‘collect only what you need’ is a sound design principle under privacy law.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Minimising collection reduces breach impact, aligns with APP data-minimisation, lowers compliance burden and user risk. Reward clear stance + link to legal obligation/risk reduction.</div>
+</div>
+</section>
+<section class="kk" id="u3o2-kk15">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#a78bfa">U3O2·KK15</span>
+<span class="kk-oc">Unit 3 – Outcome 2 — Analysis & Design</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Characteristics of user experiences (UX)</div>
+<div class="kk-why"><b>2026 signal:</b> UX &amp; affordance named for 2026; up to 62% scored zero.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">A button styled to look raised and clickable is an example of<br>A. consistency.<br>B. affordance.<br>C. redundancy.<br>D. accessibility.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. Affordance — the visual cue communicates how the element can be used.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the term ‘affordance’ in user experience design.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>A property/cue of an element that signals how it can be used (e.g. a raised button affords pressing).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two characteristics that contribute to a positive user experience.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: usability/ease of use; learnability; efficiency; accessibility; error tolerance; satisfaction/aesthetics; consistency.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain how good affordance reduces user error.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Clear cues make the correct action obvious, so users select intended controls without guessing, reducing mistaken or invalid interactions.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline the difference between usability and accessibility.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Usability (1): how easily/efficiently typical users achieve goals. Accessibility (1): whether users with disabilities/diverse needs can use the solution.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe one way an interface can provide useful feedback to the user.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>E.g. confirmation message after submit, progress indicator, inline validation error, visual state change — keeps the user informed about the result of an action.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A new app has many features but low user satisfaction. Explain three UX characteristics the team should evaluate.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1 (with relevance): learnability, efficiency, error tolerance, consistency, feedback, accessibility — each linked to improving satisfaction.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe how affordance and feedback work together when a user submits an online form.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Affordance (1): submit button looks pressable/active. Feedback (1): after pressing, a confirmation/error tells the user the outcome — closing the interaction loop.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss how a developer can balance an attractive visual design with strong usability for a diverse user base.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Tension: aesthetics vs clarity/accessibility. Strategies (any 3–4): maintain affordance/consistency, sufficient contrast, accessible controls, test with real users, avoid form-over-function. Reward balanced discussion.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Justify why removing all button borders and labels for a ‘clean’ look could harm UX.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Removes affordance/feedback cues; users can't tell what is interactive, raising errors and cognitive load — aesthetics shouldn't override discoverability. Reward stance + affordance reasoning.</div>
+</div>
+</section>
+<section class="kk" id="u3o2-kk16">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#a78bfa">U3O2·KK16</span>
+<span class="kk-oc">Unit 3 – Outcome 2 — Analysis & Design</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Design principles influencing appearance and functionality</div>
+<div class="kk-why"><b>2026 signal:</b> Design principles / user-centred design flagged to be revisited.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Using the same colours, fonts and button styles across all screens is an example of the design principle of<br>A. alignment.<br>B. contrast.<br>C. consistency.<br>D. proximity.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>C. Consistency.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">State</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">State one appearance-related design principle and one functionality-related design principle.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Appearance (1): alignment/contrast/balance/colour. Functionality (1): navigation/consistency/accessibility/error prevention. Reward one valid each.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe the design principle of contrast and one benefit it provides.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Contrast (1): using difference (colour/size/weight) to distinguish elements. Benefit (1): draws attention to key items / improves readability and hierarchy.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain how the principle of proximity helps users understand a form.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Grouping related fields/labels close together signals they belong together, so users parse structure faster and complete the form with fewer errors.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline what ‘user-centred design’ means.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Designing around real users' needs/goals/abilities, involving them through analysis, prototyping and testing across the process.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe how the principle of alignment improves the appearance of an interface.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Aligning elements to a grid/edges creates order and visual connection, making the layout look professional and easier to scan.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain how three design principles could be applied to improve a cluttered dashboard.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1 applied: proximity (group metrics), contrast (highlight key KPIs), alignment/white space (order), consistency (uniform components).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Contrast</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Contrast design principles that affect appearance with those that affect functionality, giving an example of each.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Appearance (1–2): contrast/balance/colour — look. Functionality (1–2): navigation/consistency/accessibility — behaviour/usability. Must contrast with examples.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss how applying design principles supports both accessibility and a strong brand identity.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Accessibility (1–2): contrast, consistency, clear navigation aid diverse users. Brand (1–2): consistent colour/typography builds identity. Note possible tension and resolution. Reward balance.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A client wants a unique font on every screen. Justify advice against this using design principles.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Breaks consistency, harms readability/recognition and increases cognitive load; recommend a limited, consistent type system. Reward stance + consistency/usability reasoning.</div>
+</div>
+</section>
+<section class="kk" id="u4o1-kk04">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#34d399">U4O1·KK04</span>
+<span class="kk-oc">Unit 4 – Outcome 1 — Development & Evaluation</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Innovative approaches to software development</div>
+<div class="kk-why"><b>2026 signal:</b> Innovative development methods named as a 2026 emphasis.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">An approach that delivers software in short, repeated cycles with frequent stakeholder feedback is best described as<br>A. waterfall.<br>B. agile/iterative.<br>C. big-bang.<br>D. ad-hoc.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. Agile/iterative development.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the term ‘iterative development’.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Building the solution in repeated cycles, each adding/refining functionality with review before the next cycle.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two characteristics of an agile approach to software development.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: short iterations/sprints; frequent stakeholder collaboration; embracing changing requirements; incremental delivery; continuous testing/feedback.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain one benefit of using rapid prototyping during development.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Lets users see/try an early version and give feedback, so requirements/usability issues are found and fixed early, reducing costly late changes.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Contrast</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Contrast an iterative (agile) approach with a sequential (waterfall) approach.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Iterative (1–2): cyclic, adaptive, frequent feedback, change-tolerant. Waterfall (1–2): linear phases, plan-heavy, change-resistant. Must contrast process and response to change.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline two ways emerging technologies can drive innovative approaches to development.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: AI code/test generation; cloud/DevOps continuous delivery; low-code platforms; automated testing pipelines; collaborative/remote tooling.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A startup faces rapidly changing client requirements. Explain why an iterative approach suits this situation.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: short cycles absorb change cheaply; frequent feedback realigns priorities; early increments deliver value; reduces risk of building the wrong thing.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe one risk of adopting an innovative/agile method for a team used to fixed, up-front planning.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>E.g. scope can drift without discipline; harder to fix budget/deadline; requires cultural change/skills — may cause confusion or rework if poorly managed.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss the advantages and disadvantages of incorporating AI-driven automation into a development pipeline.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Advantages (1–2): speed, automated testing/deployment, fewer manual errors. Disadvantages (1–2): reliability/trust, skill/setup cost, over-reliance, opacity. Reward balanced discussion.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Justify the choice of an iterative approach over a waterfall approach for an app with uncertain, evolving requirements.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Conclude iterative: uncertainty + change favour short feedback cycles, early validation, adaptability; waterfall's fixed up-front spec is risky here. Reward clear position + 2+ reasons applied.</div>
+</div>
+</section>
+<section class="kk" id="u4o2-kk02">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#fb7185">U4O2·KK02</span>
+<span class="kk-oc">Unit 4 – Outcome 2 — Cyber Security</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Advantages and disadvantages of developing software in-house vs externally</div>
+<div class="kk-why"><b>2026 signal:</b> In-house vs external dev — only 1% scored full; due for retest.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">One advantage of developing software in-house rather than outsourcing is<br>A. lower up-front recruitment cost.<br>B. greater control over the solution and data.<br>C. access to a wider external skill pool.<br>D. faster delivery for an organisation with no developers.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. In-house gives direct control over the solution and sensitive data.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">State</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">State one disadvantage of developing software in-house.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Higher staffing/skills cost, slower if expertise is lacking, or limited specialist knowledge. (Any one.)</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two advantages of developing software in-house.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: control over data/IP; alignment with business knowledge; easier ongoing maintenance; better security oversight; tailored solution.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two advantages of outsourcing (external) development.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: access to specialist skills; potentially faster/cheaper; scalable capacity; frees internal staff; vendor accountability.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain one security risk that arises specifically when development is outsourced externally.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Sharing source/data with a third party increases exposure (data leakage, supply-chain compromise, less direct control over the vendor's security practices).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline two factors an organisation should weigh when deciding between in-house and external development.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: available internal skills; cost/budget; timeframe; sensitivity of data; need for ongoing control/maintenance; IP ownership.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Compare</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Compare in-house and external software development in terms of cost, control, and security.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Cost (1): in-house ongoing salary vs external project fee. Control (1–2): in-house higher; external less. Security (1–2): in-house contained; external adds third-party exposure. Must compare each, not list.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">A bank holding sensitive customer data must choose a development model. Explain why in-house may be preferred.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: tighter control of sensitive data; reduced third-party exposure; regulatory/compliance assurance; deep domain knowledge; long-term maintenance control.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss the trade-offs a small business faces in outsourcing development of its first app.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Pros (1–2): skills, speed, lower up-front staffing. Cons (1–2): less control, data exposure, ongoing dependency/cost, IP terms. Reward balanced, applied discussion.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Justify a recommendation for a startup with no developers and a tight deadline to outsource its software.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Conclude outsource: no internal capability + deadline → external skills/speed outweigh control loss, provided contracts cover IP/security/maintenance. Reward clear stance + reasons + risk mitigation.</div>
+</div>
+</section>
+<section class="kk" id="u4o2-kk03">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#fb7185">U4O2·KK03</span>
+<span class="kk-oc">Unit 4 – Outcome 2 — Cyber Security</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Vulnerabilities within insecure development environments (incl. combined dev/test/production)</div>
+<div class="kk-why"><b>2026 signal:</b> Combined dev environments named core; only 9% scored full marks.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">A key risk of combining development, testing and production in a single environment is that<br>A. code runs faster.<br>B. untested or insecure code can directly affect live data.<br>C. version control becomes unnecessary.<br>D. developers cannot access the database.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. Without separation, defective/insecure code and test actions can damage or expose live/production data.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the term ‘vulnerability’ in a development environment.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>A weakness in a system, practice or configuration that could be exploited to compromise security.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two vulnerabilities that can exist in an insecure development environment.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: unpatched software; combined dev/test/prod; poor access management; insecure APIs; weak code review; use of real data in testing; insider threats.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain why using real customer data in a testing environment is a vulnerability.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Test environments are usually less secured/monitored; exposing real personal data there risks breach and privacy non-compliance if accessed/leaked.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline the purpose of separating development, testing and production environments.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Isolates unverified code/changes from live data and users, so defects/security issues are contained before release — protecting production integrity.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe how unpatched software becomes a vulnerability during development.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Known exploits in outdated tools/libraries remain open; attackers can leverage published vulnerabilities to compromise the environment or injected dependencies.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain three risks introduced by combining development, testing and production in one environment.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: untested code corrupts live data; test/debug exposure of production data; broad access increases insider/attack surface; outage of live system during dev/test; no clean rollback.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe one control that mitigates the risk of combined environments.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>E.g. separate isolated environments + role-based access + use de-identified/synthetic test data + controlled deployment pipeline. Reward control linked to separation.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss why poor identity and access management is a serious vulnerability in a development environment.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Excessive/standing privileges, shared accounts, no least-privilege → wider attack surface, harder accountability/audit, easier insider misuse and lateral movement. Reward 3–4 linked points.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Justify the cost of maintaining separate environments to management focused on saving money.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Separation prevents costly production breaches/outages and data exposure; the breach/compliance cost far exceeds environment cost. Reward stance + risk/cost reasoning.</div>
+</div>
+</section>
+<section class="kk" id="u4o2-kk04">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#fb7185">U4O2·KK04</span>
+<span class="kk-oc">Unit 4 – Outcome 2 — Cyber Security</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Security controls to protect development practices and data</div>
+<div class="kk-why"><b>2026 signal:</b> Security controls named as a 2026 revisit.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Encrypting data so it is unreadable without a key is an example of a<br>A. physical control.<br>B. technical (software) control.<br>C. administrative control.<br>D. detective audit.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. Encryption is a technical/software control.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">State</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">State one physical and one software (technical) security control.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Physical (1): locked server room/biometric door. Software (1): encryption/firewall/access control. Reward one valid each.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two software security controls that protect data within an application.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: encryption; authentication; access control/authorisation; input validation; logging/auditing; firewalls.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain how the principle of least privilege protects an organisation's data.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Users/processes get only the access needed for their role, limiting damage from compromised accounts/insiders and shrinking the attack surface.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline the difference between authentication and authorisation.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Authentication (1): verifying who a user is (login/credentials). Authorisation (1): what an authenticated user is allowed to do/access.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe how multi-factor authentication improves security.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Requires two+ independent factors (e.g. password + device code), so a stolen password alone cannot grant access — reducing account compromise.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">For a web app storing payment data, explain three security controls the team should implement.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1 applied: encryption at rest/in transit; strong authentication/MFA; least-privilege access; input validation; logging/monitoring; patching.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Identify and describe one administrative control that supports secure development.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Identify (1): security policy / developer training / code-review process / access-review procedure. Describe (1): how it reduces risk (e.g. mandatory peer review catches insecure code before release).</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss how a combination of physical, software and administrative controls provides defence in depth.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Defence in depth (1): layered controls so one failure doesn't breach the system. Give one of each layer (1×3) with how they complement. Reward layered reasoning.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Justify implementing encryption even when access controls are already in place.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Access controls can be bypassed/misconfigured or data stolen physically; encryption keeps data unreadable as a second layer — defence in depth. Reward stance + layering reasoning.</div>
+</div>
+</section>
+<section class="kk" id="u4o2-kk05">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#fb7185">U4O2·KK05</span>
+<span class="kk-oc">Unit 4 – Outcome 2 — Cyber Security</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Threat modelling principles</div>
+<div class="kk-why"><b>2026 signal:</b> Threat modelling named as a 2026 revisit.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Which of the following is a principle of threat modelling?<br>A. Releasing software as early as possible.<br>B. Identifying assets, threats and vulnerabilities, then confirming mitigations.<br>C. Avoiding documentation to save time.<br>D. Granting all developers admin access.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. Threat modelling identifies what to protect, the threats/vulnerabilities, and verifies mitigations.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the term ‘threat modelling’.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>A structured process of identifying assets, potential threats and vulnerabilities, and planning/verifying mitigations during design.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline two questions a team asks when threat modelling a new system.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: What are we building / what assets exist? What can go wrong (threats)? What are we doing about it (mitigations)? Did we do a good enough job (verify)?</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe the difference between a threat and a vulnerability.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Threat (1): a potential cause of harm (attacker/event). Vulnerability (1): a weakness the threat could exploit. (Risk = likelihood × impact of a threat exploiting a vulnerability.)</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain why threat modelling is best done early in the design stage.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Designing in mitigations is cheaper and more effective than retrofitting after build; early modelling prevents architectural weaknesses and reduces costly late fixes.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">For an online banking app, identify one asset and one threat to that asset.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Asset (1): customer account data/funds. Threat (1): credential theft/phishing, SQL injection, insider misuse. Reward asset + matched threat.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Describe the steps of a simple threat modelling process for a new web application.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>1 identify assets/scope; 2 identify threats (e.g. STRIDE-style); 3 identify vulnerabilities; 4 plan mitigations; 5 confirm/verify mitigations. Award for ordered, sensible steps.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain how threat modelling informs the choice of security controls in a solution.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Identified threats/assets are prioritised by risk; controls are selected to mitigate the highest-risk threats (e.g. injection → input validation), ensuring controls are targeted not arbitrary.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss the benefits and limitations of threat modelling as a security practice.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Benefits (1–2): proactive, prioritised, early design improvement, shared understanding. Limitations (1–2): only as good as inputs/expertise, can miss novel threats, time cost, needs updating. Reward balance.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Justify spending time on threat modelling for a project with a tight deadline.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Early identification of high-risk threats prevents far costlier breaches/rework later; targeted modelling need not be exhaustive. Reward stance + cost/risk trade-off reasoning.</div>
+</div>
+</section>
+<section class="kk" id="u4o2-kk07">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#fb7185">U4O2·KK07</span>
+<span class="kk-oc">Unit 4 – Outcome 2 — Cyber Security</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Key legislation affecting organisations and data</div>
+<div class="kk-why"><b>2026 signal:</b> Privacy / copyright legislation named for 2026.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">An organisation suffers a data breach likely to cause serious harm. Under Australian law it must<br>A. do nothing unless customers complain.<br>B. notify affected individuals and the OAIC.<br>C. only notify if more than 1000 records are involved.<br>D. delete all remaining data immediately.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. The Notifiable Data Breaches scheme requires notifying affected individuals and the OAIC.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">State</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">State the purpose of the Australian Privacy Principles (APPs).</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>They set out how organisations must collect, use, store, secure and disclose personal information.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two requirements the Privacy Act 1988 places on data handling.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: collect lawfully/with consent; use only for stated purpose; secure storage; allow access/correction; limit disclosure; notify breaches.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain how the Copyright Act 1968 applies to source code written by an employee.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Original code is a protected literary work; copyright typically vests in the employer for work made in employment, restricting others from copying/using it without permission.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline what the Notifiable Data Breaches scheme requires.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Where a breach is likely to cause serious harm, the organisation must promptly notify affected individuals and the regulator (OAIC) and describe the breach and recommended steps.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Identify two pieces of legislation relevant to an organisation that stores and processes personal data, and state one obligation from each.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Privacy Act 1988 (1): secure/limit personal data. Copyright Act 1968 (1): don't copy protected works; or Health Records Act for health data. Reward two acts + an obligation each.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain the consequences for an organisation that breaches privacy legislation.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: regulator investigation; civil penalties/fines; mandatory breach notification; remediation orders; reputational and financial harm; loss of customer trust.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe how legislation influences design decisions in a data-handling solution.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Drives requirements such as encryption, consent capture, access/correction features, data minimisation, audit logging and breach-response capability — compliance becomes a design constraint.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">Discuss the obligations an organisation has under privacy and copyright law when building software that reuses third-party code and stores user data.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Copyright (1–2): licence/permission/attribution for reused code. Privacy (1–2): consent, security, purpose limitation, breach notification. Reward both with applied detail.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Justify why an organisation should maintain audit logs of access to personal data.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Supports privacy compliance/accountability, breach investigation/notification, and deters/detects misuse; evidences due diligence to the regulator. Reward stance + legal/security reasoning.</div>
+</div>
+</section>
+<section class="kk" id="u4o2-kk08">
+<div class="kk-head">
+<div class="row1">
+<span class="kk-code" style="background:#fb7185">U4O2·KK08</span>
+<span class="kk-oc">Unit 4 – Outcome 2 — Cyber Security</span>
+<span class="tier">▲ Very likely</span>
+</div>
+<div class="kk-title">Ethical issues arising when developing software</div>
+<div class="kk-why"><b>2026 signal:</b> AI ethics named as a leading 2026 emphasis.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q01</span>
+<span class="tag aw">Identify</span>
+<span class="tag sec secA">Section A · Multiple choice</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">A developer knowingly ships software with a privacy flaw to meet a deadline. This is primarily<br>A. a legal issue only.<br>B. an ethical issue concerning responsibility to users.<br>C. a performance optimisation.<br>D. acceptable if undocumented.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>B. It raises an ethical responsibility to users (and may also be legal), centred on duty of care.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q02</span>
+<span class="tag aw">Define</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">1 mark</span>
+</div>
+<div class="q-text">Define the difference between a legal and an ethical obligation.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Legal: required by law with penalties. Ethical: a moral expectation of right conduct that may exceed what the law strictly requires.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q03</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe two ethical issues that can arise when developing software that uses AI.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: bias/discrimination in outputs; lack of transparency; privacy of training/user data; accountability for harm; job displacement; misuse.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q04</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Explain why bias in an AI model is an ethical concern.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Biased training data can lead the system to disadvantage particular groups unfairly, causing discrimination and harm while appearing objective — raising fairness/accountability concerns.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q05</span>
+<span class="tag aw">Outline</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Outline two responsibilities a developer has towards end users.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 2 × 1: protect privacy/security of data; deliver reliable/safe software; be transparent/honest; avoid harm; accessibility/fairness.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q06</span>
+<span class="tag aw">Describe</span>
+<span class="tag sec secB">Section B · Short answer</span>
+<span class="marks">2 marks</span>
+</div>
+<div class="q-text">Describe one ethical issue related to collecting more user data than a feature requires.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Over-collection breaches data-minimisation/consent expectations, increases breach harm and surveillance risk, and treats users' data without due respect — an ethical (and legal) concern.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q07</span>
+<span class="tag aw">Discuss</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">An organisation deploys an AI hiring tool. Discuss the ethical issues it should address before use.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 4 × 1: bias/fairness, transparency/explainability, accountability for decisions, candidate privacy/consent, human oversight, testing for discrimination. Reward more than one viewpoint.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q08</span>
+<span class="tag aw">Explain</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Explain how an organisation can act ethically when an AI feature could produce biased results.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Any 3 × 1: audit/test for bias on diverse data; keep human-in-the-loop; be transparent to users; allow appeal/correction; document and monitor; restrict scope.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q09</span>
+<span class="tag aw">Contrast</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">3 marks</span>
+</div>
+<div class="q-text">Contrast acting legally with acting ethically when developing software that tracks user location.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Legal (1–2): meet Privacy Act/consent minimums. Ethical (1–2): may go further — only track when truly needed, clear opt-out, honest disclosure even where law is silent. Must contrast.</div>
+</div>
+<div class="q">
+<div class="q-head">
+<span class="q-no">Q10</span>
+<span class="tag aw">Justify</span>
+<span class="tag sec secC">Section C · Case study</span>
+<span class="marks">4 marks</span>
+</div>
+<div class="q-text">A client asks a developer to add hidden data collection users won't notice. Justify the developer's ethical response.</div>
+<div class="ans"><span class="lbl">Indicative answer / marking note</span>Conclude refuse/disclose: hidden collection breaches transparency/consent and likely privacy law; ethical duty to users overrides client request; propose transparent, consented alternative. Reward stance + ethical (and legal) reasoning + alternative.</div>
+</div>
+</section>
+<footer>Digital Vector · Exam Intelligence — 180 practice questions across the 18 highest-probability KKs · Aligned to the VCAA VCE Applied Computing: Software Development 2025–2028 study design. Projection for revision targeting, not a VCAA forecast.</footer>
+</div></body></html>
